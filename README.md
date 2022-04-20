@@ -9,3 +9,6 @@ Resources:
 
 
 2.https://www.ifa.hawaii.edu/~barnes/treecode/vectmath.h.html
+
+
+3.https://github.com/felselva/mathc
