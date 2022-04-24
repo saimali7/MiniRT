@@ -7,6 +7,7 @@
 #include <fcntl.h>
 #include "../mlx/mlx.h"
 #include "../Libft/libft.h"
+#include "../Libft/gnl/get_next_line.h"
 
 typedef struct s_ambient
 {
@@ -18,7 +19,7 @@ typedef struct	s_camera
 {
 	float	coord[3];
 	float	orient[3];
-	float	fov;
+	int		fov;
 }	t_camera;
 
 typedef struct	s_light
@@ -26,7 +27,6 @@ typedef struct	s_light
 	float	coord[3];
 	float	ratio;
 	int		color[3];
-	struct s_light	*next;
 }			t_light;
 
 typedef struct s_sphere
@@ -34,7 +34,7 @@ typedef struct s_sphere
 	float	coord[3];
 	float	diametr;
 	int		color[3];
-	struct s_light	*next;
+	struct s_sphere	*next;
 }			t_sphere;
 
 typedef struct	s_plane
@@ -42,28 +42,27 @@ typedef struct	s_plane
 	float	coord[3];
 	float	orient[3];
 	int		color[3];
-	struct s_light	*next;
+	struct s_plane	*next;
 }			t_plane;
 
 typedef struct s_cylinder
 {
 	float	coord[3];
 	float	orient[3];
-	float	rgb[3];
+	int		rgb[3];
 	float	diametr;
 	float	height;
-	struct s_light *next;
+	struct s_cylinder *next;
 }			t_cylinder;
 
 typedef struct	s_rt
 {
 	t_ambient	ambient;
-	t_camera	*camera;
-	t_light		*light;
+	t_camera	camera;
+	t_light		light;
 	t_plane		*plane;
 	t_sphere	*sphere;
 	t_cylinder	*cylind;
 }				t_rt;
-
 
 #endif
