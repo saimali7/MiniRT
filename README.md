@@ -17,4 +17,4 @@ Resources:
 4.https://gabrielgambetta.com/computer-graphics-from-scratch/
 
 
-5. https://habr.com/ru/post/342510/ 
+5.https://habr.com/ru/post/342510/ 
