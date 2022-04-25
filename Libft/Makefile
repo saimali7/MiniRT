@@ -26,7 +26,8 @@ LIST =	ft_atoi.c			ft_bzero.c			ft_calloc.c\
 		ft_putendl_fd.c		ft_putnbr_fd.c		ft_atod.c\
 		ft_lstnew.c			ft_lstadd_front.c	ft_lstsize.c\
 		ft_lstlast.c		ft_lstadd_back.c	ft_lstdelone.c\
-		ft_lstclear.c		ft_lstiter.c		ft_lstmap.c
+		ft_lstclear.c		ft_lstiter.c		ft_lstmap.c\
+		gnl/get_next_line.c 		gnl/get_next_line_utils.c \
 
 OBJ = $(LIST:.c=.o)
 
@@ -35,7 +36,6 @@ FLAGS = -Wall -Wextra -Werror
 all : $(NAME)
 
 $(NAME) :	$(OBJ)
-			$(MAKE) -C ./gnl
 			gcc -c $(FLAGS) $(LIST)
 			ar -rc $(NAME) $(OBJ)
 
@@ -44,8 +44,6 @@ $(NAME) :	$(OBJ)
 
 clean:
 	rm -f $(OBJ)
-	rm -f ./gnl/*.o
-	rm -f ./gnl/*.a
 
 fclean: clean
 	rm -rf $(NAME)

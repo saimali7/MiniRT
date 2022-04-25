@@ -22,9 +22,11 @@ bonus : $(NAME)
 
 clean:
 	rm -rf $(OBJ)
-	rm -f ./mlx/*.a
+	rm -f ./mlx/*.a 
 	rm -f ./libft/*.o
 	rm -f ./libft/*.a
+	rm -f ./libft/gnl/*.o
+	rm -f ./libft/gnl/*.a
 
 fclean: clean
 	rm -rf $(NAME)
