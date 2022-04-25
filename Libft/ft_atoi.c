@@ -21,13 +21,6 @@ static int	is_space(char s)
 	return (0);
 }
 
-static void	ft_atoi_error(void)
-{
-	ft_putendl_fd("Input Error\n./fractol \
-Mandelbrot\n./fractol Mandelbar\n./fractol Julia x.x y.y", 2);
-	exit (0);
-}
-
 int	ft_atoi(const char *str)
 {
 	int				i;
@@ -52,6 +45,6 @@ int	ft_atoi(const char *str)
 	}
 	if ((str[i] != '\0') || (res > 2147483647 && sign == 1) || \
 	(res > 2147483648 && sign == -1))
-		ft_atoi_error();
+		exit(1); //past function with free
 	return (res * sign);
 }
