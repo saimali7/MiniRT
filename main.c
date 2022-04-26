@@ -38,7 +38,7 @@ t_rt	*init_rt(void)
 {
 	t_rt *ptr;
 
-	ptr = (t_rt *) malloc(sizeof(t_rt));
+	ptr = ft_calloc(sizeof(t_rt), 1);
 	if (!ptr)
 		return (NULL);
 	ptr->plane = NULL;
@@ -106,7 +106,7 @@ int		open_and_check(char *arg)
 	rd = 0;
 	buf = (char *) malloc(sizeof(char));
 	fd = open(arg, O_RDONLY);
-	if (fd == -1)
+	if (fd == -1) //check is not folder
 		return (-1);
 	rd = read(fd, buf, 1);
 	if (rd < 0)
@@ -502,13 +502,32 @@ int		parse_line(char *str, t_rt *rt)
 	return (0);
 }
 
+char	*fixed_line(char *str)
+{
+	int		i;
+	char	*tmp;
+
+	i = 0;
+	tmp = str;
+	while (tmp && tmp[i])
+	{
+		if (tmp[i] == '\t')
+			tmp[i] = ' ';
+		i++;
+	}
+	str = ft_strtrim(tmp, " ");
+	free(tmp);
+	return (str);
+}
+
 int		parse_set_rt(t_rt *rt, int fd)
 {
 	char *str;
-
+	
 	str = get_next_line(fd);
 	while (str != NULL)
 	{
+		str = fixed_line(str);
 		if (parse_line(str, rt) == -1)
 		{
 			free(str);
@@ -569,6 +588,12 @@ int main(int argc, char **argv)
 		print_rt(rt);
 		// calculate
 		// draw
+	}
+	else
+	{
+		ft_putstr_fd("Error: ", 2); // create funct error with massage, free and exit
+		ft_putstr_fd("Usage: ./miniRT path_of_scene.rt", 2);
+		ft_putendl_fd("", 2);
 	}
 	free_rt(&rt);
 	return (0);
