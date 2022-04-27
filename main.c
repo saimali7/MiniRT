@@ -136,7 +136,7 @@ double	ft_value(char *str, char delimeter, int reset)
 	while (str[i] != '\0' && str[i] != delimeter && str[i] != '\n')
 		i = i + 1;
 	sub = ft_substr(str, k, i - k);
-	value = ft_atod(sub);
+	value = ft_atod(sub); // change rt_atod with t_rt
 	free (sub);
 	return (value);
 }
@@ -174,7 +174,7 @@ int		comma_check(char *str)
 
 int		set_ambient(char **line, t_rt *rt)
 {
-	rt->ambient.ratio = ft_atod(line[1]);
+	rt->ambient.ratio = rt_atod(line[1], rt);
 	if (rt->ambient.ratio < 0.0 || rt->ambient.ratio > 1.0)
 		return (-1);
 	if (comma_check(line[2]) == -1)
@@ -182,7 +182,7 @@ int		set_ambient(char **line, t_rt *rt)
 	rt->ambient.color[0] = ft_value(line[2], ',', 0);
 	rt->ambient.color[1] = ft_value(line[2], ',', 1);
 	rt->ambient.color[2] = ft_value(line[2], ',', 1);
-	if (rt->ambient.color[0] < 0 || rt->ambient.color[0] > 255 || rt->ambient.color[1] < 0 
+	if (rt->ambient.color[0] < 0 || rt->ambient.color[0] > 255 || rt->ambient.color[1] < 0
 	|| rt->ambient.color[1] > 255 || rt->ambient.color[2] < 0 || rt->ambient.color[2] > 255)
 		return (-1);
 	return (0);
@@ -247,7 +247,7 @@ int		set_camera(char **line, t_rt *rt)
 	rt->camera.orient[1] = ft_value(line[2], ',', 1);
 	rt->camera.orient[2] = ft_value(line[2], ',', 1);
 	rt->camera.fov = ft_value(line[3], ',', 0);
-	if (rt->camera.coord[0] < -100 || rt->camera.coord[0] > 100 || rt->camera.coord[1] < -100 
+	if (rt->camera.coord[0] < -100 || rt->camera.coord[0] > 100 || rt->camera.coord[1] < -100
 	|| rt->camera.coord[1] > 100 || rt->camera.coord[2] < -100 || rt->camera.coord[2] > 100)
 		return (-1);
 	if (rt->camera.orient[0] < -1.0 || rt->camera.orient[0] > 1.0 || rt->camera.orient[1] < -1.0
@@ -289,10 +289,10 @@ int		set_light(char **line, t_rt *rt)
 	rt->light.color[0] = ft_value(line[3], ',', 0);
 	rt->light.color[1] = ft_value(line[3], ',', 1);
 	rt->light.color[2] = ft_value(line[3], ',', 1);
-	if (rt->light.color[0] < 0 || rt->light.color[0] > 255 || rt->light.color[1] < 0 
+	if (rt->light.color[0] < 0 || rt->light.color[0] > 255 || rt->light.color[1] < 0
 	|| rt->light.color[1] > 255 || rt->light.color[2] < 0 || rt->light.color[2] > 255)
 		return (-1);
-	if (rt->light.coord[0] < -100 || rt->light.coord[0] > 100 || rt->light.coord[1] < -100 
+	if (rt->light.coord[0] < -100 || rt->light.coord[0] > 100 || rt->light.coord[1] < -100
 	|| rt->light.coord[1] > 100 || rt->light.coord[2] < -100 || rt->light.coord[2] > 100)
 		return (-1);
 	if (rt->light.ratio < 0.0 || rt->light.ratio > 1.0)
@@ -329,10 +329,10 @@ int		set_sphere(char **line,t_rt *rt)
 	rt->sphere->color[0] = ft_value(line[3], ',', 0);
 	rt->sphere->color[1] = ft_value(line[3], ',', 1);
 	rt->sphere->color[2] = ft_value(line[3], ',', 1);
-	if (rt->sphere->color[0] < 0 || rt->sphere->color[0] > 255 || rt->sphere->color[1] < 0 
+	if (rt->sphere->color[0] < 0 || rt->sphere->color[0] > 255 || rt->sphere->color[1] < 0
 	|| rt->sphere->color[1] > 255 || rt->sphere->color[2] < 0 || rt->sphere->color[2] > 255)
 		return (-1);
-	if (rt->sphere->coord[0] < -100 || rt->sphere->coord[0] > 100 || rt->sphere->coord[1] < -100 
+	if (rt->sphere->coord[0] < -100 || rt->sphere->coord[0] > 100 || rt->sphere->coord[1] < -100
 	|| rt->sphere->coord[1] > 100 || rt->sphere->coord[2] < -100 || rt->sphere->coord[2] > 100)
 		return (-1);
 	if (rt->sphere->diametr < 0 || rt->sphere->diametr > 100)
@@ -374,13 +374,13 @@ int		set_plane(char **line, t_rt *rt)
 	rt->plane->color[0] = ft_value(line[3], ',', 0);
 	rt->plane->color[1] = ft_value(line[3], ',', 1);
 	rt->plane->color[2] = ft_value(line[3], ',', 1);
-	if (rt->plane->coord[0] < -100 || rt->plane->coord[0] > 100 || rt->plane->coord[1] < -100 
+	if (rt->plane->coord[0] < -100 || rt->plane->coord[0] > 100 || rt->plane->coord[1] < -100
 	|| rt->plane->coord[1] > 100 || rt->plane->coord[2] < -100 || rt->plane->coord[2] > 100)
 		return (-1);
 	if (rt->plane->orient[0] < -1.0 || rt->plane->orient[0] > 1.0 || rt->plane->orient[1] < -1.0
 	|| rt->plane->orient[1] > 1.0 || rt->plane->orient[2] < -1.0 || rt->plane->orient[2] > 1.0)
 		return (-1);
-	if (rt->plane->color[0] < 0 || rt->plane->color[0] > 255 || rt->plane->color[1] < 0 
+	if (rt->plane->color[0] < 0 || rt->plane->color[0] > 255 || rt->plane->color[1] < 0
 	|| rt->plane->color[1] > 255 || rt->plane->color[2] < 0 || rt->plane->color[2] > 255)
 		return (-1);
 	return (0);
@@ -409,13 +409,13 @@ int		parse_plane(char **line, t_rt *rt)
 
 int		cylinder_errorcheck(t_rt *rt)
 {
-	if (rt->cylind->coord[0] < -100 || rt->cylind->coord[0] > 100 || rt->cylind->coord[1] < -100 
+	if (rt->cylind->coord[0] < -100 || rt->cylind->coord[0] > 100 || rt->cylind->coord[1] < -100
 	|| rt->cylind->coord[1] > 100 || rt->cylind->coord[2] < -100 || rt->cylind->coord[2] > 100)
 		return (-1);
 	if (rt->cylind->orient[0] < -1.0 || rt->cylind->orient[0] > 1.0 || rt->cylind->orient[1] < -1.0
 	|| rt->cylind->orient[1] > 1.0 || rt->cylind->orient[2] < -1.0 || rt->cylind->orient[2] > 1.0)
-		return (-1);	
-	if (rt->cylind->rgb[0] < 0 || rt->cylind->rgb[0] > 255 || rt->cylind->rgb[1] < 0 
+		return (-1);
+	if (rt->cylind->rgb[0] < 0 || rt->cylind->rgb[0] > 255 || rt->cylind->rgb[1] < 0
 	|| rt->cylind->rgb[1] > 255 || rt->cylind->rgb[2] < 0 || rt->cylind->rgb[2] > 255)
 		return (-1);
 	if (rt->cylind->diametr < 0 || rt->cylind->diametr > 100)
@@ -511,7 +511,7 @@ char	*fixed_line(char *str)
 	tmp = str;
 	while (tmp && tmp[i])
 	{
-		if (tmp[i] == '\t')
+		if (ft_isspace(tmp[i]))
 			tmp[i] = ' ';
 		i++;
 	}
@@ -523,7 +523,7 @@ char	*fixed_line(char *str)
 int		parse_set_rt(t_rt *rt, int fd)
 {
 	char *str;
-	
+
 	str = get_next_line(fd);
 	while (str != NULL)
 	{
@@ -534,7 +534,7 @@ int		parse_set_rt(t_rt *rt, int fd)
 			return (-1);
 		}
 		free(str);
-		str = get_next_line(fd);	
+		str = get_next_line(fd);
 	}
 	free (str);
 	return (0);
