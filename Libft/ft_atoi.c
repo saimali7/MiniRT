@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anifanto <stasy247@mail.ru>                +#+  +:+       +#+        */
+/*   By: anifanto <anifanto@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/28 20:21:17 by anifanto          #+#    #+#             */
-/*   Updated: 2021/11/17 13:22:26 by anifanto         ###   ########.fr       */
+/*   Updated: 2022/04/27 12:26:54 by anifanto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,6 @@ int	ft_atoi(const char *str)
 	}
 	if ((str[i] != '\0') || (res > 2147483647 && sign == 1) || \
 	(res > 2147483648 && sign == -1))
-		exit(1); //past function with free
+		exit(1);
 	return (res * sign);
 }

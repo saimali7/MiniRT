@@ -2,7 +2,7 @@ NAME = miniRT
 
 CC = gcc
 
-LIST =	main.c
+LIST =	main.c	src/atod.c
 
 OBJ = $(LIST:.c=.o)
 
@@ -22,7 +22,7 @@ bonus : $(NAME)
 
 clean:
 	rm -rf $(OBJ)
-	rm -f ./mlx/*.a 
+	rm -f ./mlx/*.a
 	rm -f ./libft/*.o
 	rm -f ./libft/*.a
 	rm -f ./libft/gnl/*.o

@@ -6,7 +6,7 @@
 #    By: anifanto <anifanto@student.42abudhabi.a    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/03 11:38:11 by anifanto          #+#    #+#              #
-#    Updated: 2022/04/20 15:10:13 by anifanto         ###   ########.fr        #
+#    Updated: 2022/04/27 12:24:42 by anifanto         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,6 +27,7 @@ LIST =	ft_atoi.c			ft_bzero.c			ft_calloc.c\
 		ft_lstnew.c			ft_lstadd_front.c	ft_lstsize.c\
 		ft_lstlast.c		ft_lstadd_back.c	ft_lstdelone.c\
 		ft_lstclear.c		ft_lstiter.c		ft_lstmap.c\
+		ft_isspace.c\
 		gnl/get_next_line.c 		gnl/get_next_line_utils.c \
 
 OBJ = $(LIST:.c=.o)
