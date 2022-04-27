@@ -44,6 +44,7 @@ t_rt	*init_rt(void)
 	ptr->plane = NULL;
 	ptr->sphere = NULL;
 	ptr->cylind = NULL;
+	ptr->display = NULL;
 	return (ptr);
 }
 
@@ -586,6 +587,7 @@ int main(int argc, char **argv)
 			exit(-1);
 		}
 		print_rt(rt);
+		//init_window(rt->display); //will add free
 		// calculate
 		// draw
 	}

@@ -2,6 +2,7 @@
 # define MINILIBX_H
 
 # include "../mlx/mlx.h"
+# include "MiniRt.h"
 
 # define WIDHT 1000
 # define HEIGHT 500
@@ -18,10 +19,9 @@ typedef struct s_img
 typedef struct s_display
 {
 	void			*mlx;
-	void			*mlx_ptr;
-	unsigned int	**buffer;
+	void			*mlx_win;
+	//unsigned int	**buffer;
 	t_img			img;
-	int				width;
 }					t_disp;
 
 #endif
