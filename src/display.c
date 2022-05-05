@@ -21,14 +21,6 @@ static int	init_screen(t_disp	*display)
 	}
 }
 
-void	my_mlx_pixel_put(t_img *data, int x, int y, int color) //for example
-{
-	char	*dst;
-
-	dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
-	*(unsigned int*)dst = color;
-}
-
 void	init_window(t_disp *display)
 {
 	display = (t_disp *)ft_calloc(sizeof(t_disp), 1);
@@ -42,9 +34,7 @@ void	init_window(t_disp *display)
 		exit(1); // change error funct("Init window failed")
 	if (!init_screen(display))
 		exit(1); // change error funct("Init screen failed")
-	my_mlx_pixel_put(&display->img, 5, 5, 0x00FF0000); //move
-	mlx_put_image_to_window(display->mlx, display->mlx_win, display->img.img, 0, 0); //move
-	mlx_loop(display->mlx); //move
+	ft_calculate(display);
 }
 
 void	ft_free_display(t_disp	*display) // need paste

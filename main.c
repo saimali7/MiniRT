@@ -587,8 +587,8 @@ int main(int argc, char **argv)
 			exit(-1);
 		}
 		print_rt(rt);
-		//init_window(rt->display); //will add free
-		// calculate
+		init_window(rt->display); //will add free
+		//ft_calculate(rt->display);
 		// draw
 	}
 	else

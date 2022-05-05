@@ -69,6 +69,7 @@ typedef struct	s_rt
 
 double	rt_atod(const char *str, t_rt *rt);
 void	init_window(t_disp *display);
+void    ft_calculate(t_disp *display);
 void	free_rt(t_rt **ptr_rt);
 
 
