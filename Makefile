@@ -2,7 +2,7 @@ NAME = miniRT
 
 CC = gcc
 
-LIST =	main.c	src/atod.c	src/display.c
+LIST =	main.c	src/atod.c	src/display.c	src/calculate.c
 
 OBJ = $(LIST:.c=.o)
 
