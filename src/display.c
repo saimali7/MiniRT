@@ -21,7 +21,8 @@ static int	init_screen(t_disp	*display)
 	}
 }
 
-void	init_window(t_disp *display)
+
+void	init_window(t_disp *display, t_rt *rt)
 {
 	display = (t_disp *)ft_calloc(sizeof(t_disp), 1);
 	if (!display)
@@ -34,7 +35,7 @@ void	init_window(t_disp *display)
 		exit(1); // change error funct("Init window failed")
 	if (!init_screen(display))
 		exit(1); // change error funct("Init screen failed")
-	ft_calculate(display);
+	ft_calculate(display, rt);
 }
 
 void	ft_free_display(t_disp	*display) // need paste
@@ -51,6 +52,7 @@ void	ft_free_display(t_disp	*display) // need paste
 			mlx_destroy_window(display->mlx, display->mlx_win);
 		if (display->mlx)
 			free(display->mlx);
+
 		// if (display->buffer)
 		// {
 		// 	j = 0;

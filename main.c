@@ -43,7 +43,7 @@ t_rt	*init_rt(void)
 		return (NULL);
 	ptr->plane = NULL;
 	ptr->sphere = NULL;
-	ptr->cylind = NULL;
+	ptr->cylinder = NULL;
 	ptr->display = NULL;
 	return (ptr);
 }
@@ -71,10 +71,10 @@ void	free_rt(t_rt **ptr_rt)
 		rt->sphere = rt->sphere->next;
 		free (sphere);
 	}
-	while (rt->cylind != NULL)
+	while (rt->cylinder != NULL)
 	{
-		cylinder = rt->cylind;
-		rt->cylind = rt->cylind->next;
+		cylinder = rt->cylinder;
+		rt->cylinder = rt->cylinder->next;
 		free (cylinder);
 	}
 	free (rt);
@@ -410,18 +410,18 @@ int		parse_plane(char **line, t_rt *rt)
 
 int		cylinder_errorcheck(t_rt *rt)
 {
-	if (rt->cylind->coord[0] < -100 || rt->cylind->coord[0] > 100 || rt->cylind->coord[1] < -100
-	|| rt->cylind->coord[1] > 100 || rt->cylind->coord[2] < -100 || rt->cylind->coord[2] > 100)
+	if (rt->cylinder->coord[0] < -100 || rt->cylinder->coord[0] > 100 || rt->cylinder->coord[1] < -100
+	|| rt->cylinder->coord[1] > 100 || rt->cylinder->coord[2] < -100 || rt->cylinder->coord[2] > 100)
 		return (-1);
-	if (rt->cylind->orient[0] < -1.0 || rt->cylind->orient[0] > 1.0 || rt->cylind->orient[1] < -1.0
-	|| rt->cylind->orient[1] > 1.0 || rt->cylind->orient[2] < -1.0 || rt->cylind->orient[2] > 1.0)
+	if (rt->cylinder->orient[0] < -1.0 || rt->cylinder->orient[0] > 1.0 || rt->cylinder->orient[1] < -1.0
+	|| rt->cylinder->orient[1] > 1.0 || rt->cylinder->orient[2] < -1.0 || rt->cylinder->orient[2] > 1.0)
 		return (-1);
-	if (rt->cylind->rgb[0] < 0 || rt->cylind->rgb[0] > 255 || rt->cylind->rgb[1] < 0
-	|| rt->cylind->rgb[1] > 255 || rt->cylind->rgb[2] < 0 || rt->cylind->rgb[2] > 255)
+	if (rt->cylinder->color[0] < 0 || rt->cylinder->color[0] > 255 || rt->cylinder->color[1] < 0
+	|| rt->cylinder->color[1] > 255 || rt->cylinder->color[2] < 0 || rt->cylinder->color[2] > 255)
 		return (-1);
-	if (rt->cylind->diametr < 0 || rt->cylind->diametr > 100)
+	if (rt->cylinder->diametr < 0 || rt->cylinder->diametr > 100)
 		return (-1);
-	if (rt->cylind->height < 0 || rt->cylind->height > 100)
+	if (rt->cylinder->height < 0 || rt->cylinder->height > 100)
 		return (-1);
 	return (0);
 }
@@ -430,17 +430,17 @@ int		set_cylinder(char **line, t_rt *rt)
 {
 	if (comma_check(line[1]) == -1 || comma_check(line[2]) == -1 || comma_check(line[5]) == -1)
 		return (-1);
-	rt->cylind->coord[0] = ft_value(line[1], ',', 0);
-	rt->cylind->coord[1] = ft_value(line[1], ',', 1);
-	rt->cylind->coord[2] = ft_value(line[1], ',', 1);
-	rt->cylind->orient[0] = ft_value(line[2], ',', 0);
-	rt->cylind->orient[1] = ft_value(line[2], ',', 1);
-	rt->cylind->orient[2] = ft_value(line[2], ',', 1);
-	rt->cylind->diametr = ft_value(line[3], ',', 0);
-	rt->cylind->height = ft_value(line[4], ',', 0);
-	rt->cylind->rgb[0] = ft_value(line[5], ',', 0);
-	rt->cylind->rgb[1] = ft_value(line[5], ',', 1);
-	rt->cylind->rgb[2] = ft_value(line[5], ',', 1);
+	rt->cylinder->coord[0] = ft_value(line[1], ',', 0);
+	rt->cylinder->coord[1] = ft_value(line[1], ',', 1);
+	rt->cylinder->coord[2] = ft_value(line[1], ',', 1);
+	rt->cylinder->orient[0] = ft_value(line[2], ',', 0);
+	rt->cylinder->orient[1] = ft_value(line[2], ',', 1);
+	rt->cylinder->orient[2] = ft_value(line[2], ',', 1);
+	rt->cylinder->diametr = ft_value(line[3], ',', 0);
+	rt->cylinder->height = ft_value(line[4], ',', 0);
+	rt->cylinder->color[0] = ft_value(line[5], ',', 0);
+	rt->cylinder->color[1] = ft_value(line[5], ',', 1);
+	rt->cylinder->color[2] = ft_value(line[5], ',', 1);
 	if (cylinder_errorcheck(rt) == -1)
 		return (-1);
 	return (0);
@@ -451,10 +451,10 @@ int		parse_cylinder(char **line, t_rt *rt)
 	int		size;
 	t_cylinder *temp;
 
-	temp = rt->cylind;
-	while (rt->cylind != NULL)
-		rt->cylind = rt->cylind->next;
-	rt->cylind = new_cylinder();
+	temp = rt->cylinder;
+	while (rt->cylinder != NULL)
+		rt->cylinder = rt->cylinder->next;
+	rt->cylinder = new_cylinder();
 	size = array_size(line);
 	if (size != 6)
 		return (-1);
@@ -463,7 +463,7 @@ int		parse_cylinder(char **line, t_rt *rt)
 	if (set_cylinder(line, rt) == -1)
 		return (-1);
 	if (temp != NULL)
-		rt->cylind = temp;
+		rt->cylinder = temp;
 	return (0);
 }
 
@@ -566,9 +566,10 @@ void	print_rt(t_rt *rt)
 		printf("Sphere: %f,%f,%f %f		%d,%d,%d\n", rt->sphere->coord[0], rt->sphere->coord[1], rt->sphere->coord[2], rt->sphere->diametr, rt->sphere->color[0], rt->sphere->color[1], rt->sphere->color[2]);
 	if (rt->plane != NULL)
 		printf("Plane: %f,%f,%f %f,%f,%f	%d,%d,%d\n", rt->plane->coord[0], rt->plane->coord[1], rt->plane->coord[2], rt->plane->orient[0], rt->plane->orient[1], rt->plane->orient[2], rt->plane->color[0], rt->plane->color[1], rt->plane->color[2]);
-	if (rt->cylind != NULL)
-		printf("Cylinder: %f,%f,%f		%f,%f,%f		%f %f 	%d,%d,%d\n", rt->cylind->coord[0], rt->cylind->coord[1], rt->cylind->coord[2], rt->cylind->orient[0], rt->cylind->orient[1], rt->cylind->orient[2], rt->cylind->diametr, rt->cylind->height, rt->cylind->rgb[0], rt->cylind->rgb[1], rt->cylind->rgb[2]);
+	if (rt->cylinder != NULL)
+		printf("Cylinder: %f,%f,%f		%f,%f,%f		%f %f 	%d,%d,%d\n", rt->cylinder->coord[0], rt->cylinder->coord[1], rt->cylinder->coord[2], rt->cylinder->orient[0], rt->cylinder->orient[1], rt->cylinder->orient[2], rt->cylinder->diametr, rt->cylinder->height, rt->cylinder->color[0], rt->cylinder->color[1], rt->cylinder->color[2]);
 }
+
 
 int main(int argc, char **argv)
 {
@@ -587,8 +588,7 @@ int main(int argc, char **argv)
 			exit(-1);
 		}
 		print_rt(rt);
-		init_window(rt->display); //will add free
-		//ft_calculate(rt->display);
+		init_window(rt->display, rt); //will add free
 		// draw
 	}
 	else
