@@ -5,8 +5,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <fcntl.h>
+#include <unistd.h>
 #include "Minilibx.h"
 #include "../mlx/mlx.h"
+#include "Vectors.h"
 #include "../Libft/libft.h"
 #include "../Libft/gnl/get_next_line.h"
 
