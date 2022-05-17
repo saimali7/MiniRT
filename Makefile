@@ -2,7 +2,8 @@ NAME = miniRT
 
 CC = gcc
 
-LIST =	main.c	src/atod.c	src/display.c	src/calculate.c
+LIST =	main.c	src/atod.c	src/display.c	src/calculate.c src/errors.c \
+		src/sphere.c src/ray_tracing.c src/vectors.c
 
 OBJ = $(LIST:.c=.o)
 

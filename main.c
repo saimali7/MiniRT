@@ -7,7 +7,7 @@ t_plane *new_plane(void)
 
 	ptr = (t_plane *) malloc(sizeof(t_plane));
 	if (!ptr)
-		return (NULL);
+		error_exit(-1, ERR_MEM_AL);
 	ptr->next = NULL;
 	return (ptr);
 }
@@ -18,7 +18,7 @@ t_sphere *new_sphere(void)
 
 	ptr = (t_sphere *) malloc(sizeof(t_sphere));
 	if (!ptr)
-		return (NULL);
+		error_exit(-1, ERR_MEM_AL);
 	ptr->next = NULL;
 	return (ptr);
 }
@@ -29,7 +29,7 @@ t_cylinder *new_cylinder(void)
 
 	ptr = (t_cylinder *) malloc(sizeof(t_cylinder));
 	if (!ptr)
-		return (NULL);
+		error_exit(-1, ERR_MEM_AL);
 	ptr->next = NULL;
 	return (ptr);
 }
@@ -40,7 +40,7 @@ t_rt	*init_rt(void)
 
 	ptr = ft_calloc(sizeof(t_rt), 1);
 	if (!ptr)
-		return (NULL);
+		error_exit(-1, ERR_MEM_AL);
 	ptr->plane = NULL;
 	ptr->sphere = NULL;
 	ptr->cylinder = NULL;
@@ -106,6 +106,8 @@ int		open_and_check(char *arg)
 	fd = 0;
 	rd = 0;
 	buf = (char *) malloc(sizeof(char));
+	if (!buf)
+		error_exit(-1, ERR_MEM_AL);
 	fd = open(arg, O_RDONLY);
 	if (fd == -1) //check is not folder
 		return (-1);
@@ -323,10 +325,12 @@ int		set_sphere(char **line,t_rt *rt)
 {
 	if (comma_check(line[1]) == -1 || comma_check(line[3]) == -1)
 		return (-1);
-	rt->sphere->coord[0] = ft_value(line[1], ',', 0);
-	rt->sphere->coord[1] = ft_value(line[1], ',', 1);
-	rt->sphere->coord[2] = ft_value(line[1], ',', 1);
+	//rt->sphere->center = new_sphere(0, 0, 0);	// add free
+	rt->sphere->coord[0] = ft_value(line[1], ',', 0); //rt->sphere->center->x
+	rt->sphere->coord[1] = ft_value(line[1], ',', 1); //rt->sphere->center->y
+	rt->sphere->coord[2] = ft_value(line[1], ',', 1);	////rt->sphere->center->z
 	rt->sphere->diametr = ft_value(line[2], ',', 0);
+	rt->sphere->radius = rt->sphere->diametr / 2.0; // check
 	rt->sphere->color[0] = ft_value(line[3], ',', 0);
 	rt->sphere->color[1] = ft_value(line[3], ',', 1);
 	rt->sphere->color[2] = ft_value(line[3], ',', 1);

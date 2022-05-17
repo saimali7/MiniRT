@@ -12,6 +12,11 @@
 #include "../Libft/libft.h"
 #include "../Libft/gnl/get_next_line.h"
 
+# define MAX_SIZE 10000
+# define ERR_MEM_AL "Error: allocating memory"
+
+typedef struct	s_vect	t_vect;
+
 typedef struct s_ambient
 {
 	float	ratio;
@@ -20,8 +25,8 @@ typedef struct s_ambient
 
 typedef struct	s_camera
 {
-	float	coord[3];
-	float	orient[3];
+	float	coord[3];	//vector
+	float	orient[3];	//vector
 	int		fov;
 }	t_camera;
 
@@ -34,8 +39,9 @@ typedef struct	s_light
 
 typedef struct s_sphere
 {
-	float	coord[3];
+	float	coord[3]; // change t_vect	*center;
 	float	diametr;
+	float	radius;
 	int		color[3];
 	struct s_sphere	*next;
 }			t_sphere;
@@ -60,6 +66,9 @@ typedef struct s_cylinder
 
 typedef struct	s_rt
 {
+	// void		*mlx;
+	// void		*mlx_win;
+	// t_img		img;
 	t_ambient	ambient;
 	t_camera	camera;
 	t_light		light;
@@ -73,6 +82,10 @@ double	rt_atod(const char *str, t_rt *rt);
 void	init_window(t_disp *display, t_rt *rt);
 void	ft_calculate(t_disp *display, t_rt *rt);
 void	free_rt(t_rt **ptr_rt);
+void	error_exit(int code, char *str);
+void    ray_tracing(t_rt *rt);
+float	is_ray_sphere(t_camera camera, t_vect *ray, t_sphere *sphere);
+unsigned int	ft_get_rgb(int *color);
 
 
 
