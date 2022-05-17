@@ -2,6 +2,35 @@
 #include "../inc/Minilibx.h"
 #include "../Libft/libft.h"
 
+// int is_sphere(t_rt *rt, float x, float y)
+// {
+// 	float dist;
+// 	float rad;
+
+// 	dist = sqrtf(powf(x - rt->sphere->coord[0], 2) + powf(y - rt->sphere->coord[1], 2));
+// 	rad = rt->sphere->diametr /2;
+// 	if (!rt->sphere)
+// 		return (0);
+// 	if (dist <= rad)
+// 	{
+// 		if ((rad - dist) < 1.00000000)
+// 			return (2);
+// 		return (1);
+// 	}
+// 	return (0);
+// }
+
+// int is_cylinder(t_rt *rt, float x, float y)
+// {
+// 	float check = 1.000000;
+
+// 	if ((x < rt->cylinder->coord[0] ) || (y < rt->cylinder->coord[1]) || y > (rt->cylinder->coord[1] + rt->cylinder->height) || x > (rt->cylinder->coord[0] + rt->cylinder->diametr))
+// 		return 0;
+// 	if ((x - rt->cylinder->coord[0] < check) || (y - rt->cylinder->coord[1] < check) || (rt->cylinder->coord[1] + rt->cylinder->height - y < check) || (rt->cylinder->coord[0] + rt->cylinder->diametr - x < check))
+// 		return 1;
+// 	return 2;
+// }
+
 unsigned int	ft_get_rgb(int *color)
 {
 	unsigned int	x;
@@ -18,41 +47,30 @@ void	my_mlx_pixel_put(t_img *data, int x, int y, int color)
 	*(unsigned int*)dst = color;
 }
 
-int is_sphere(t_rt *rt, float x, float y)
+typedef struct	s_vplane
 {
-	float dist;
-	float rad;
+	float		width;
+	float		hight;
+	float		x_pix;
+	float		y_pix;
+}				t_vplane;
 
-	dist = sqrtf(powf(x - rt->sphere->coord[0], 2) + powf(y - rt->sphere->coord[1], 2));
-	rad = rt->sphere->diametr /2;
-	if (!rt->sphere)
-		return (0);
-	if (dist <= rad)
-	{
-		if ((rad - dist) < 1.00000000)
-			return (2);
-		return (1);
-	}
-	return (0);
-}
-
-int is_cylinder(t_rt *rt, float x, float y)
+t_vplane	*get_view_plane(int fov)
 {
-	float check = 1.000000;
+	t_vplane	*new;
+	float		aspect;
 
-	if ((x < rt->cylinder->coord[0] ) || (y < rt->cylinder->coord[1]) || y > (rt->cylinder->coord[1] + rt->cylinder->height) || x > (rt->cylinder->coord[0] + rt->cylinder->diametr))
-		return 0;
-	if ((x - rt->cylinder->coord[0] < check) || (y - rt->cylinder->coord[1] < check) || (rt->cylinder->coord[1] + rt->cylinder->height - y < check) || (rt->cylinder->coord[0] + rt->cylinder->diametr - x < check))
-		return 1;
-	return 2;
-}
-
-int is_plane(t_rt *rt, float x, float y)
-{
-	(void)rt;
-	if (x || y)
-		return(0);
-	return(0);
+	fov = 1;
+	new = malloc(sizeof(t_vplane));
+	if (!new)
+		error_exit(-1, ERR_MEM_AL);
+	aspect =  WIDHT / HEIGHT;
+	new->width = 1; //will change
+	new->hight = new->width / aspect; 
+	new->x_pix = new->width / WIDHT;
+	new->y_pix = new->hight / HEIGHT;
+	printf ("wight = %f, hight = %f\n", new->width, new->hight); //delete
+	return (new);
 }
 
 int	exit_hook(int x)
@@ -77,57 +95,87 @@ int	ft_key(int key, t_rt *rt)
 
 void	ft_calculate(t_disp *display, t_rt *rt)
 {
-	float x;
-	float y;
+	//	ray_tracing(rt);
 
-	y = HEIGHT / -2;
-	while (y < HEIGHT / 2)
-	{
-		x = WIDHT / -2;
-		while (x < WIDHT / 2)
-		{
-			if (y == 0.01 * x * x - 240)
-				my_mlx_pixel_put(&display->img, WIDHT / 2 + x, HEIGHT / 2 - y, 0x00FFFFFFF); //for fun
-			if (is_sphere(rt, x, y) == 2)
-				my_mlx_pixel_put(&display->img, WIDHT / 2 + x, HEIGHT / 2 - y, ft_get_rgb(rt->sphere->color));
-			else if (is_sphere(rt, x, y))
-				my_mlx_pixel_put(&display->img, WIDHT / 2 + x, HEIGHT / 2 - y, ft_get_rgb(rt->sphere->color)/1.01);
-			x++;
-		}
-		y++;
-	}
+	int			mlx_x;
+	int			mlx_y;
+	float		ang_x;
+	float		ang_y;
+	float		ray_x;
+	float		ray_y;
+	t_vect		*ray;
+	t_vplane	*vplane; // view window
 
-	y = HEIGHT / -2;
-	while (y < HEIGHT / 2)
-	{
-		x = WIDHT / -2;
-		while (x < WIDHT / 2)
-		{
-			if (is_cylinder(rt, x, y) == 2)
-				my_mlx_pixel_put(&display->img, WIDHT / 2 + x, HEIGHT / 2 - y, ft_get_rgb(rt->cylinder->color));
-			else if (is_cylinder(rt, x, y))
-				my_mlx_pixel_put(&display->img, WIDHT / 2 + x, HEIGHT / 2 - y, ft_get_rgb(rt->cylinder->color) * 1.01);
-			x++;
-		}
-		y++;
-	}
+	unsigned int color; //delete
 
-	y = HEIGHT / -2;
-	while (y < HEIGHT / 2)
+	mlx_y = 0;
+	vplane = get_view_plane(rt->camera.fov);
+	ang_y = HEIGHT / 2;
+
+	// ray = new_vect(100, 0, -1);
+	// is_ray_sphere(rt->camera, ray, rt->sphere);
+
+	while (ang_y >= ((HEIGHT / 2) * (-1)))
 	{
-		x = WIDHT / -2;
-		while (x < WIDHT / 2)
-		{
-			if (is_plane(rt, x, y) == 2)
-				my_mlx_pixel_put(&display->img, WIDHT / 2 + x, HEIGHT / 2 - y, ft_get_rgb(rt->plane->color));
-			else if (is_plane(rt, x, y))
-				my_mlx_pixel_put(&display->img, WIDHT / 2 + x, HEIGHT / 2 - y, ft_get_rgb(rt->plane->color)/1.01);
-			x++;
-		}
-		y++;
+		ray_y = ang_y * (vplane->y_pix);
+		ang_x = (WIDHT / 2) * (-1);
+		mlx_x = 0;
+	 	while (ang_x <= (WIDHT / 2))
+	 	{
+	 		ray_x = ang_x * (vplane->x_pix);
+			//my_mlx_pixel_put(&display->img, 5, mlx_y, ft_get_rgb(rt->sphere->color));
+			ray = new_vect(ray_x, ray_y, -1);
+	 		normalize_vect(ray);
+	 		if (is_ray_sphere(rt->camera, ray, rt->sphere))
+	 			color = ft_get_rgb(rt->sphere->color);
+	 		else
+	 			color = 0;
+	 		my_mlx_pixel_put(&display->img, 5, mlx_y, color);
+	 		free(ray);
+	 		ang_x++;
+	 		mlx_x++;
+	 	}
+		ang_y--;
+		mlx_y++;
 	}
+	//my_mlx_pixel_put(&display->img, 5, 5, 0x00FFFFFFF);
+
+	// float x;
+	// float y;
+
+	// y = HEIGHT / -2;
+	// while (y < HEIGHT / 2)
+	// {
+	// 	x = WIDHT / -2;
+	// 	while (x < WIDHT / 2)
+	// 	{
+	// 		if (y == 0.01 * x * x - 240)
+	// 			my_mlx_pixel_put(&display->img, WIDHT / 2 + x, HEIGHT / 2 - y, 0x00FFFFFFF); //for fun
+	// 		if (is_sphere(rt, x, y) == 2)
+	// 			my_mlx_pixel_put(&display->img, WIDHT / 2 + x, HEIGHT / 2 - y, ft_get_rgb(rt->sphere->color));
+	// 		else if (is_sphere(rt, x, y))
+	// 			my_mlx_pixel_put(&display->img, WIDHT / 2 + x, HEIGHT / 2 - y, ft_get_rgb(rt->sphere->color)/1.01);
+	// 		x++;
+	// 	}
+	// 	y++;
+	// }
+
+	// y = HEIGHT / -2;
+	// while (y < HEIGHT / 2)
+	// {
+	// 	x = WIDHT / -2;
+	// 	while (x < WIDHT / 2)
+	// 	{
+	// 		if (is_cylinder(rt, x, y) == 2)
+	// 			my_mlx_pixel_put(&display->img, WIDHT / 2 + x, HEIGHT / 2 - y, ft_get_rgb(rt->cylinder->color));
+	// 		else if (is_cylinder(rt, x, y))
+	// 			my_mlx_pixel_put(&display->img, WIDHT / 2 + x, HEIGHT / 2 - y, ft_get_rgb(rt->cylinder->color) * 1.01);
+	// 		x++;
+	// 	}
+	// 	y++;
+	// }
+
 	mlx_put_image_to_window(display->mlx, display->mlx_win, display->img.img, 0, 0);
-	(void)rt;
 	mlx_hook(display->mlx_win, 17, 0, exit_hook, 0);
 	mlx_key_hook(display->mlx_win, ft_key, rt);
 	mlx_loop(display->mlx);

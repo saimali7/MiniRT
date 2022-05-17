@@ -1,12 +1,12 @@
-#include "inc/Vectors.h"
+#include "../inc/Vectors.h"
 
 t_vect	*new_vect(float x, float y, float z)
 {
 	t_vect	*new;
 
-	new = ft_calloc(sizeof(t_vect), 1);
-	// if (!new)
- 	//     error_exit(-1);
+	new = malloc(sizeof(t_vect));
+	if (!new)
+		error_exit(-1, ERR_MEM_AL);
 	new->x = x;
     new->y = y;
  	new->z = z;

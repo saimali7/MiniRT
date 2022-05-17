@@ -26,15 +26,20 @@ void	init_window(t_disp *display, t_rt *rt)
 {
 	display = (t_disp *)ft_calloc(sizeof(t_disp), 1);
 	if (!display)
-		exit(1); // change error funct("Display allocate failed")
+		error_exit(-1, ERR_MEM_AL);
 	display->mlx = mlx_init();
+	if (!display->height)
+		display->height = HEIGHT;
+	if (!display->width)
+		display->width = WIDHT;
 	if(!display->mlx)
-		exit(1); // change error funct("Init mlx failed")
-	display->mlx_win = mlx_new_window(display->mlx, WIDHT, HEIGHT, "MiniRt");
+		error_exit(-1, "Error: Init mlx failed");
+	display->mlx_win = mlx_new_window(display->mlx, display->width, display->height, "MiniRt");
 	if (!display->mlx_win)
-		exit(1); // change error funct("Init window failed")
+		error_exit(-1, "Error: Init window failed");
 	if (!init_screen(display))
-		exit(1); // change error funct("Init screen failed")
+		error_exit(-1, "Error: Init screen failed");
+	(void)rt;
 	ft_calculate(display, rt);
 }
 
