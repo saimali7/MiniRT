@@ -337,10 +337,10 @@ int		set_sphere(char **line,t_rt *rt)
 	if (rt->sphere->color[0] < 0 || rt->sphere->color[0] > 255 || rt->sphere->color[1] < 0
 	|| rt->sphere->color[1] > 255 || rt->sphere->color[2] < 0 || rt->sphere->color[2] > 255)
 		return (-1);
-	if (rt->sphere->coord[0] < -100 || rt->sphere->coord[0] > 100 || rt->sphere->coord[1] < -100
-	|| rt->sphere->coord[1] > 100 || rt->sphere->coord[2] < -100 || rt->sphere->coord[2] > 100)
+	if (rt->sphere->coord[0] < -MAX_SIZE || rt->sphere->coord[0] > MAX_SIZE || rt->sphere->coord[1] < -MAX_SIZE
+	|| rt->sphere->coord[1] > MAX_SIZE || rt->sphere->coord[2] < -MAX_SIZE || rt->sphere->coord[2] > MAX_SIZE)
 		return (-1);
-	if (rt->sphere->diametr < 0 || rt->sphere->diametr > 100)
+	if (rt->sphere->diametr < 0 || rt->sphere->diametr > MAX_SIZE)
 		return(-1);
 	return (0);
 }
@@ -587,20 +587,15 @@ int main(int argc, char **argv)
 		ft_putendl_fd(argv[1], 0);
 		if (parse(rt, argv[1]) == -1)
 		{
-			write(2, "Error\nInvalid argument file\n", 29);
 			free_rt(&rt);
-			exit(-1);
+			error_exit(-1, "Error: Invalid argument file\n");
 		}
 		print_rt(rt);
 		init_window(rt->display, rt); //will add free
 		// draw
 	}
 	else
-	{
-		ft_putstr_fd("Error: ", 2); // create funct error with massage, free and exit
-		ft_putstr_fd("Usage: ./miniRT path_of_scene.rt", 2);
-		ft_putendl_fd("", 2);
-	}
+		error_exit(-1, "Error: Usage: ./miniRT path_of_scene.rt\n");
 	free_rt(&rt);
 	return (0);
 }

@@ -24,7 +24,7 @@ static int	init_screen(t_disp	*display)
 
 void	init_window(t_disp *display, t_rt *rt)
 {
-	display = (t_disp *)ft_calloc(sizeof(t_disp), 1);
+	display = (t_disp *)ft_calloc(1, sizeof(t_disp));
 	if (!display)
 		error_exit(-1, ERR_MEM_AL);
 	display->mlx = mlx_init();

@@ -1,49 +1,49 @@
 #include "../inc/Vectors.h"
 
-t_vect	*new_vect(float x, float y, float z)
+float		*new_vect(float x, float y, float z)
 {
-	t_vect	*new;
+	float	*new;
 
-	new = malloc(sizeof(t_vect));
+	new = calloc(3, sizeof(float));
 	if (!new)
 		error_exit(-1, ERR_MEM_AL);
-	new->x = x;
-    new->y = y;
- 	new->z = z;
+	new[0] = x;
+    new[1] = y;
+ 	new[2] = z;
  	return (new);
 }
 
-t_vect	*subtr_vec(t_vect *vect1, t_vect *vect2)
+float	*subtr_vec(float *vect1, float *vect2)
 {
-	t_vect	*res;
+	float	*res;
 
- 	res = new_vect(vect1->x - vect2->x, vect1->y - vect2->y, vect1->z - vect2->z);
+ 	res = new_vect(vect1[0] - vect2[0], vect1[1] - vect2[1], vect1[2] - vect2[2]);
 	return (res);
 }
 
-float	lenght_vect(t_vect *vect)
+float	lenght_vect(float *vect)
 {
 	float	res;
 
-	res = sqrt((vect->x * vect->x) + (vect->y * vect->y) + (vect->z * vect->z));
+	res = sqrt((vect[0] * vect[0]) + (vect[1] * vect[1]) + (vect[2] * vect[2]));
 	return (res);
 }
 
-void	normalize_vect(t_vect *vect)
+void	normalize_vect(float *vect)
 {
 	float	length;
 
 	length = lenght_vect(vect);
-	vect->x /= length;
-	vect->y /= length;
-	vect->z /= length;
+	vect[0] /= length;
+	vect[1] /= length;
+	vect[2] /= length;
 }
 
-float	dot_product_vect(t_vect *vect1, t_vect *vect2)
+float	dot_product_vect(float *vect1, float *vect2)
 {
 	float	res;
 
-	res = ((vect1->x * vect2->x) + (vect1->y * vect2->y) + (vect1->z * vect2->z));
+	res = ((vect1[0] * vect2[0]) + (vect1[1] * vect2[1]) + (vect1[2] * vect2[2]));
 	return (res);
 }
 

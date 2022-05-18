@@ -13,7 +13,8 @@
 #include "../Libft/gnl/get_next_line.h"
 
 # define MAX_SIZE 10000
-# define ERR_MEM_AL "Error: allocating memory"
+# define RAD
+# define ERR_MEM_AL "Error: allocating memory\n"
 
 typedef struct	s_vect	t_vect;
 
@@ -84,7 +85,7 @@ void	ft_calculate(t_disp *display, t_rt *rt);
 void	free_rt(t_rt **ptr_rt);
 void	error_exit(int code, char *str);
 void    ray_tracing(t_rt *rt);
-float	is_ray_sphere(t_camera camera, t_vect *ray, t_sphere *sphere);
+float	is_ray_sphere(t_camera camera, float *ray, t_sphere *sphere);
 unsigned int	ft_get_rgb(int *color);
 
 

@@ -4,8 +4,8 @@
 # include "../mlx/mlx.h"
 # include "MiniRt.h"
 
-# define WIDHT 800.00
-# define HEIGHT 600.00
+# define WIDHT 1000.00
+# define HEIGHT 800.00
 
 typedef struct	s_rt t_rt;
 
