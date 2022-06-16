@@ -1,13 +1,16 @@
 #include "inc/MiniRt.h"
 #include "inc/Minilibx.h"
 
+//NEED TO FIX
+//segfaults if there are mutliple new lines in the map.
+
 t_plane *new_plane(void)
 {
 	t_plane *ptr;
 
 	ptr = (t_plane *) malloc(sizeof(t_plane));
 	if (!ptr)
-		return (NULL);
+		error_exit(-1, ERR_MEM_AL);
 	ptr->next = NULL;
 	return (ptr);
 }
@@ -18,7 +21,7 @@ t_sphere *new_sphere(void)
 
 	ptr = (t_sphere *) malloc(sizeof(t_sphere));
 	if (!ptr)
-		return (NULL);
+		error_exit(-1, ERR_MEM_AL);
 	ptr->next = NULL;
 	return (ptr);
 }
@@ -29,7 +32,7 @@ t_cylinder *new_cylinder(void)
 
 	ptr = (t_cylinder *) malloc(sizeof(t_cylinder));
 	if (!ptr)
-		return (NULL);
+		error_exit(-1, ERR_MEM_AL);
 	ptr->next = NULL;
 	return (ptr);
 }
@@ -40,10 +43,11 @@ t_rt	*init_rt(void)
 
 	ptr = ft_calloc(sizeof(t_rt), 1);
 	if (!ptr)
-		return (NULL);
+		error_exit(-1, ERR_MEM_AL);
 	ptr->plane = NULL;
 	ptr->sphere = NULL;
-	ptr->cylind = NULL;
+	ptr->cylinder = NULL;
+	ptr->display = NULL;
 	return (ptr);
 }
 
@@ -70,10 +74,10 @@ void	free_rt(t_rt **ptr_rt)
 		rt->sphere = rt->sphere->next;
 		free (sphere);
 	}
-	while (rt->cylind != NULL)
+	while (rt->cylinder != NULL)
 	{
-		cylinder = rt->cylind;
-		rt->cylind = rt->cylind->next;
+		cylinder = rt->cylinder;
+		rt->cylinder = rt->cylinder->next;
 		free (cylinder);
 	}
 	free (rt);
@@ -105,6 +109,8 @@ int		open_and_check(char *arg)
 	fd = 0;
 	rd = 0;
 	buf = (char *) malloc(sizeof(char));
+	if (!buf)
+		error_exit(-1, ERR_MEM_AL);
 	fd = open(arg, O_RDONLY);
 	if (fd == -1) //check is not folder
 		return (-1);
@@ -322,20 +328,22 @@ int		set_sphere(char **line,t_rt *rt)
 {
 	if (comma_check(line[1]) == -1 || comma_check(line[3]) == -1)
 		return (-1);
-	rt->sphere->coord[0] = ft_value(line[1], ',', 0);
-	rt->sphere->coord[1] = ft_value(line[1], ',', 1);
-	rt->sphere->coord[2] = ft_value(line[1], ',', 1);
+	//rt->sphere->center = new_sphere(0, 0, 0);	// add free
+	rt->sphere->coord[0] = ft_value(line[1], ',', 0); //rt->sphere->center->x
+	rt->sphere->coord[1] = ft_value(line[1], ',', 1); //rt->sphere->center->y
+	rt->sphere->coord[2] = ft_value(line[1], ',', 1);	////rt->sphere->center->z
 	rt->sphere->diametr = ft_value(line[2], ',', 0);
+	rt->sphere->radius = rt->sphere->diametr / 2.0; // check
 	rt->sphere->color[0] = ft_value(line[3], ',', 0);
 	rt->sphere->color[1] = ft_value(line[3], ',', 1);
 	rt->sphere->color[2] = ft_value(line[3], ',', 1);
 	if (rt->sphere->color[0] < 0 || rt->sphere->color[0] > 255 || rt->sphere->color[1] < 0
 	|| rt->sphere->color[1] > 255 || rt->sphere->color[2] < 0 || rt->sphere->color[2] > 255)
 		return (-1);
-	if (rt->sphere->coord[0] < -100 || rt->sphere->coord[0] > 100 || rt->sphere->coord[1] < -100
-	|| rt->sphere->coord[1] > 100 || rt->sphere->coord[2] < -100 || rt->sphere->coord[2] > 100)
+	if (rt->sphere->coord[0] < -MAX_SIZE || rt->sphere->coord[0] > MAX_SIZE || rt->sphere->coord[1] < -MAX_SIZE
+	|| rt->sphere->coord[1] > MAX_SIZE || rt->sphere->coord[2] < -MAX_SIZE || rt->sphere->coord[2] > MAX_SIZE)
 		return (-1);
-	if (rt->sphere->diametr < 0 || rt->sphere->diametr > 100)
+	if (rt->sphere->diametr < 0 || rt->sphere->diametr > MAX_SIZE)
 		return(-1);
 	return (0);
 }
@@ -346,9 +354,15 @@ int		parse_sphere(char **line, t_rt *rt)
 	t_sphere *temp;
 
 	temp = rt->sphere;
-	while (rt->sphere != NULL)
+	while (rt->sphere != NULL && rt->sphere->next != NULL)
 		rt->sphere = rt->sphere->next;
-	rt->sphere = new_sphere();
+	if (rt->sphere == NULL)
+		rt->sphere = new_sphere();
+	else
+	{
+		rt->sphere->next = new_sphere();
+		rt->sphere = rt->sphere->next;
+	}
 	size = array_size(line);
 	if (size != 4)
 		return (-1);
@@ -392,9 +406,15 @@ int		parse_plane(char **line, t_rt *rt)
 	t_plane *temp;
 
 	temp = rt->plane;
-	while (rt->plane != NULL)
+	while (rt->plane != NULL && rt->plane->next != NULL)
 		rt->plane = rt->plane->next;
-	rt->plane = new_plane();
+	if (rt->plane == NULL)
+		rt->plane = new_plane();
+	else
+	{
+		rt->plane->next = new_plane();
+		rt->plane = rt->plane->next;
+	}
 	size = array_size(line);
 	if (size != 4)
 		return (-1);
@@ -409,18 +429,18 @@ int		parse_plane(char **line, t_rt *rt)
 
 int		cylinder_errorcheck(t_rt *rt)
 {
-	if (rt->cylind->coord[0] < -100 || rt->cylind->coord[0] > 100 || rt->cylind->coord[1] < -100
-	|| rt->cylind->coord[1] > 100 || rt->cylind->coord[2] < -100 || rt->cylind->coord[2] > 100)
+	if (rt->cylinder->coord[0] < -100 || rt->cylinder->coord[0] > 100 || rt->cylinder->coord[1] < -100
+	|| rt->cylinder->coord[1] > 100 || rt->cylinder->coord[2] < -100 || rt->cylinder->coord[2] > 100)
 		return (-1);
-	if (rt->cylind->orient[0] < -1.0 || rt->cylind->orient[0] > 1.0 || rt->cylind->orient[1] < -1.0
-	|| rt->cylind->orient[1] > 1.0 || rt->cylind->orient[2] < -1.0 || rt->cylind->orient[2] > 1.0)
+	if (rt->cylinder->orient[0] < -1.0 || rt->cylinder->orient[0] > 1.0 || rt->cylinder->orient[1] < -1.0
+	|| rt->cylinder->orient[1] > 1.0 || rt->cylinder->orient[2] < -1.0 || rt->cylinder->orient[2] > 1.0)
 		return (-1);
-	if (rt->cylind->rgb[0] < 0 || rt->cylind->rgb[0] > 255 || rt->cylind->rgb[1] < 0
-	|| rt->cylind->rgb[1] > 255 || rt->cylind->rgb[2] < 0 || rt->cylind->rgb[2] > 255)
+	if (rt->cylinder->color[0] < 0 || rt->cylinder->color[0] > 255 || rt->cylinder->color[1] < 0
+	|| rt->cylinder->color[1] > 255 || rt->cylinder->color[2] < 0 || rt->cylinder->color[2] > 255)
 		return (-1);
-	if (rt->cylind->diametr < 0 || rt->cylind->diametr > 100)
+	if (rt->cylinder->diametr < 0 || rt->cylinder->diametr > 100)
 		return (-1);
-	if (rt->cylind->height < 0 || rt->cylind->height > 100)
+	if (rt->cylinder->height < 0 || rt->cylinder->height > 100)
 		return (-1);
 	return (0);
 }
@@ -429,17 +449,17 @@ int		set_cylinder(char **line, t_rt *rt)
 {
 	if (comma_check(line[1]) == -1 || comma_check(line[2]) == -1 || comma_check(line[5]) == -1)
 		return (-1);
-	rt->cylind->coord[0] = ft_value(line[1], ',', 0);
-	rt->cylind->coord[1] = ft_value(line[1], ',', 1);
-	rt->cylind->coord[2] = ft_value(line[1], ',', 1);
-	rt->cylind->orient[0] = ft_value(line[2], ',', 0);
-	rt->cylind->orient[1] = ft_value(line[2], ',', 1);
-	rt->cylind->orient[2] = ft_value(line[2], ',', 1);
-	rt->cylind->diametr = ft_value(line[3], ',', 0);
-	rt->cylind->height = ft_value(line[4], ',', 0);
-	rt->cylind->rgb[0] = ft_value(line[5], ',', 0);
-	rt->cylind->rgb[1] = ft_value(line[5], ',', 1);
-	rt->cylind->rgb[2] = ft_value(line[5], ',', 1);
+	rt->cylinder->coord[0] = ft_value(line[1], ',', 0);
+	rt->cylinder->coord[1] = ft_value(line[1], ',', 1);
+	rt->cylinder->coord[2] = ft_value(line[1], ',', 1);
+	rt->cylinder->orient[0] = ft_value(line[2], ',', 0);
+	rt->cylinder->orient[1] = ft_value(line[2], ',', 1);
+	rt->cylinder->orient[2] = ft_value(line[2], ',', 1);
+	rt->cylinder->diametr = ft_value(line[3], ',', 0);
+	rt->cylinder->height = ft_value(line[4], ',', 0);
+	rt->cylinder->color[0] = ft_value(line[5], ',', 0);
+	rt->cylinder->color[1] = ft_value(line[5], ',', 1);
+	rt->cylinder->color[2] = ft_value(line[5], ',', 1);
 	if (cylinder_errorcheck(rt) == -1)
 		return (-1);
 	return (0);
@@ -450,10 +470,16 @@ int		parse_cylinder(char **line, t_rt *rt)
 	int		size;
 	t_cylinder *temp;
 
-	temp = rt->cylind;
-	while (rt->cylind != NULL)
-		rt->cylind = rt->cylind->next;
-	rt->cylind = new_cylinder();
+	temp = rt->cylinder;
+	while (rt->cylinder != NULL && rt->cylinder->next != NULL)
+		rt->cylinder = rt->cylinder->next;
+	if (rt->cylinder == NULL)
+		rt->cylinder = new_cylinder();
+	else
+	{
+		rt->cylinder->next = new_cylinder();
+		rt->cylinder = rt->cylinder->next;
+	}
 	size = array_size(line);
 	if (size != 6)
 		return (-1);
@@ -462,7 +488,7 @@ int		parse_cylinder(char **line, t_rt *rt)
 	if (set_cylinder(line, rt) == -1)
 		return (-1);
 	if (temp != NULL)
-		rt->cylind = temp;
+		rt->cylinder = temp;
 	return (0);
 }
 
@@ -561,13 +587,23 @@ void	print_rt(t_rt *rt)
 	printf ("Ambient: %f	%i,%i,%i\n", rt->ambient.ratio, rt->ambient.color[0], rt->ambient.color[1], rt->ambient.color[2]);
 	printf ("Camera: %f,%f,%f	%f,%f,%f %d\n", rt->camera.coord[0], rt->camera.coord[1], rt->camera.coord[2], rt->camera.orient[0], rt->camera.orient[1], rt->camera.orient[2], rt->camera.fov);
 	printf ("Light: %f,%f,%f	%f		%d,%d,%d\n", rt->light.coord[0], rt->light.coord[1], rt->light.coord[2], rt->light.ratio,rt->light.color[0], rt->light.color[1], rt->light.color[2]);
-	if (rt->sphere != NULL)
+	while (rt->sphere != NULL)
+	{
 		printf("Sphere: %f,%f,%f %f		%d,%d,%d\n", rt->sphere->coord[0], rt->sphere->coord[1], rt->sphere->coord[2], rt->sphere->diametr, rt->sphere->color[0], rt->sphere->color[1], rt->sphere->color[2]);
-	if (rt->plane != NULL)
+		rt->sphere = rt->sphere->next;
+	}
+	while (rt->plane != NULL)
+	{
 		printf("Plane: %f,%f,%f %f,%f,%f	%d,%d,%d\n", rt->plane->coord[0], rt->plane->coord[1], rt->plane->coord[2], rt->plane->orient[0], rt->plane->orient[1], rt->plane->orient[2], rt->plane->color[0], rt->plane->color[1], rt->plane->color[2]);
-	if (rt->cylind != NULL)
-		printf("Cylinder: %f,%f,%f		%f,%f,%f		%f %f 	%d,%d,%d\n", rt->cylind->coord[0], rt->cylind->coord[1], rt->cylind->coord[2], rt->cylind->orient[0], rt->cylind->orient[1], rt->cylind->orient[2], rt->cylind->diametr, rt->cylind->height, rt->cylind->rgb[0], rt->cylind->rgb[1], rt->cylind->rgb[2]);
+		rt->plane = rt->plane->next;
+	}
+	while (rt->cylinder != NULL)
+	{
+		printf("Cylinder: %f,%f,%f		%f,%f,%f		%f %f 	%d,%d,%d\n", rt->cylinder->coord[0], rt->cylinder->coord[1], rt->cylinder->coord[2], rt->cylinder->orient[0], rt->cylinder->orient[1], rt->cylinder->orient[2], rt->cylinder->diametr, rt->cylinder->height, rt->cylinder->color[0], rt->cylinder->color[1], rt->cylinder->color[2]);
+		rt->cylinder = rt->cylinder->next;
+	}
 }
+
 
 int main(int argc, char **argv)
 {
@@ -581,20 +617,15 @@ int main(int argc, char **argv)
 		ft_putendl_fd(argv[1], 0);
 		if (parse(rt, argv[1]) == -1)
 		{
-			write(2, "Error\nInvalid argument file\n", 29);
 			free_rt(&rt);
-			exit(-1);
+			error_exit(-1, "Error: Invalid argument file\n");
 		}
+		init_window(rt->display, rt); //will add free
 		print_rt(rt);
-		// calculate
 		// draw
 	}
 	else
-	{
-		ft_putstr_fd("Error: ", 2); // create funct error with massage, free and exit
-		ft_putstr_fd("Usage: ./miniRT path_of_scene.rt", 2);
-		ft_putendl_fd("", 2);
-	}
+		error_exit(-1, "Error: Usage: ./miniRT path_of_scene.rt\n");
 	free_rt(&rt);
 	return (0);
 }

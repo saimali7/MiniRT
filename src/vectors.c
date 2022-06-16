@@ -1,0 +1,49 @@
+#include "../inc/Vectors.h"
+
+float		*new_vect(float x, float y, float z)
+{
+	float	*new;
+
+	new = calloc(3, sizeof(float));
+	if (!new)
+		error_exit(-1, ERR_MEM_AL);
+	new[0] = x;
+    new[1] = y;
+ 	new[2] = z;
+ 	return (new);
+}
+
+float	*subtr_vec(float *vect1, float *vect2)
+{
+	float	*res;
+
+ 	res = new_vect(vect1[0] - vect2[0], vect1[1] - vect2[1], vect1[2] - vect2[2]);
+	return (res);
+}
+
+float	lenght_vect(float *vect)
+{
+	float	res;
+
+	res = sqrt((vect[0] * vect[0]) + (vect[1] * vect[1]) + (vect[2] * vect[2]));
+	return (res);
+}
+
+void	normalize_vect(float *vect)
+{
+	float	length;
+
+	length = lenght_vect(vect);
+	vect[0] /= length;
+	vect[1] /= length;
+	vect[2] /= length;
+}
+
+float	dot_product_vect(float *vect1, float *vect2)
+{
+	float	res;
+
+	res = ((vect1[0] * vect2[0]) + (vect1[1] * vect2[1]) + (vect1[2] * vect2[2]));
+	return (res);
+}
+

@@ -18,3 +18,5 @@ Resources:
 
 
 5.https://habr.com/ru/post/342510/ 
+
+6.https://github.com/wojciech-graj/C-Raytracer
