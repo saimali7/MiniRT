@@ -17,14 +17,21 @@ void    ft_putpixel(int x, int y, int color, t_disp *display)
 }
 
 
-float *Convert_Viewport(int x, int y)
+float *Convert_Viewport(int x, int y, t_rt *rt)
 {
     float *direction;
 
-    direction =(float *) malloc(sizeof(float) * 3);
-    direction[0] = x * 1 / WIDHT;
-    direction[1] = y * 1 / HEIGHT;
+    float fov = (float)rt->camera.fov;
+    float aspect =  WIDHT / HEIGHT;
+	float new_width = (tan(fov / 2 * (M_PI / 180))) * 2;
+	float new_hight = new_width / aspect;
+	float x_pix = new_width / WIDHT;
+	float y_pix = new_hight / HEIGHT;
+    direction =(float *) malloc(sizeof(float) * 3); //add check
+    direction[0] = x * x_pix;
+    direction[1] = y * y_pix;
     direction[2] = 1.0;
+    normalize_vect(direction);
     return (direction);
 }
 
@@ -44,9 +51,9 @@ void    intersect_sphere(t_rt *rt, float *direction, t_sphere *sphere, float *in
     s_center[2] = sphere->coord[2];
 
 
-    origin[0] = 0;
-    origin[1] = 0;
-    origin[2] = 0;
+    origin[0] = rt->camera.coord[0];
+    origin[1] = rt->camera.coord[1];
+    origin[2] = rt->camera.coord[2];
 
     oc = subtr_vec(origin, s_center);
     a = dot_product_vect(direction, direction);
@@ -90,7 +97,7 @@ int     trace_ray(t_rt *rt, float *direction, int min, int max)
         sphere = sphere->next;
     }
     if (closest_sphere == NULL)
-        return (0xfffffff);
+        return (0x000000);
     else
         return ((65536  * closest_sphere->color[0]) + (256 * closest_sphere->color[1]) + closest_sphere->color[2]);
 }
@@ -110,7 +117,8 @@ void    calculate_s(t_disp *display , t_rt *rt)
         x = -WIDHT/2;
         while (x < WIDHT/2)
         {
-            direction = Convert_Viewport(x, y);
+            direction = Convert_Viewport(x, y, rt);
+            //direction = direction * rt->camera.orient[0]
             color = trace_ray(rt, direction, 1 , INF);
             ft_putpixel(x, y , color, display);
             x++;
