@@ -29,8 +29,7 @@ typedef struct	s_camera
 	float	coord[3];
 	float	orient[3];
 	int		fov;
-	// float	right[3];
-	// float	up[3];
+	float	origin[3]; // need to add in parse NULL
 }	t_camera;
 
 typedef struct	s_light
