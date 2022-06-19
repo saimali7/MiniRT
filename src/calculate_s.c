@@ -16,29 +16,88 @@ void    ft_putpixel(int x, int y, int color, t_disp *display)
 	temp[position + 2] = color / (256 * 256);
 }
 
-
-float *Convert_Viewport(int x, int y, t_rt *rt)
+float*	multiply_vectors(t_camera *cam, float *right, float *up, float *tmp)
 {
-    float *direction;
+	float	*res;
+	float	x;
+	float	y;
+	float	z;
 
-    float fov = (float)rt->camera.fov;
-    float aspect =  WIDHT / HEIGHT;
+	x = tmp[0] * right[0] + tmp[1] * up[0] + tmp[2] * cam->orient[0] + cam->coord[0];
+	y = tmp[0] * right[1] + tmp[1] * up[1] + tmp[2] * cam->orient[1] + cam->coord[1];
+	z = tmp[0] * right[2] + tmp[1] * up[2] + tmp[2] * cam->orient[2] + cam->coord[2];
+	res = new_vect(x, y, z);
+	free (tmp);
+	return (res);
+}
+
+float	*get_direction (int x, int y, t_rt *rt)
+{
+	float	fov;
+	float	aspect;
+	
+	fov = (float)rt->camera.fov;
+    aspect = WIDHT / HEIGHT;
 	float new_width = (tan(fov / 2 * (M_PI / 180))) * 2;
 	float new_hight = new_width / aspect;
 	float x_pix = new_width / WIDHT;
 	float y_pix = new_hight / HEIGHT;
-    direction =(float *) malloc(sizeof(float) * 3); //add check
-    direction[0] = x * x_pix;
-    direction[1] = y * y_pix;
-    direction[2] = 1.0;
-    normalize_vect(direction);
-    return (direction);
+	return (new_vect(x * x_pix, y * y_pix, 1.0));
+}
+
+float	*get_look_right(t_camera *camera)
+{
+	float	*rand;
+	float	*right;
+
+	rand = new_vect(0, 1, 0);
+	normalize_vect(rand);
+	right = cross_product(rand, camera->orient);
+	normalize_vect(right);
+	free(rand);
+	return (right);
+}
+
+float	*get_look_up(t_camera *camera, float *right)
+{
+	float	*up;
+
+	up = cross_product(camera->orient, right);
+	normalize_vect(up);
+	//printf("x = %f, y = %f, z= %f;", up[0], up[1], up[2]); // ok
+	return (up);
+}
+
+float *Convert_Viewport(int x, int y, t_rt *rt)
+{
+    float	*direction;
+	float	*to_origin;
+	float	*right;
+	float	*up;
+
+	right = get_look_right(&rt->camera);
+	//printf("x = %f, y = %f, z= %f;", right[0], right[1], right[2]); //ok
+	up = get_look_up(&rt->camera, right);
+	to_origin = multiply_vectors(&rt->camera, right, up, new_vect(0, 0, 0));
+	//printf("x = %f, y = %f, z= %f;", to_origin[0], to_origin[1], to_origin[2]); //ok
+	rt->camera.origin[0] = to_origin[0];
+	rt->camera.origin[1] = to_origin[1];
+	rt->camera.origin[2] = to_origin[2];
+	direction = get_direction(x, y, rt);
+	direction = multiply_vectors(&rt->camera, right, up, direction);
+	direction = subtr_vec(direction, to_origin);
+	//printf("x = %f, y = %f, z= %f;", direction[0], direction[1], direction[2]); //
+	normalize_vect(direction);
+	free(right);
+	free(up);
+
+	return (direction);
 }
 
 void    intersect_sphere(t_rt *rt, float *direction, t_sphere *sphere, float *intersect)
 {
     float *oc;
-    float origin[3]; //replace with actual camera cord.
+	float origin[3]; //replace with actual camera cord.
     float s_center[3];
     float a;
     float b;
@@ -50,10 +109,9 @@ void    intersect_sphere(t_rt *rt, float *direction, t_sphere *sphere, float *in
     s_center[1] = sphere->coord[1];
     s_center[2] = sphere->coord[2];
 
-
-    origin[0] = rt->camera.coord[0];
-    origin[1] = rt->camera.coord[1];
-    origin[2] = rt->camera.coord[2];
+    origin[0] = rt->camera.origin[0];	//rt->camera.coord[0]; we can will take from struct
+    origin[1] = rt->camera.origin[1];	//rt->camera.coord[1];
+    origin[2] = rt->camera.origin[2];	//rt->camera.coord[2];
 
     oc = subtr_vec(origin, s_center);
     a = dot_product_vect(direction, direction);
@@ -118,9 +176,9 @@ void    calculate_s(t_disp *display , t_rt *rt)
         while (x < WIDHT/2)
         {
             direction = Convert_Viewport(x, y, rt);
-            //direction = direction * rt->camera.orient[0]
             color = trace_ray(rt, direction, 1 , INF);
             ft_putpixel(x, y , color, display);
+            free(direction);
             x++;
         }
         y++;

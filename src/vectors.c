@@ -4,7 +4,7 @@ float		*new_vect(float x, float y, float z)
 {
 	float	*new;
 
-	new = calloc(3, sizeof(float));
+	new = ft_calloc(3, sizeof(float));
 	if (!new)
 		error_exit(-1, ERR_MEM_AL);
 	new[0] = x;
@@ -47,3 +47,16 @@ float	dot_product_vect(float *vect1, float *vect2)
 	return (res);
 }
 
+float	*cross_product(float *vect1, float *vect2)
+{
+	float *result;
+	float x;
+	float y;
+	float z;
+
+	x = vect1[1] * vect2[2] - vect1[2] * vect2[1];
+	y = vect1[2] * vect2[0] - vect1[0] * vect2[2];
+	z = vect1[0] * vect2[1] - vect1[1] * vect2[0];
+	result = new_vect(x, y, z);
+	return (result);
+}
