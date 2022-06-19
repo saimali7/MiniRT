@@ -26,9 +26,11 @@ typedef struct s_ambient
 
 typedef struct	s_camera
 {
-	float	coord[3];	//vector
-	float	orient[3];	//vector
+	float	coord[3];
+	float	orient[3];
 	int		fov;
+	// float	right[3];
+	// float	up[3];
 }	t_camera;
 
 typedef struct	s_light
@@ -40,7 +42,7 @@ typedef struct	s_light
 
 typedef struct s_sphere
 {
-	float	coord[3]; // change t_vect	*center;
+	float	coord[3];
 	float	diametr;
 	float	radius;
 	int		color[3];
