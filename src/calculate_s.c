@@ -2,21 +2,7 @@
 #include "../inc/Minilibx.h"
 #include "../Libft/libft.h"
 
-float *clamp(float min, float max, float *value)
-{
-    int i = 0;
-    while (i < 3)
-    {
-        if (value[i] > max)
-            value[i] = max;
-        else if (value[i] < min)
-            value[i] = min;
-        i++;
-    }
-    return (value);
-}
-
-void    ft_putpixel(int x, int y, float *color, t_disp *display)
+void    ft_putpixel(int x, int y, int color, t_disp *display)
 {
     char	*temp;
 	int		position;
@@ -25,34 +11,93 @@ void    ft_putpixel(int x, int y, float *color, t_disp *display)
     y = HEIGHT/2 - y - 1;
 	position = x * 4 + 4 * WIDHT * y;
 	temp = display->img.addr;
-	temp[position] = color[2];
-	temp[position + 1] = color[1];
-	temp[position + 2] = color[0];
+	temp[position] = color % 256;
+	temp[position + 1] = (color / 256) % 256;
+	temp[position + 2] = color / (256 * 256);
 }
 
-
-float *Convert_Viewport(int x, int y, t_rt *rt)
+float*	multiply_vectors(t_camera *cam, float *right, float *up, float *tmp)
 {
-    float *direction;
+	float	*res;
+	float	x;
+	float	y;
+	float	z;
 
-    float fov = (float)rt->camera.fov;
-    float aspect =  WIDHT / HEIGHT;
+	x = tmp[0] * right[0] + tmp[1] * up[0] + tmp[2] * cam->orient[0] + cam->coord[0];
+	y = tmp[0] * right[1] + tmp[1] * up[1] + tmp[2] * cam->orient[1] + cam->coord[1];
+	z = tmp[0] * right[2] + tmp[1] * up[2] + tmp[2] * cam->orient[2] + cam->coord[2];
+	res = new_vect(x, y, z);
+	free (tmp);
+	return (res);
+}
+
+float	*get_direction (int x, int y, t_rt *rt)
+{
+	float	fov;
+	float	aspect;
+	
+	fov = (float)rt->camera.fov;
+    aspect = WIDHT / HEIGHT;
 	float new_width = (tan(fov / 2 * (M_PI / 180))) * 2;
 	float new_hight = new_width / aspect;
 	float x_pix = new_width / WIDHT;
 	float y_pix = new_hight / HEIGHT;
-    direction =(float *) malloc(sizeof(float) * 3); //add check
-    direction[0] = x * x_pix;
-    direction[1] = y * y_pix;
-    direction[2] = 1.0;
-    normalize_vect(direction);
-    return (direction);
+	return (new_vect(x * x_pix, y * y_pix, 1.0));
+}
+
+float	*get_look_right(t_camera *camera)
+{
+	float	*rand;
+	float	*right;
+
+	rand = new_vect(0, 1, 0);
+	normalize_vect(rand);
+	right = cross_product(rand, camera->orient);
+	normalize_vect(right);
+	free(rand);
+	return (right);
+}
+
+float	*get_look_up(t_camera *camera, float *right)
+{
+	float	*up;
+
+	up = cross_product(camera->orient, right);
+	normalize_vect(up);
+	//printf("x = %f, y = %f, z= %f;", up[0], up[1], up[2]); // ok
+	return (up);
+}
+
+float *Convert_Viewport(int x, int y, t_rt *rt)
+{
+    float	*direction;
+	float	*to_origin;
+	float	*right;
+	float	*up;
+
+	right = get_look_right(&rt->camera);
+	//printf("x = %f, y = %f, z= %f;", right[0], right[1], right[2]); //ok
+	up = get_look_up(&rt->camera, right);
+	to_origin = multiply_vectors(&rt->camera, right, up, new_vect(0, 0, 0));
+	//printf("x = %f, y = %f, z= %f;", to_origin[0], to_origin[1], to_origin[2]); //ok
+	rt->camera.origin[0] = to_origin[0];
+	rt->camera.origin[1] = to_origin[1];
+	rt->camera.origin[2] = to_origin[2];
+	direction = get_direction(x, y, rt);
+	direction = multiply_vectors(&rt->camera, right, up, direction);
+	direction = subtr_vec(direction, to_origin);
+	//printf("x = %f, y = %f, z= %f;", direction[0], direction[1], direction[2]); //
+	normalize_vect(direction);
+	free(right);
+	free(up);
+
+	return (direction);
 }
 
 void    intersect_sphere(t_rt *rt, float *direction, t_sphere *sphere, float *intersect)
 {
     float *oc;
-    float origin[3]; //replace with actual camera cord.
+	float origin[3]; //replace with actual camera cord.
     float s_center[3];
     float a;
     float b;
@@ -64,10 +109,9 @@ void    intersect_sphere(t_rt *rt, float *direction, t_sphere *sphere, float *in
     s_center[1] = sphere->coord[1];
     s_center[2] = sphere->coord[2];
 
-
-    origin[0] = rt->camera.coord[0];
-    origin[1] = rt->camera.coord[1];
-    origin[2] = rt->camera.coord[2];
+    origin[0] = rt->camera.origin[0];	//rt->camera.coord[0]; we can will take from struct
+    origin[1] = rt->camera.origin[1];	//rt->camera.coord[1];
+    origin[2] = rt->camera.origin[2];	//rt->camera.coord[2];
 
     oc = subtr_vec(origin, s_center);
     a = dot_product_vect(direction, direction);
@@ -86,34 +130,12 @@ void    intersect_sphere(t_rt *rt, float *direction, t_sphere *sphere, float *in
     return ;
 }
 
-float lighting(float *point, float *normal, t_rt *rt)
-{
-    float intesity;
-    float *vec_light;
-    float normal_dot;
-    float length_n;
-
-    length_n = length_vect(normal);
-    intesity = 0.0;
-
-    intesity += rt->ambient.ratio;
-    vec_light = subtr_vec(rt->light.coord, point);
-
-    normal_dot = dot_product_vect(normal, vec_light);
-    if (normal_dot > 0)
-        intesity += rt->light.ratio * normal_dot / (length_n * length_vect(vec_light));
-    return (intesity);
-}
-
-float     *trace_ray(t_rt *rt, float *direction, int min, int max)
+int     trace_ray(t_rt *rt, float *direction, int min, int max)
 {
     float closest_t = INF;
     t_sphere *closest_sphere = NULL;
     t_sphere *sphere;
-    float   *intersect;
-    float   *point;
-    float   *normal;
-    float   *color;
+    float *intersect;
 
     sphere = rt->sphere;
     intersect = malloc(sizeof(float) * 2);
@@ -133,35 +155,30 @@ float     *trace_ray(t_rt *rt, float *direction, int min, int max)
         sphere = sphere->next;
     }
     if (closest_sphere == NULL)
-    {
-       return ((float *)calloc(sizeof(float), 3));
-    }
-    point = add_vect(rt->camera.coord, multiply_vect(closest_t, direction));
-    normal = subtr_vec(point, closest_sphere->coord);
-    normal = multiply_vect(1.0 / length_vect(normal), normal);
-    color = multiply_vect(lighting(point, normal, rt), closest_sphere->color);
-    
-    return (color);
+        return (0x000000);
+    else
+        return ((65536  * closest_sphere->color[0]) + (256 * closest_sphere->color[1]) + closest_sphere->color[2]);
 }
 
 void    calculate_s(t_disp *display , t_rt *rt)
 {
     int x;
     int y;
-    float *color;
+    int color;
     float *direction;
 
     y = -HEIGHT/2;
     x = 0;
+    color = 0xFFFFFF;
     while (y < HEIGHT/2)
     {
         x = -WIDHT/2;
         while (x < WIDHT/2)
         {
             direction = Convert_Viewport(x, y, rt);
-            //direction = direction * rt->camera.orient[0]
             color = trace_ray(rt, direction, 1 , INF);
-            ft_putpixel(x, y , clamp(0.0, 255.0, color), display);
+            ft_putpixel(x, y , color, display);
+            free(direction);
             x++;
         }
         y++;

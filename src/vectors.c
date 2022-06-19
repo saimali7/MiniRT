@@ -4,7 +4,7 @@ float		*new_vect(float x, float y, float z)
 {
 	float	*new;
 
-	new = calloc(3, sizeof(float));
+	new = ft_calloc(3, sizeof(float));
 	if (!new)
 		error_exit(-1, ERR_MEM_AL);
 	new[0] = x;
@@ -21,7 +21,7 @@ float	*subtr_vec(float *vect1, float *vect2)
 	return (res);
 }
 
-float	length_vect(float *vect)
+float	lenght_vect(float *vect)
 {
 	float	res;
 
@@ -33,7 +33,7 @@ void	normalize_vect(float *vect)
 {
 	float	length;
 
-	length = length_vect(vect);
+	length = lenght_vect(vect);
 	vect[0] /= length;
 	vect[1] /= length;
 	vect[2] /= length;
@@ -47,23 +47,16 @@ float	dot_product_vect(float *vect1, float *vect2)
 	return (res);
 }
 
-float	*add_vect(float *vect1, float *vect2)
+float	*cross_product(float *vect1, float *vect2)
 {
-	float *temp;
+	float *result;
+	float x;
+	float y;
+	float z;
 
-	temp = (float *) malloc(sizeof(float) * 3);
-	temp[0] = vect1[0] + vect2[0];
-	temp[1] = vect1[1] + vect2[1];
-	temp[2] = vect1[2] + vect1[2];
-	return (temp);
-}
-float	*multiply_vect(float scalar,float *vect2)
-{
-	float *temp;
-	temp = (float *) malloc(sizeof(float) * 3);
-
-	temp[0] = vect2[0] * scalar;
-	temp[1] = vect2[1] * scalar;
-	temp[2] = vect2[2] * scalar;
-	return (temp);
+	x = vect1[1] * vect2[2] - vect1[2] * vect2[1];
+	y = vect1[2] * vect2[0] - vect1[0] * vect2[2];
+	z = vect1[0] * vect2[1] - vect1[1] * vect2[0];
+	result = new_vect(x, y, z);
+	return (result);
 }
