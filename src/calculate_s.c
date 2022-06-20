@@ -109,7 +109,7 @@ void    intersect_sphere(t_rt *rt, float *direction, t_sphere *sphere, float *in
     s_center[1] = sphere->coord[1];
     s_center[2] = sphere->coord[2];
 
-    origin[0] = rt->camera.origin[0];	//rt->camera.coord[0]; we can will take from struct
+    origin[0] = rt->camera.origin[0];	//rt->camera.coord[0]; we can take from struct
     origin[1] = rt->camera.origin[1];	//rt->camera.coord[1];
     origin[2] = rt->camera.origin[2];	//rt->camera.coord[2];
 
@@ -177,6 +177,8 @@ void    calculate_s(t_disp *display , t_rt *rt)
         {
             direction = Convert_Viewport(x, y, rt);
             color = trace_ray(rt, direction, 1 , INF);
+			//color = trace_ray_plane(rt, direction);
+			//color = trace_ray_cylinder(rt, direction);
             ft_putpixel(x, y , color, display);
             free(direction);
             x++;

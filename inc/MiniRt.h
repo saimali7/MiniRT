@@ -90,6 +90,9 @@ float	is_ray_sphere(t_camera camera, float *ray, t_sphere *sphere);
 unsigned int	ft_get_rgb(int *color);
 void    calculate_s(t_disp *display , t_rt *rt);
 
+int     trace_ray_plane(t_rt *rt, float *direction);
+int     trace_ray_cylinder(t_rt *rt, float *direction);
+
 
 
 #endif
