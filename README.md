@@ -19,6 +19,6 @@ Resources:
 
 5.https://habr.com/ru/post/342510/ 
 
-6. https://www.youtube.com/watch?v=TTqLX0OHZzI (video in rus about raytrace in C++ witn good hints)
+6.https://www.youtube.com/watch?v=TTqLX0OHZzI (video in rus about raytrace in C++ witn good hints)
 
 7.https://github.com/wojciech-graj/C-Raytracer
