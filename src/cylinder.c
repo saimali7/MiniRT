@@ -2,22 +2,6 @@
 #include "../inc/Minilibx.h"
 #include "../Libft/libft.h"
 
-float	*vector_multiply(float	*vect, float value) // move to vector
-{
-	float *res;
-	
-	res = new_vect(vect[0] * value, vect[1] * value, vect[2] * value);
-	return (res);
-}
-
-float	*vector_add(float *vect1, float *vect2)
-{
-	float	*res;
-
-	res = new_vect(vect1[0] + vect2[0], vect1[1] + vect2[1], vect1[2] + vect2[2]);
-	return (res);
-}
-
 int	solve_quadratic(float a, float b, float c, float *intersect)
 {
 	float	discriminant;
@@ -61,14 +45,14 @@ int   cylinder_roots(t_rt *rt, float *direction, t_cylinder *cylinder, float *in
 	float	*tmp2;
 	float	tmp3;
 
-	tmp = vector_multiply(cylinder->orient, dot_product_vect(direction, cylinder->orient));
+	tmp = multiply_vect(dot_product_vect(direction, cylinder->orient), cylinder->orient);
 	a_sqrt = subtr_vec(direction, tmp);
 	
 	a = dot_product_vect(a_sqrt, a_sqrt);
 	
 	tmp2 = subtr_vec (rt->camera.origin, cylinder->coord); 
 	tmp3 = 	dot_product_vect(subtr_vec(rt->camera.origin, cylinder->coord), cylinder->orient);
-	right = subtr_vec(tmp2, vector_multiply(cylinder->orient, tmp3));
+	right = subtr_vec(tmp2, multiply_vect(tmp3, cylinder->orient));
 	b = 2 * dot_product_vect(a_sqrt, right);
 	c = dot_product_vect(right, right) - ((cylinder->diametr / 2) * (cylinder->diametr / 2)); //change on radius
 	
@@ -84,8 +68,8 @@ void		check_intersect(float *inter, t_cylinder *cylinder, float *direction, t_rt
 	float	*q;
 	float	*p2;
 
-	p2 = vector_add(cylinder->coord, vector_multiply(cylinder->orient, cylinder->height));
-	q = vector_add(rt->camera.origin, vector_multiply(direction, *inter));
+	p2 = add_vect(cylinder->coord, multiply_vect(cylinder->height, cylinder->orient));
+	q = add_vect(rt->camera.origin, multiply_vect(*inter, direction));
 	if (dot_product_vect(cylinder->orient, subtr_vec(q, cylinder->coord)) <= 0)
 		*inter = -1;
 	if (dot_product_vect(cylinder->orient, subtr_vec(q, p2)) >= 0)

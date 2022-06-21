@@ -5,6 +5,22 @@
         "algorithm": "c",
         "chrono": "c",
         "limits": "c",
-        "ratio": "c"
+        "ratio": "c",
+        "__bit_reference": "c",
+        "__functional_base": "c",
+        "__node_handle": "c",
+        "atomic": "c",
+        "bitset": "c",
+        "cstddef": "c",
+        "__memory": "c",
+        "functional": "c",
+        "iterator": "c",
+        "locale": "c",
+        "optional": "c",
+        "system_error": "c",
+        "tuple": "c",
+        "type_traits": "c",
+        "vector": "c",
+        "memory": "c"
     }
 }
