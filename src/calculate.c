@@ -140,41 +140,41 @@ void	ft_calculate(t_disp *display, t_rt *rt)
 	// }
 	//my_mlx_pixel_put(&display->img, 5, 5, 0x00FFFFFFF);
 
-	float		x;
-	float		y;
-	float		ray_x;
-	float		ray_y;
-	float		*ray;
-	t_vplane	*vplane; // view window
+	// float		x;
+	// float		y;
+	// float		ray_x;
+	// float		ray_y;
+	// float		*ray;
+	// t_vplane	*vplane; // view window
 
-	vplane = get_view_plane(rt->camera.fov);
-	y = HEIGHT / -2 + 1;
-	while (y < HEIGHT / 2)
-	{
-		ray_y = y * (vplane->y_pix);
-		//printf ("%f ", ray_y);
-		x = WIDHT / -2;
-		while (x < WIDHT / 2)
-		{
-			//printf("%d\n", x);
-			ray_x = x * (vplane->x_pix);
-			ray = new_vect(ray_x * 1, ray_y * 1, -1);
-			normalize_vect(ray);
-			if (is_ray_sphere(rt->camera, ray, rt->sphere))
-				my_mlx_pixel_put(&display->img, WIDHT / 2 + x, HEIGHT / 2 - y, ft_get_rgb(rt->sphere->color));
-	 			//my_mlx_pixel_put(&display->img, WIDHT / 2 + x, HEIGHT / 2 - y, ft_get_rgb(rt->sphere->color));
-			//if (y == 0.01 * x * x - 240)
-				//my_mlx_pixel_put(&display->img, WIDHT / 2 + x, HEIGHT / 2 - y, 0x00FFFFFFF); //for fun
-			//if (x == y)
-			if (is_sphere(rt, x, y) == 2)
-				my_mlx_pixel_put(&display->img, WIDHT / 2 + x, HEIGHT / 2 - y, ft_get_rgb(rt->sphere->color)/1.09);
-			//else if (is_sphere(rt, x, y))
-				//my_mlx_pixel_put(&display->img, WIDHT / 2 + x, HEIGHT / 2 - y, ft_get_rgb(rt->sphere->color)/1.09);
-			free(ray);
-			x++;
-		}
-		y++;
-	}
+	// vplane = get_view_plane(rt->camera.fov);
+	// y = HEIGHT / -2 + 1;
+	// while (y < HEIGHT / 2)
+	// {
+	// 	ray_y = y * (vplane->y_pix);
+	// 	//printf ("%f ", ray_y);
+	// 	x = WIDHT / -2;
+	// 	while (x < WIDHT / 2)
+	// 	{
+	// 		//printf("%d\n", x);
+	// 		ray_x = x * (vplane->x_pix);
+	// 		ray = new_vect(ray_x * 1, ray_y * 1, -1);
+	// 		normalize_vect(ray);
+	// 		if (is_ray_sphere(rt->camera, ray, rt->sphere))
+	// 			my_mlx_pixel_put(&display->img, WIDHT / 2 + x, HEIGHT / 2 - y, ft_get_rgb(rt->sphere->color));
+	//  			//my_mlx_pixel_put(&display->img, WIDHT / 2 + x, HEIGHT / 2 - y, ft_get_rgb(rt->sphere->color));
+	// 		//if (y == 0.01 * x * x - 240)
+	// 			//my_mlx_pixel_put(&display->img, WIDHT / 2 + x, HEIGHT / 2 - y, 0x00FFFFFFF); //for fun
+	// 		//if (x == y)
+	// 		if (is_sphere(rt, x, y) == 2)
+	// 			my_mlx_pixel_put(&display->img, WIDHT / 2 + x, HEIGHT / 2 - y, ft_get_rgb(rt->sphere->color)/1.09);
+	// 		//else if (is_sphere(rt, x, y))
+	// 			//my_mlx_pixel_put(&display->img, WIDHT / 2 + x, HEIGHT / 2 - y, ft_get_rgb(rt->sphere->color)/1.09);
+	// 		free(ray);
+	// 		x++;
+	// 	}
+	// 	y++;
+	// }
 	//ray = new_vect(-100, 200, -1);
 	//if (is_ray_sphere(rt->camera, ray, rt->sphere))
 		//my_mlx_pixel_put(&display->img, WIDHT / 2 - 100, HEIGHT / 2 - 200, 0x0000FFFFF);

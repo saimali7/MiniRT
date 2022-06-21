@@ -584,22 +584,22 @@ int	parse(t_rt *rt, char *arg)
 
 void	print_rt(t_rt *rt)
 {
-	printf ("Ambient: %f	%i,%i,%i\n", rt->ambient.ratio, rt->ambient.color[0], rt->ambient.color[1], rt->ambient.color[2]);
+	printf ("Ambient: %f %f,%f,%f\n", rt->ambient.ratio, rt->ambient.color[0], rt->ambient.color[1], rt->ambient.color[2]);
 	printf ("Camera: %f,%f,%f	%f,%f,%f %d\n", rt->camera.coord[0], rt->camera.coord[1], rt->camera.coord[2], rt->camera.orient[0], rt->camera.orient[1], rt->camera.orient[2], rt->camera.fov);
-	printf ("Light: %f,%f,%f	%f		%d,%d,%d\n", rt->light.coord[0], rt->light.coord[1], rt->light.coord[2], rt->light.ratio,rt->light.color[0], rt->light.color[1], rt->light.color[2]);
+	printf ("Light: %f,%f,%f %f %f,%f,%f\n", rt->light.coord[0], rt->light.coord[1], rt->light.coord[2], rt->light.ratio,rt->light.color[0], rt->light.color[1], rt->light.color[2]);
 	while (rt->sphere != NULL)
 	{
-		printf("Sphere: %f,%f,%f %f		%d,%d,%d\n", rt->sphere->coord[0], rt->sphere->coord[1], rt->sphere->coord[2], rt->sphere->diametr, rt->sphere->color[0], rt->sphere->color[1], rt->sphere->color[2]);
+		printf("Sphere: %f,%f,%f %f %f,%f,%f\n", rt->sphere->coord[0], rt->sphere->coord[1], rt->sphere->coord[2], rt->sphere->diametr, rt->sphere->color[0], rt->sphere->color[1], rt->sphere->color[2]);
 		rt->sphere = rt->sphere->next;
 	}
 	while (rt->plane != NULL)
 	{
-		printf("Plane: %f,%f,%f %f,%f,%f	%d,%d,%d\n", rt->plane->coord[0], rt->plane->coord[1], rt->plane->coord[2], rt->plane->orient[0], rt->plane->orient[1], rt->plane->orient[2], rt->plane->color[0], rt->plane->color[1], rt->plane->color[2]);
+		printf("Plane: %f,%f,%f %f,%f,%f %f,%f,%f\n", rt->plane->coord[0], rt->plane->coord[1], rt->plane->coord[2], rt->plane->orient[0], rt->plane->orient[1], rt->plane->orient[2], rt->plane->color[0], rt->plane->color[1], rt->plane->color[2]);
 		rt->plane = rt->plane->next;
 	}
 	while (rt->cylinder != NULL)
 	{
-		printf("Cylinder: %f,%f,%f		%f,%f,%f		%f %f 	%d,%d,%d\n", rt->cylinder->coord[0], rt->cylinder->coord[1], rt->cylinder->coord[2], rt->cylinder->orient[0], rt->cylinder->orient[1], rt->cylinder->orient[2], rt->cylinder->diametr, rt->cylinder->height, rt->cylinder->color[0], rt->cylinder->color[1], rt->cylinder->color[2]);
+		printf("Cylinder: %f,%f,%f %f,%f,%f %f %f %f,%f,%f\n", rt->cylinder->coord[0], rt->cylinder->coord[1], rt->cylinder->coord[2], rt->cylinder->orient[0], rt->cylinder->orient[1], rt->cylinder->orient[2], rt->cylinder->diametr, rt->cylinder->height, rt->cylinder->color[0], rt->cylinder->color[1], rt->cylinder->color[2]);
 		rt->cylinder = rt->cylinder->next;
 	}
 }

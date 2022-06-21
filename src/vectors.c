@@ -21,7 +21,7 @@ float	*subtr_vec(float *vect1, float *vect2)
 	return (res);
 }
 
-float	lenght_vect(float *vect)
+float	length_vect(float *vect)
 {
 	float	res;
 
@@ -33,7 +33,7 @@ void	normalize_vect(float *vect)
 {
 	float	length;
 
-	length = lenght_vect(vect);
+	length = length_vect(vect);
 	vect[0] /= length;
 	vect[1] /= length;
 	vect[2] /= length;
@@ -59,4 +59,20 @@ float	*cross_product(float *vect1, float *vect2)
 	z = vect1[0] * vect2[1] - vect1[1] * vect2[0];
 	result = new_vect(x, y, z);
 	return (result);
+}
+
+float	*add_vect(float *vect1, float *vect2)
+{
+	float	*res;
+
+	res = new_vect(vect1[0] + vect2[0], vect1[1] + vect2[1], vect1[2] + vect2[2]);
+	return (res);
+}
+
+float	*multiply_vect(float scalar,float *vect)
+{
+	float *res;
+	
+	res = new_vect(vect[0] * scalar, vect[1] * scalar, vect[2] * scalar);
+	return (res);
 }

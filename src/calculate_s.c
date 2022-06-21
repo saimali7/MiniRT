@@ -2,7 +2,21 @@
 #include "../inc/Minilibx.h"
 #include "../Libft/libft.h"
 
-void    ft_putpixel(int x, int y, int color, t_disp *display)
+float *clamp(float min, float max, float *value)
+{
+    int i = 0;
+    while (i < 3)
+    {
+        if (value[i] > max)
+            value[i] = max;
+        else if (value[i] < min)
+            value[i] = min;
+        i++;
+    }
+    return (value);
+}
+
+void    ft_putpixel(int x, int y, float *color, t_disp *display)
 {
     char	*temp;
 	int		position;
@@ -11,9 +25,9 @@ void    ft_putpixel(int x, int y, int color, t_disp *display)
     y = HEIGHT/2 - y - 1;
 	position = x * 4 + 4 * WIDHT * y;
 	temp = display->img.addr;
-	temp[position] = color % 256;
-	temp[position + 1] = (color / 256) % 256;
-	temp[position + 2] = color / (256 * 256);
+	temp[position] = color[2];
+	temp[position + 1] = color[1];
+	temp[position + 2] = color[0];
 }
 
 float*	multiply_vectors(t_camera *cam, float *right, float *up, float *tmp)
@@ -109,7 +123,7 @@ void    intersect_sphere(t_rt *rt, float *direction, t_sphere *sphere, float *in
     s_center[1] = sphere->coord[1];
     s_center[2] = sphere->coord[2];
 
-    origin[0] = rt->camera.origin[0];	//rt->camera.coord[0]; we can will take from struct
+    origin[0] = rt->camera.origin[0];	//rt->camera.coord[0]; we can take from struct
     origin[1] = rt->camera.origin[1];	//rt->camera.coord[1];
     origin[2] = rt->camera.origin[2];	//rt->camera.coord[2];
 
@@ -130,12 +144,52 @@ void    intersect_sphere(t_rt *rt, float *direction, t_sphere *sphere, float *in
     return ;
 }
 
-int     trace_ray(t_rt *rt, float *direction, int min, int max)
+float lighting(float *point, float *normal, t_rt *rt, int specular, float *view)
+{
+    float intensity;
+    float *vec_light;
+    float normal_dot;
+    float length_n;
+    float length_v;
+    float *r;
+    float r_dot_v;
+
+    length_n = length_vect(normal);
+    length_v = length_vect(view);
+    intensity = 0.0;
+
+    intensity += rt->ambient.ratio;
+    vec_light = subtr_vec(rt->light.coord, point);
+
+    normal_dot = dot_product_vect(normal, vec_light);
+    if (normal_dot > 0)
+        intensity += rt->light.ratio * normal_dot / (length_n * length_vect(vec_light));
+
+    if (specular != -1)
+    {
+        r = subtr_vec(multiply_vect(2.0 * dot_product_vect(normal, vec_light), normal), vec_light);
+        r_dot_v = dot_product_vect(r, view);
+        if (r_dot_v > 0)
+            intensity += rt->light.ratio * pow(r_dot_v / (length_vect(r) * length_v), specular);
+    }
+    return (intensity);
+}
+
+float   blendcolor(float a, float b, float t)
+{
+    return sqrt((1 - t) * pow(a, 2) + t * pow(b, 2));
+}
+
+float   *trace_ray(t_rt *rt, float *direction, int min, int max)
 {
     float closest_t = INF;
     t_sphere *closest_sphere = NULL;
     t_sphere *sphere;
     float *intersect;
+    float   *point;
+    float   *normal;
+    float   *color;
+    float   *view;
 
     sphere = rt->sphere;
     intersect = malloc(sizeof(float) * 2);
@@ -155,21 +209,34 @@ int     trace_ray(t_rt *rt, float *direction, int min, int max)
         sphere = sphere->next;
     }
     if (closest_sphere == NULL)
-        return (0x000000);
-    else
-        return ((65536  * closest_sphere->color[0]) + (256 * closest_sphere->color[1]) + closest_sphere->color[2]);
+        return ((float *)ft_calloc(sizeof(float), 3));
+    point = add_vect(rt->camera.coord, multiply_vect(closest_t, direction));
+    normal = subtr_vec(point, closest_sphere->coord);
+    normal = multiply_vect(1.0 / length_vect(normal), normal);
+
+    view = multiply_vect(-1, direction);
+    color = multiply_vect(lighting(point, normal, rt, 1000 , view), closest_sphere->color);
+    // if (rt->ambient.ratio > 0.0)
+    // {
+    //     color[0] = (rt->ambient.color[0] - color[0]) * rt->ambient.ratio + color[0];
+    //     color[1] = (rt->ambient.color[1] - color[1]) * rt->ambient.ratio + color[1];
+    //     color[2] = (rt->ambient.color[2] - color[2]) * rt->ambient.ratio + color[2]; 
+    // }
+    return (color);
+    // else
+    //     return ((65536  * closest_sphere->color[0]) + (256 * closest_sphere->color[1]) + closest_sphere->color[2]);
 }
 
 void    calculate_s(t_disp *display , t_rt *rt)
 {
     int x;
     int y;
-    int color;
+    float *color;
     float *direction;
 
     y = -HEIGHT/2;
     x = 0;
-    color = 0xFFFFFF;
+
     while (y < HEIGHT/2)
     {
         x = -WIDHT/2;
@@ -177,7 +244,9 @@ void    calculate_s(t_disp *display , t_rt *rt)
         {
             direction = Convert_Viewport(x, y, rt);
             color = trace_ray(rt, direction, 1 , INF);
-            ft_putpixel(x, y , color, display);
+			//color = trace_ray_plane(rt, direction);
+			//color = trace_ray_cylinder(rt, direction);
+            ft_putpixel(x, y , clamp(0.0, 255.0, color), display);
             free(direction);
             x++;
         }

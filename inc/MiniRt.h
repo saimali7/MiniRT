@@ -21,7 +21,7 @@ typedef struct	s_vect	t_vect;
 typedef struct s_ambient
 {
 	float	ratio;
-	int		color[3];
+	float	color[3];
 }			t_ambient;
 
 typedef struct	s_camera
@@ -36,15 +36,15 @@ typedef struct	s_light
 {
 	float	coord[3];
 	float	ratio;
-	int		color[3];
+	float	color[3];
 }			t_light;
 
 typedef struct s_sphere
 {
-	float	coord[3];
+	float	coord[3];	// change t_vect *center;
 	float	diametr;
 	float	radius;
-	int		color[3];
+	float	color[3];
 	struct s_sphere	*next;
 }			t_sphere;
 
@@ -52,7 +52,7 @@ typedef struct	s_plane
 {
 	float	coord[3];
 	float	orient[3];
-	int		color[3];
+	float	color[3];
 	struct s_plane	*next;
 }			t_plane;
 
@@ -60,7 +60,7 @@ typedef struct s_cylinder
 {
 	float	coord[3];
 	float	orient[3];
-	int		color[3];
+	float	color[3];
 	float	diametr;
 	float	height;
 	struct	s_cylinder *next;
@@ -89,6 +89,9 @@ void    ray_tracing(t_rt *rt);
 float	is_ray_sphere(t_camera camera, float *ray, t_sphere *sphere);
 unsigned int	ft_get_rgb(int *color);
 void    calculate_s(t_disp *display , t_rt *rt);
+
+int     trace_ray_plane(t_rt *rt, float *direction);
+int     trace_ray_cylinder(t_rt *rt, float *direction);
 
 
 
