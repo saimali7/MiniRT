@@ -176,9 +176,9 @@ void    calculate_s(t_disp *display , t_rt *rt)
         while (x < WIDHT/2)
         {
             direction = Convert_Viewport(x, y, rt);
-            color = trace_ray(rt, direction, 1 , INF);
+            //color = trace_ray(rt, direction, 1 , INF);
 			//color = trace_ray_plane(rt, direction);
-			//color = trace_ray_cylinder(rt, direction);
+			color = trace_ray_cylinder(rt, direction);
             ft_putpixel(x, y , color, display);
             free(direction);
             x++;

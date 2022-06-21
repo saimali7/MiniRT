@@ -53,6 +53,7 @@ int   cylinder_roots(t_rt *rt, float *direction, t_cylinder *cylinder, float *in
 {
     float	*a_sqrt;
 	float	*right;
+	//float	coeff[3];
 	float	a;
 	float	b;
 	float	c;
@@ -71,12 +72,14 @@ int   cylinder_roots(t_rt *rt, float *direction, t_cylinder *cylinder, float *in
 	b = 2 * dot_product_vect(a_sqrt, right);
 	c = dot_product_vect(right, right) - ((cylinder->diametr / 2) * (cylinder->diametr / 2)); //change on radius
 	
+	free(tmp);
+	free(tmp2);
 	if (!solve_quadratic(a, b, c, intersect))
 	 	return (0);
 	return (1);
 }
 
-void		check_t(float *inter, t_cylinder *cylinder, float *direction, t_rt *rt)
+void		check_intersect(float *inter, t_cylinder *cylinder, float *direction, t_rt *rt)
 {
 	float	*q;
 	float	*p2;
@@ -87,6 +90,8 @@ void		check_t(float *inter, t_cylinder *cylinder, float *direction, t_rt *rt)
 		*inter = -1;
 	if (dot_product_vect(cylinder->orient, subtr_vec(q, p2)) >= 0)
 		*inter = -1;
+	free(q);
+	free(p2);
 }
 
 int		intersect_cylinder(t_rt *rt, float *direction, t_cylinder *cylinder, float *intersect)	//, float *dist)
@@ -94,9 +99,9 @@ int		intersect_cylinder(t_rt *rt, float *direction, t_cylinder *cylinder, float 
 	if (!cylinder_roots(rt, direction, cylinder, intersect))
 		return (0);
 	if (intersect[0] > 0)
-		check_t(&intersect[0], cylinder, direction, rt);
+		check_intersect(&intersect[0], cylinder, direction, rt);
 	if (intersect[1] > 0)
-		check_t(&intersect[1], cylinder, direction, rt);
+		check_intersect(&intersect[1], cylinder, direction, rt);
 	if (intersect[0] < 0 && intersect[1] < 0)
 		return (0);
 	// if (intersect[1] < intersect[0])
@@ -146,6 +151,7 @@ int     trace_ray_cylinder(t_rt *rt, float *direction)
 		}
         cylinder = cylinder->next;
     }
+	free(intersect);
     if (closest_cylinder == NULL)
         return (0x000000);
     else
