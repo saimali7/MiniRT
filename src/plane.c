@@ -19,8 +19,6 @@ int    intersect_plane(t_rt *rt, float *direction, t_plane *plane, float *inters
     return (0);
 }
 
-
-
 int     trace_ray_plane(t_rt *rt, float *direction)
 {
     t_plane *closest_plane = NULL;
