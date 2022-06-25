@@ -33,7 +33,7 @@ int	solve_quadratic(float a, float b, float c, float *intsect)
 	return (1);
 }
 
-int   cylinder_roots(t_rt *rt, t_vect direction, t_cylinder *cylinder, float *intsect)
+int   cylinder_roots(t_vect origin, t_vect direction, t_cylinder *cylinder, float *intsect)
 {
     t_vect	a_sqrt;
 	t_vect	right;
@@ -50,8 +50,8 @@ int   cylinder_roots(t_rt *rt, t_vect direction, t_cylinder *cylinder, float *in
 	
 	a = dot_product_vect(a_sqrt, a_sqrt);
 	
-	tmp2 = subtr_vec (rt->camera.origin, cylinder->coord); 
-	tmp3 = dot_product_vect(subtr_vec(rt->camera.origin, cylinder->coord), cylinder->orient);
+	tmp2 = subtr_vec (origin, cylinder->coord); 
+	tmp3 = dot_product_vect(subtr_vec(origin, cylinder->coord), cylinder->orient);
 	right = subtr_vec(tmp2, multiply_vect(tmp3, cylinder->orient));
 	b = 2 * dot_product_vect(a_sqrt, right);
 	c = dot_product_vect(right, right) - ((cylinder->radius) * (cylinder->radius)); //change on radius
@@ -61,27 +61,27 @@ int   cylinder_roots(t_rt *rt, t_vect direction, t_cylinder *cylinder, float *in
 	return (1);
 }
 
-void		check_intersect(float *intsect, t_cylinder *cylinder, t_vect direction, t_rt *rt)
+void		check_intersect(float *intsect, t_cylinder *cylinder, t_vect direction, t_vect origin)
 {
 	t_vect	q;
 	t_vect	p2;
 
 	p2 = add_vect(cylinder->coord, multiply_vect(cylinder->height, cylinder->orient));
-	q = add_vect(rt->camera.origin, multiply_vect(*intsect, direction));
+	q = add_vect(origin, multiply_vect(*intsect, direction));
 	if (dot_product_vect(cylinder->orient, subtr_vec(q, cylinder->coord)) <= 0)
 		*intsect = -1;
 	if (dot_product_vect(cylinder->orient, subtr_vec(q, p2)) >= 0)
 		*intsect = -1;
 }
 
-int		intersect_cylinder(t_rt *rt, t_vect direction, t_cylinder *cylinder, float *intsect)
+int		intersect_cylinder(t_vect origin, t_vect direction, t_cylinder *cylinder, float *intsect)
 {
-	if (!cylinder_roots(rt, direction, cylinder, intsect))
+	if (!cylinder_roots(origin, direction, cylinder, intsect))
 		return (0);
 	if (intsect[0] > 0)
-		check_intersect(&intsect[0], cylinder, direction, rt);
+		check_intersect(&intsect[0], cylinder, direction, origin);
 	if (intsect[1] > 0)
-		check_intersect(&intsect[1], cylinder, direction, rt);
+		check_intersect(&intsect[1], cylinder, direction, origin);
 	if (intsect[0] < 0 && intsect[1] < 0)
 		return (0);
 	// if (intersect[1] < intersect[0])
@@ -99,7 +99,7 @@ int		intersect_cylinder(t_rt *rt, t_vect direction, t_cylinder *cylinder, float 
 	return (1);
 }
 
-int     trace_ray_cylinder(t_vect origin, t_rt *rt, t_vect direction, t_inter *intersect)
+void    trace_ray_cylinder(t_vect origin, t_rt *rt, t_vect direction, t_inter *intersect)
 {
     t_cylinder *closest_cylinder = NULL;
     t_cylinder *cylinder;
@@ -111,7 +111,7 @@ int     trace_ray_cylinder(t_vect origin, t_rt *rt, t_vect direction, t_inter *i
     intsect = malloc(sizeof(float) * 2);
     while (cylinder != NULL)
     {
-		if (intersect_cylinder(rt, direction, cylinder, intsect))
+		if (intersect_cylinder(origin, direction, cylinder, intsect))
 		{
 			// if (dist < closest_t)
 			// {
