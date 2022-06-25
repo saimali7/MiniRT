@@ -107,7 +107,7 @@ unsigned int	ft_get_rgb(int *color);
 void    calculate_s(t_disp *display , t_rt *rt);
 
 int     trace_ray_plane(t_rt *rt, float *direction);
-int     trace_ray_cylinder(t_rt *rt, float *direction);
+void    trace_ray_cylinder(t_vect origin, t_rt *rt, t_vect direction, t_inter *intersect);
 float    intersect_plane(t_vect origin, t_vect direction, t_plane *plane, float *intersect);
 
 
