@@ -30,7 +30,6 @@ float	length_vect(t_vect res)
 
 void	normalize_vect(t_vect *vect)
 {
-	t_vect  res;
 	float	length;
 
 	length = length_vect(*vect);

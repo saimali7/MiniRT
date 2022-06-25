@@ -66,7 +66,7 @@ typedef struct s_cylinder
 	t_vect	coord;
 	t_vect	orient;
 	t_vect	color;
-	float	diametr;
+	float	radius;
 	float	height;
 	struct	s_cylinder *next;
 }			t_cylinder;
