@@ -438,7 +438,7 @@ int		cylinder_errorcheck(t_rt *rt)
 	if (rt->cylinder->color.x < 0 || rt->cylinder->color.x > 255 || rt->cylinder->color.y < 0
 	|| rt->cylinder->color.y > 255 || rt->cylinder->color.z < 0 || rt->cylinder->color.z > 255)
 		return (-1);
-	if (rt->cylinder->diametr < 0 || rt->cylinder->diametr > 100)
+	if (rt->cylinder->radius < 0 || rt->cylinder->radius > 100)
 		return (-1);
 	if (rt->cylinder->height < 0 || rt->cylinder->height > 100)
 		return (-1);
@@ -455,7 +455,7 @@ int		set_cylinder(char **line, t_rt *rt)
 	rt->cylinder->orient.x = ft_value(line[2], ',', 0);
 	rt->cylinder->orient.y = ft_value(line[2], ',', 1);
 	rt->cylinder->orient.z = ft_value(line[2], ',', 1);
-	rt->cylinder->diametr = ft_value(line[3], ',', 0);
+	rt->cylinder->radius = ft_value(line[3], ',', 0) / 2;
 	rt->cylinder->height = ft_value(line[4], ',', 0);
 	rt->cylinder->color.x = ft_value(line[5], ',', 0);
 	rt->cylinder->color.y = ft_value(line[5], ',', 1);
@@ -599,7 +599,7 @@ void	print_rt(t_rt *rt)
 	}
 	while (rt->cylinder != NULL)
 	{
-		printf("Cylinder: %f,%f,%f %f,%f,%f %f %f %f,%f,%f\n", rt->cylinder->coord.x, rt->cylinder->coord.y, rt->cylinder->coord.z, rt->cylinder->orient.x, rt->cylinder->orient.y, rt->cylinder->orient.z, rt->cylinder->diametr, rt->cylinder->height, rt->cylinder->color.x, rt->cylinder->color.y, rt->cylinder->color.z);
+		printf("Cylinder: %f,%f,%f %f,%f,%f %f %f %f,%f,%f\n", rt->cylinder->coord.x, rt->cylinder->coord.y, rt->cylinder->coord.z, rt->cylinder->orient.x, rt->cylinder->orient.y, rt->cylinder->orient.z, rt->cylinder->radius, rt->cylinder->height, rt->cylinder->color.x, rt->cylinder->color.y, rt->cylinder->color.z);
 		rt->cylinder = rt->cylinder->next;
 	}
 }

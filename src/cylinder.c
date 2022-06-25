@@ -131,6 +131,11 @@ void    trace_ray_cylinder(t_vect origin, t_rt *rt, t_vect direction, t_inter *i
 		}
         cylinder = cylinder->next;
     }
+	 if (closest_cylinder == NULL)
+    {
+        free(intsect);
+        return ;
+    }
     intersect->closest_cylinder = closest_cylinder;
     intersect->closest_t = closest_t;
     intersect->closest_sphere = NULL;

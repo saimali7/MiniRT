@@ -209,7 +209,7 @@ void closest_intersection(t_vect origin, t_rt *rt, t_vect direction, t_inter *in
     intersect->closest_t = INF;
     check_sphere(origin, rt, direction, intersect);
     check_plane(origin, rt, direction, intersect);
-    // check_cylinder();
+    trace_ray_cylinder(origin, rt, direction, intersect);
 }
 
 float lighting(t_vect point, t_vect normal, t_rt *rt, float specular, t_vect view)
@@ -289,11 +289,14 @@ t_vect   trace_ray(t_rt *rt, t_vect direction, int min, int max)
         view = multiply_vect(-1, direction);
         color = multiply_vect(lighting(point, normal, rt, 10, view), intersect->closest_plane->color);
     }
-    // else if (intersect->closest_cylinder != NULL)
-    // {
-
-    // }
-
+    else if (intersect->closest_cylinder != NULL)
+    {
+        point = add_vect(rt->camera.coord, multiply_vect(intersect->closest_t, direction));
+        normal = subtr_vec(point, intersect->closest_cylinder->coord);
+        normal = multiply_vect(1.0 / length_vect(normal), normal);
+        view = multiply_vect(-1, direction);
+        color = multiply_vect(lighting(point, normal, rt, 1500, view), intersect->closest_cylinder->color);
+    }
     if (rt->ambient.ratio > 0.0)
     {
         color.x += (rt->ambient.color.x * rt->ambient.ratio);
