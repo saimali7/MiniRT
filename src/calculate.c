@@ -2,23 +2,23 @@
 #include "../inc/Minilibx.h"
 #include "../Libft/libft.h"
 
-int is_sphere(t_rt *rt, float x, float y)
-{
-	float dist;
-	float rad;
+// int is_sphere(t_rt *rt, float x, float y)
+// {
+// 	float dist;
+// 	float rad;
 
-	dist = sqrtf(powf(x - rt->sphere->coord[0], 2) + powf(y - rt->sphere->coord[1], 2));
-	rad = rt->sphere->diametr / 2;
-	if (!rt->sphere)
-		return (0);
-	if (dist <= rad)
-	{
-		if ((rad - dist) < 1.00000000)
-			return (2);
-		return (1);
-	}
-	return (0);
-}
+// 	dist = sqrtf(powf(x - rt->sphere->coord[0], 2) + powf(y - rt->sphere->coord[1], 2));
+// 	rad = rt->sphere->diametr / 2;
+// 	if (!rt->sphere)
+// 		return (0);
+// 	if (dist <= rad)
+// 	{
+// 		if ((rad - dist) < 1.00000000)
+// 			return (2);
+// 		return (1);
+// 	}
+// 	return (0);
+// }
 
 // int is_cylinder(t_rt *rt, float x, float y)
 // {

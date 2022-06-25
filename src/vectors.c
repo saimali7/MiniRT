@@ -1,78 +1,78 @@
 #include "../inc/Vectors.h"
 
-float		*new_vect(float x, float y, float z)
+t_vect	new_vect(float x, float y, float z)
 {
-	float	*new;
+	t_vect result;
 
-	new = ft_calloc(3, sizeof(float));
-	if (!new)
-		error_exit(-1, ERR_MEM_AL);
-	new[0] = x;
-    new[1] = y;
- 	new[2] = z;
- 	return (new);
-}
-
-float	*subtr_vec(float *vect1, float *vect2)
-{
-	float	*res;
-
- 	res = new_vect(vect1[0] - vect2[0], vect1[1] - vect2[1], vect1[2] - vect2[2]);
-	return (res);
-}
-
-float	length_vect(float *vect)
-{
-	float	res;
-
-	res = sqrt((vect[0] * vect[0]) + (vect[1] * vect[1]) + (vect[2] * vect[2]));
-	return (res);
-}
-
-void	normalize_vect(float *vect)
-{
-	float	length;
-
-	length = length_vect(vect);
-	vect[0] /= length;
-	vect[1] /= length;
-	vect[2] /= length;
-}
-
-float	dot_product_vect(float *vect1, float *vect2)
-{
-	float	res;
-
-	res = ((vect1[0] * vect2[0]) + (vect1[1] * vect2[1]) + (vect1[2] * vect2[2]));
-	return (res);
-}
-
-float	*cross_product(float *vect1, float *vect2)
-{
-	float *result;
-	float x;
-	float y;
-	float z;
-
-	x = vect1[1] * vect2[2] - vect1[2] * vect2[1];
-	y = vect1[2] * vect2[0] - vect1[0] * vect2[2];
-	z = vect1[0] * vect2[1] - vect1[1] * vect2[0];
-	result = new_vect(x, y, z);
+	result.x = x;
+	result.y = y;
+	result.z = z;
 	return (result);
 }
 
-float	*add_vect(float *vect1, float *vect2)
+t_vect subtr_vec(t_vect v1, t_vect v2)
 {
-	float	*res;
+	t_vect result;
 
-	res = new_vect(vect1[0] + vect2[0], vect1[1] + vect2[1], vect1[2] + vect2[2]);
+	result.x = v1.x - v2.x;
+	result.y = v1.y - v2.y;
+	result.z = v1.z - v2.z;
+	return (result);
+}
+
+float	length_vect(t_vect res)
+{
+	float	temp;
+
+	temp = sqrt((res.x * res.x) + (res.y * res.y) + (res.z * res.z));
+	return (temp);
+}
+
+void	normalize_vect(t_vect *vect)
+{
+	t_vect  res;
+	float	length;
+
+	length = length_vect(*vect);
+	vect->x /= length;
+	vect->y /= length;
+	vect->z /= length;
+}
+
+float	dot_product_vect(t_vect vect1, t_vect vect2)
+{
+	float	res;
+
+	res = ((vect1.x * vect2.x) + (vect1.y * vect2.y) + (vect1.z * vect2.z));
 	return (res);
 }
 
-float	*multiply_vect(float scalar,float *vect)
+t_vect	cross_product(t_vect v1, t_vect v2)
 {
-	float *res;
+	t_vect result;
+
+	result.x = v1.y * v2.z - v1.z * v2.y;
+	result.y = v1.z * v2.x - v1.x * v2.z;
+	result.z = v1.x * v2.y - v1.y * v2.x;
+	return (result);
+}
+
+t_vect add_vect(t_vect v1, t_vect v2)
+{
+	t_vect	result;
+
+	result.x = v1.x + v2.x;
+	result.y = v1.y + v2.y;
+	result.z = v1.z + v2.z;
+	return (result);
+}
+
+t_vect	multiply_vect(float scalar,t_vect vect)
+{
+	t_vect res;
 	
-	res = new_vect(vect[0] * scalar, vect[1] * scalar, vect[2] * scalar);
+	res.x = vect.x * scalar;
+	res.y = vect.y * scalar;
+	res.z = vect.z * scalar;
 	return (res);
 }
