@@ -1,5 +1,5 @@
 #include "../inc/MiniRt.h"
-#include "../inc/Vectors.h"
+#include "../inc/Vector.h"
 
 // float	is_ray_sphere(t_camera camera, float *ray, t_sphere *sphere)
 // {

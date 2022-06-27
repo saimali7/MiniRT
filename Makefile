@@ -4,7 +4,7 @@ CC = gcc
 
 LIST =	main.c	src/atod.c	src/display.c	src/calculate.c src/errors.c \
 		src/sphere.c src/ray_tracing.c src/vectors.c src/calculate_s.c \
-		src/plane.c	src/cylinder.c
+		src/plane.c	src/cylinder.c src/parsing.c
 
 OBJ = $(LIST:.c=.o)
 

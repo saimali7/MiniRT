@@ -31,6 +31,7 @@ int	rt_atoi(const char *str, t_rt *rt)
 	}
 	return (res * sign);
 }
+
 static void	rt_pop_dot(char *str)
 {
 	int	i;

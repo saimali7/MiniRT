@@ -3,19 +3,19 @@
 #include "../Libft/libft.h"
 
 
-float    intersect_plane(t_vect origin, t_vect direction, t_plane *plane, float *intersect)
+float	intersect_plane(t_vect origin, t_vect direction, t_plane *plane, float *intersect)
 {
-    float  denom;
-    t_vect   pl;
-    
-    denom = dot_product_vect(plane->orient, direction);
-    if (fabs(denom) > 1e-6)
-    {
-        pl = subtr_vec(plane->coord, origin);
-        *intersect = dot_product_vect(pl, plane->orient) / denom;
-        return (*intersect >= 0);
-    }
-    return (0);
+	float	denom;
+	t_vect	pl;
+
+	denom = dot_product_vect(plane->orient, direction);
+	if (fabs(denom) > 1e-6)
+	{
+		pl = subtr_vec(plane->coord, origin);
+		*intersect = dot_product_vect(pl, plane->orient) / denom;
+		return (*intersect >= 0);
+	}
+	return (0);
 }
 
 // int     trace_ray_plane(t_rt *rt, float *direction)
@@ -31,7 +31,7 @@ float    intersect_plane(t_vect origin, t_vect direction, t_plane *plane, float 
 //     {
 //         if (intersect_plane(rt, direction, plane, &intersect))
 //         {
-//             if (intersect < closest_t) 
+//             if (intersect < closest_t)
 //             {
 //                 closest_plane = plane;
 //                 closest_t = intersect;
