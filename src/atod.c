@@ -1,7 +1,7 @@
 #include "../inc/MiniRt.h"
 #include "../Libft/libft.h"
 
-int	rt_atoi(const char *str, t_rt *rt)
+int	rt_atoi(const char *str, t_rt *rt)	// more then 25 lines
 {
 	int				i;
 	int				sign;
@@ -19,10 +19,7 @@ int	rt_atoi(const char *str, t_rt *rt)
 	if (str[i] == '-' || str[i] == '+')
 		i++;
 	while (ft_isdigit(str[i]))
-	{
-		res = res * 10 + (str[i] - '0');
-		i++;
-	}
+		res = res * 10 + (str[i++] - '0');
 	if ((str[i] != '\0') || (res > 2147483647 && sign == 1) || \
 	(res > 2147483648 && sign == -1))
 	{
@@ -60,7 +57,7 @@ static double	rt_devide(int size)
 double	rt_atod(const char *str, t_rt *rt)
 {
 	char	*tmp;
-	int		dot;
+	size_t	dot;
 	double	nb;
 
 	if (!ft_strchr(str, '.'))
@@ -72,5 +69,11 @@ double	rt_atod(const char *str, t_rt *rt)
 	rt_pop_dot(tmp);
 	nb = rt_atoi(tmp, rt);
 	free(tmp);
+	if (!dot || dot == (ft_strlen(str) - 1) || (dot == 1 && str[0] \
+		&& (str[0] == '-' || str[0] == '+')))
+	{
+		free_rt(&rt);
+		error_exit(-1, "Error: Invalid argument file\n");
+	}
 	return (nb / rt_devide(ft_strlen(str) - 1 - dot));
 }

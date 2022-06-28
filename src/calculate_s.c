@@ -15,7 +15,7 @@ t_vect	clamp(float min, float max, t_vect value)
 		value.y = min;
 	if (value.z > max)
 		value.z = max;
-	else if(value.z < min)
+	else if (value.z < min)
 		value.z = min;
 	return (value);
 }
@@ -25,8 +25,8 @@ void	ft_putpixel(int x, int y, t_vect color, t_disp *display)
 	char	*temp;
 	int		position;
 
-	x = WIDHT/2 + x;
-	y = HEIGHT/2 - y - 1;
+	x = WIDHT /2 + x;
+	y = HEIGHT /2 - y - 1;
 	position = x * 4 + 4 * WIDHT * y;
 	temp = display->img.addr;
 	temp[position] = color.z;
@@ -34,118 +34,16 @@ void	ft_putpixel(int x, int y, t_vect color, t_disp *display)
 	temp[position + 2] = color.x;
 }
 
-t_vect	multiply_vectors(t_camera *cam, t_vect right, t_vect up, t_vect tmp)
+void	closest_intersection(t_vect origin, t_rt *rt, t_vect dir, t_inter *its)
 {
-	t_vect	res;
-
-	res.x = tmp.x * right.x + tmp.y * up.x + tmp.z * cam->orient.x + cam->coord.x;
-	res.y = tmp.x * right.y + tmp.y * up.y + tmp.z * cam->orient.y + cam->coord.y;
-	res.z = tmp.x * right.z + tmp.y * up.z + tmp.z * cam->orient.z + cam->coord.z;
-	return (res);
-}
-
-t_vect	get_direction(int x, int y, t_rt *rt)
-{
-	float	fov;
-	float	aspect;
-
-	fov = (float)rt->camera.fov;
-	aspect = WIDHT / HEIGHT;
-	float new_width = (tan(fov / 2 * (M_PI / 180))) * 2;
-	float new_hight = new_width / aspect;
-	float x_pix = new_width / WIDHT;
-	float y_pix = new_hight / HEIGHT;
-	return (new_vect(x * x_pix, y * y_pix, 1.0));
-}
-
-t_vect	get_look_right(t_camera *camera)
-{
-	t_vect	rand;
-	t_vect	right;
-
-	rand = new_vect(0, 1, 0);
-	normalize_vect(&rand);
-	right = cross_product(rand, camera->orient);
-	normalize_vect(&right);
-	return (right);
-}
-
-t_vect	get_look_up(t_camera *camera, t_vect right)
-{
-	t_vect	up;
-
-	up = cross_product(camera->orient, right);
-	normalize_vect(&up);
-	//printf("x = %f, y = %f, z= %f;", up[0], up[1], up[2]); // ok
-	return (up);
-}
-
-t_vect	convert_viewport(int x, int y, t_rt *rt)
-{
-	t_vect	direction;
-	//t_vect	to_origin;
-	t_vect	right;
-	t_vect	up;
-
-	right = get_look_right(&rt->camera);
-	//printf("x = %f, y = %f, z= %f;", right[0], right[1], right[2]); //ok
-	up = get_look_up(&rt->camera, right);
-	rt->camera.origin = multiply_vectors(&rt->camera, right, up, new_vect(0, 0, 0));
-	//printf("x = %f, y = %f, z= %f;", to_origin[0], to_origin[1], to_origin[2]); //ok
-	// rt->camera.origin.x = to_origin.x;
-	// rt->camera.origin.y = to_origin.y;
-	// rt->camera.origin.z = to_origin.z;
-	direction = get_direction(x, y, rt);
-	direction = multiply_vectors(&rt->camera, right, up, direction);
-	direction = subtr_vec(direction, rt->camera.origin);
-	normalize_vect(&direction);
-	return (direction);
-}
-
-
-
-void	check_plane(t_vect origin, t_rt *rt, t_vect direction, t_inter *intersect)
-{
-	t_plane	*plane;
-	t_plane	*closest_plane;
-	float	intsect;
-	float	closest_t;
-
-	closest_t = INF;
-	closest_plane = NULL;
-	plane = rt->plane;
-	while (plane != NULL)
-	{
-		intersect_plane(origin, direction, plane, &intsect);
-		if (intsect < closest_t && intersect->min < intsect && intsect < intersect->max)
-		{
-			closest_t = intsect;
-			closest_plane = plane;
-		}
-		plane = plane->next;
-	}
-	if (closest_plane == NULL)
-		return ;
-	if (intersect->closest_t > closest_t)
-	{
-		intersect->closest_plane = closest_plane;
-		intersect->closest_t = closest_t;
-		intersect->closest_cylinder = NULL;
-		intersect->closest_sphere = NULL;
-		intersect->hit_flag = 1;
-	}
-}
-
-void closest_intersection(t_vect origin, t_rt *rt, t_vect direction, t_inter *intersect)
-{
-	intersect->hit_flag = -1;
-	intersect->closest_cylinder = NULL;
-	intersect->closest_plane = NULL;
-	intersect->closest_sphere = NULL;
-	intersect->closest_t = INF;
-	check_sphere(origin, rt, direction, intersect);
-	check_plane(origin, rt, direction, intersect);
-	check_cylinder(origin, rt, direction, intersect);
+	its->hit_flag = -1;
+	its->closest_cylinder = NULL;
+	its->closest_plane = NULL;
+	its->closest_sphere = NULL;
+	its->closest_t = INF;
+	check_sphere(origin, rt, dir, its);
+	check_cylinder(origin, rt, dir, its);
+	check_plane(origin, rt, dir, its);
 }
 
 float	lighting(t_vect point, t_vect normal, t_rt *rt, float specular, t_vect view)
@@ -158,7 +56,7 @@ float	lighting(t_vect point, t_vect normal, t_rt *rt, float specular, t_vect vie
 	t_vect	r;
 	float	r_dot_v;
 	float	t_max;
-	t_inter	intersect;
+	t_inter	its;
 
 	length_n = length_vect(normal);
 	length_v = length_vect(view);
@@ -172,10 +70,10 @@ float	lighting(t_vect point, t_vect normal, t_rt *rt, float specular, t_vect vie
 	t_max = 1.0;
 
     // shadow check
-	intersect.min = 0.0001;
-	intersect.max = t_max;
-	closest_intersection(point, rt, vec_light, &intersect);
-	if (intersect.hit_flag != -1)
+	its.min = 0.0001;
+	its.max = t_max;
+	closest_intersection(point, rt, vec_light, &its);
+	if (its.hit_flag != -1)
 		return intensity;
 
     // diffuse light
@@ -205,47 +103,46 @@ t_vect		get_normal_for_cyl(t_vect point, t_cylinder *cylinder)
 	return (normal);
 }
 
-t_vect	trace_ray(t_rt *rt, t_vect direction, int min, int max)
+t_vect	trace_ray(t_rt *rt, t_vect dir, int min, int max)
 {
 	t_vect	point;
 	t_vect	normal;
 	t_vect	color;
 	t_vect	view;
-	t_inter	*intersect;
+	t_inter	*its;
 
-	intersect = malloc(sizeof(t_inter));
-	intersect->closest_sphere = NULL;
-	intersect->min = min;
-	intersect->max = max;
-	closest_intersection(rt->camera.origin, rt, direction, intersect);
-	if (intersect->hit_flag == -1)
+	its = malloc(sizeof(t_inter));
+	its->closest_sphere = NULL;
+	its->min = min;
+	its->max = max;
+	closest_intersection(rt->camera.origin, rt, dir, its);
+	if (its->hit_flag == -1)
 		return (new_vect(0,0,0));
-	if (intersect->closest_sphere != NULL)
+	if (its->closest_sphere != NULL)
 	{
-		point = add_vect(rt->camera.coord, multiply_vect(intersect->closest_t, direction));
-		normal = subtr_vec(point, intersect->closest_sphere->coord);
+		point = add_vect(rt->camera.coord, multiply_vect(its->closest_t, dir));
+		normal = subtr_vec(point, its->closest_sphere->coord);
 		normal = multiply_vect(1.0 / length_vect(normal), normal);
-		view = multiply_vect(-1, direction);
-		color = multiply_vect(lighting(point, normal, rt, 2000 , view), intersect->closest_sphere->color);
+		view = multiply_vect(-1, dir);
+		color = multiply_vect(lighting(point, normal, rt, 2000 , view), its->closest_sphere->color);
 	}
-	else if (intersect->closest_plane != NULL)
+	else if (its->closest_plane != NULL)
 	{
-		point = add_vect(rt->camera.coord, multiply_vect(intersect->closest_t, direction));
-		normal = intersect->closest_plane->orient;
+		point = add_vect(rt->camera.coord, multiply_vect(its->closest_t, dir));
+		normal = its->closest_plane->orient;
 		normal = multiply_vect(1.0 / length_vect(normal), normal);
-		view = multiply_vect(-1, direction);
-		color = multiply_vect(lighting(point, normal, rt, 10, view), intersect->closest_plane->color);
+		view = multiply_vect(-1, dir);
+		color = multiply_vect(lighting(point, normal, rt, 10, view), its->closest_plane->color);
 	}
-	else if (intersect->closest_cylinder != NULL)
+	else if (its->closest_cylinder != NULL)
 	{
-		point = add_vect(rt->camera.coord, multiply_vect(intersect->closest_t, direction));
+		point = add_vect(rt->camera.coord, multiply_vect(its->closest_t, dir));
         // normal = subtr_vec(point, intersect->closest_cylinder->coord);
         // normal = multiply_vect(1.0 / length_vect(normal), normal);
-		normal = get_normal_for_cyl(point, intersect->closest_cylinder);
-		view = multiply_vect(-1, direction);
-		color = multiply_vect(lighting(point, normal, rt, 1500, view), intersect->closest_cylinder->color);
+		normal = get_normal_for_cyl(point, its->closest_cylinder);
+		view = multiply_vect(-1, dir);
+		color = multiply_vect(lighting(point, normal, rt, 1500, view), its->closest_cylinder->color);
 	}
-
 
 	if (rt->ambient.ratio > 0.0)
 	{
@@ -253,7 +150,7 @@ t_vect	trace_ray(t_rt *rt, t_vect direction, int min, int max)
 		color.y += (rt->ambient.color.y * rt->ambient.ratio);
 		color.z += (rt->ambient.color.z * rt->ambient.ratio);
 	}
-	free (intersect);
+	free (its);
 	return (color);
 }
 
@@ -262,19 +159,18 @@ void	calculate_s(t_disp *display , t_rt *rt)
 	int		x;
 	int		y;
 	t_vect	color;
-	t_vect	direction;
+	t_vect	dir;
 
-	y = -HEIGHT/2;
+	y = -HEIGHT / 2;
 	x = 0;
-
-	while (y < HEIGHT/2)
+	while (y < HEIGHT / 2)
 	{
-		x = -WIDHT/2;
-		while (x < WIDHT/2)
+		x = -WIDHT / 2;
+		while (x < WIDHT / 2)
 		{
-			direction = convert_viewport(x, y, rt);
-			color = trace_ray(rt, direction, 1 , INF);
-			ft_putpixel(x, y , clamp(0.0, 255.0, color), display);
+			dir = convert_viewport(x, y, rt);
+			color = trace_ray(rt, dir, 1, INF);
+			ft_putpixel(x, y, clamp(0.0, 255.0, color), display);
 			x++;
 		}
 		y++;

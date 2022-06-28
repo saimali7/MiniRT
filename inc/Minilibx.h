@@ -8,7 +8,7 @@
 # define HEIGHT 800.00
 # define INF 100000
 
-typedef struct	s_rt t_rt;
+typedef struct s_rt	t_rt;
 
 typedef struct s_img
 {
@@ -21,13 +21,13 @@ typedef struct s_img
 
 typedef struct s_display
 {
-	void			*mlx;
-	void			*mlx_win;
+	void	*mlx;
+	void	*mlx_win;
 	//unsigned int	**buffer;
-	t_img			img;
-	float		width;
-	float		height;
-}					t_disp;
+	t_img	img;
+	float	width;
+	float	height;
+}			t_disp;
 
 int		ft_key(int key, t_rt *rt);
 int		exit_hook(int x);

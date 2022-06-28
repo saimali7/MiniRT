@@ -6,7 +6,6 @@ void error_exit(int code, char *str)
 
 	i  = 0;
 	if (code == -1)
-		i =  write (STDERR_FILENO, str, ft_strlen(str));
-    //free_all;
+		i =  write(STDERR_FILENO, str, ft_strlen(str));
 	exit(code);
 }

@@ -2,7 +2,7 @@
 
 t_vect	new_vect(float x, float y, float z)
 {
-	t_vect result;
+	t_vect	result;
 
 	result.x = x;
 	result.y = y;

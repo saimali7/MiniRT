@@ -33,7 +33,7 @@ void	init_window(t_disp *display, t_rt *rt)
 		display->width = WIDHT;
 	if (!display->mlx)
 		error_exit(-1, "Error: Init mlx failed");
-	display->mlx_win = mlx_new_window(display->mlx, display->width, display->height, "MiniRt");
+	display->mlx_win = mlx_new_window(display->mlx, WIDHT, HEIGHT, "MiniRt");
 	if (!display->mlx_win)
 		error_exit(-1, "Error: Init window failed");
 	if (!init_screen(display))

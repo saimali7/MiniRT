@@ -33,7 +33,7 @@ t_cylinder	*new_cylinder(void)
 	return (ptr);
 }
 
-int		extension_check(char *arg)
+int	extension_check(char *arg)
 {
 	int	i;
 
@@ -50,7 +50,7 @@ int		extension_check(char *arg)
 	return (0);
 }
 
-int		open_and_check(char *arg)
+int	open_and_check(char *arg)
 {
 	int		fd;
 	int		rd;
@@ -101,20 +101,22 @@ int		comma_helper(char *str, int *i)
 {
 	while (str[*i] != ',' && str[*i] != '\0' && str[*i] != '\n')
 	{
-		if (ft_isdigit(str[*i]) != 1 && str[*i] != '.' && str[*i] != '-' && str[*i] != '+')
+		if (ft_isdigit(str[*i]) != 1 && str[*i] != '.' \
+		&& str[*i] != '-' && str[*i] != '+')
 			return (-1);
 		*i = *i + 1;
 	}
 	if (str[*i] != ',' && str[*i] != '\0' && str[*i] != '\n')
 		return (-1);
-	if (str[*i + 1] != '+' && str[*i + 1] != '-' && ft_isdigit(str[*i + 1]) != 1 && str[*i] != '\0' && str[*i] != '\n')
+	if (str[*i + 1] != '+' && str[*i + 1] != '-' && \
+		ft_isdigit(str[*i + 1]) != 1 && str[*i] != '\0' && str[*i] != '\n')
 		return (-1);
 	return (0);
 }
 
-int		comma_check(char *str)
+int	comma_check(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (comma_helper(str, &i) == -1)
@@ -128,7 +130,7 @@ int		comma_check(char *str)
 	return (0);
 }
 
-int		set_ambient(char **line, t_rt *rt)
+int	set_ambient(char **line, t_rt *rt)
 {
 	rt->ambient.ratio = rt_atod(line[1], rt);
 	if (rt->ambient.ratio < 0.0 || rt->ambient.ratio > 1.0)
@@ -138,15 +140,16 @@ int		set_ambient(char **line, t_rt *rt)
 	rt->ambient.color.x = ft_value(line[2], ',', 0, rt);
 	rt->ambient.color.y = ft_value(line[2], ',', 1, rt);
 	rt->ambient.color.z = ft_value(line[2], ',', 1, rt);
-	if (rt->ambient.color.x < 0 || rt->ambient.color.x > 255 || rt->ambient.color.y < 0
-	|| rt->ambient.color.y > 255 || rt->ambient.color.z < 0 || rt->ambient.color.z > 255)
+	if (rt->ambient.color.x < 0 || rt->ambient.color.x > 255 || \
+	rt->ambient.color.y < 0 || rt->ambient.color.y > 255 || \
+	rt->ambient.color.z < 0 || rt->ambient.color.z > 255)
 		return (-1);
 	return (0);
 }
 
-int		array_size(char **line)
+int	array_size(char **line)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (line[i] != NULL && line[i][0] != '\n')
@@ -154,10 +157,10 @@ int		array_size(char **line)
 	return (i);
 }
 
-int		alpha_check(char **line)
+int	alpha_check(char **line)
 {
-	int i;
-	int k;
+	int	i;
+	int	k;
 
 	i = 1;
 	while (line[i] != NULL)
@@ -165,7 +168,9 @@ int		alpha_check(char **line)
 		k = 0;
 		while (line[i][k] != '\0')
 		{
-			if ((ft_isdigit(line[i][k]) != 1) && line[i][k] != '.' && line[i][k] != '+' && line[i][k] != '-' && line[i][k] != ',' && line[i][k] != '\n')
+			if ((ft_isdigit(line[i][k]) != 1) && line[i][k] != '.' \
+					&& line[i][k] != '+' && line[i][k] != '-' \
+					&& line[i][k] != ',' && line[i][k] != '\n')
 				return (-1);
 			k++;
 		}
@@ -174,7 +179,7 @@ int		alpha_check(char **line)
 	return (0);
 }
 
-int		parse_ambient(char **line, t_rt *rt)
+int	parse_ambient(char **line, t_rt *rt)
 {
 	int			size;
 	static int	a;
@@ -192,7 +197,7 @@ int		parse_ambient(char **line, t_rt *rt)
 	return (0);
 }
 
-int		set_camera(char **line, t_rt *rt)
+int	set_camera(char **line, t_rt *rt)
 {
 	if (comma_check(line[1]) == -1)
 		return (-1);
@@ -203,21 +208,23 @@ int		set_camera(char **line, t_rt *rt)
 	rt->camera.orient.y = ft_value(line[2], ',', 1, rt);
 	rt->camera.orient.z = ft_value(line[2], ',', 1, rt);
 	rt->camera.fov = ft_value(line[3], ',', 0, rt);
-	if (rt->camera.coord.x < -100 || rt->camera.coord.x > 100 || rt->camera.coord.y < -100
-	|| rt->camera.coord.y > 100 || rt->camera.coord.z < -100 || rt->camera.coord.z > 100)
+	if (rt->camera.coord.x < -100 || rt->camera.coord.x > 100 || \
+	rt->camera.coord.y < -100 || rt->camera.coord.y > 100 || \
+	rt->camera.coord.z < -100 || rt->camera.coord.z > 100)
 		return (-1);
-	if (rt->camera.orient.x < -1.0 || rt->camera.orient.x > 1.0 || rt->camera.orient.y < -1.0
-	|| rt->camera.orient.y > 1.0 || rt->camera.orient.z < -1.0 || rt->camera.orient.z > 1.0)
+	if (rt->camera.orient.x < -1.0 || rt->camera.orient.x > 1.0 || \
+	rt->camera.orient.y < -1.0 || rt->camera.orient.y > 1.0 \
+	|| rt->camera.orient.z < -1.0 || rt->camera.orient.z > 1.0)
 		return (-1);
 	if (rt->camera.fov < 0 || rt->camera.fov > 180)
 		return (-1);
 	return (0);
 }
 
-int		parse_camera(char **line, t_rt *rt)
+int	parse_camera(char **line, t_rt *rt)
 {
-	int		size;
-	static int c;
+	int			size;
+	static int	c;
 
 	c++;
 	if (c > 1)
@@ -232,7 +239,7 @@ int		parse_camera(char **line, t_rt *rt)
 	return (0);
 }
 
-int		set_light(char **line, t_rt *rt)
+int	set_light(char **line, t_rt *rt)
 {
 	if (comma_check(line[1]) == -1)
 		return (-1);
@@ -245,18 +252,20 @@ int		set_light(char **line, t_rt *rt)
 	rt->light.color.x = ft_value(line[3], ',', 0, rt);
 	rt->light.color.y = ft_value(line[3], ',', 1, rt);
 	rt->light.color.z = ft_value(line[3], ',', 1, rt);
-	if (rt->light.color.x < 0 || rt->light.color.x > 255 || rt->light.color.y < 0
-	|| rt->light.color.y > 255 || rt->light.color.z < 0 || rt->light.color.z > 255)
+	if (rt->light.color.x < 0 || rt->light.color.x > 255 || \
+	rt->light.color.y < 0 || rt->light.color.y > 255 || \
+	rt->light.color.z < 0 || rt->light.color.z > 255)
 		return (-1);
-	if (rt->light.coord.x < -100 || rt->light.coord.x > 100 || rt->light.coord.y < -100
-	|| rt->light.coord.y > 100 || rt->light.coord.z < -100 || rt->light.coord.z > 100)
+	if (rt->light.coord.x < -100 || rt->light.coord.x > 100 || \
+	rt->light.coord.y < -100 || rt->light.coord.y > 100 || \
+	rt->light.coord.z < -100 || rt->light.coord.z > 100)
 		return (-1);
 	if (rt->light.ratio < 0.0 || rt->light.ratio > 1.0)
 		return (-1);
 	return (0);
 }
 
-int		parse_light(char **line, t_rt *rt)
+int	parse_light(char **line, t_rt *rt)
 {
 	int			size;
 	static int	l;
@@ -274,7 +283,7 @@ int		parse_light(char **line, t_rt *rt)
 	return (0);
 }
 
-int		set_sphere(char **line,t_rt *rt)
+int	set_sphere(char **line,t_rt *rt)
 {
 	if (comma_check(line[1]) == -1 || comma_check(line[3]) == -1)
 		return (-1);
@@ -298,7 +307,7 @@ int		set_sphere(char **line,t_rt *rt)
 	return (0);
 }
 
-int		parse_sphere(char **line, t_rt *rt)
+int	parse_sphere(char **line, t_rt *rt)
 {
 	int			size;
 	t_sphere	*temp;
@@ -325,9 +334,10 @@ int		parse_sphere(char **line, t_rt *rt)
 	return (0);
 }
 
-int		set_plane(char **line, t_rt *rt)
+int	set_plane(char **line, t_rt *rt)
 {
-	if (comma_check(line[1]) == -1 || comma_check(line[2]) == -1 || comma_check(line[2]) == -1)
+	if (comma_check(line[1]) == -1 || comma_check(line[2]) == -1 \
+		|| comma_check(line[2]) == -1)
 		return (-1);
 	rt->plane->coord.x = ft_value(line[1], ',', 0, rt);
 	rt->plane->coord.y = ft_value(line[1], ',', 1, rt);
@@ -338,19 +348,22 @@ int		set_plane(char **line, t_rt *rt)
 	rt->plane->color.x = ft_value(line[3], ',', 0, rt);
 	rt->plane->color.y = ft_value(line[3], ',', 1, rt);
 	rt->plane->color.z = ft_value(line[3], ',', 1, rt);
-	if (rt->plane->coord.x < -100 || rt->plane->coord.x > 100 || rt->plane->coord.y < -100
-	|| rt->plane->coord.y > 100 || rt->plane->coord.z < -100 || rt->plane->coord.z > 100)
+	if (rt->plane->coord.x < -100 || rt->plane->coord.x > 100 || \
+	rt->plane->coord.y < -100 || rt->plane->coord.y > 100 || \
+	rt->plane->coord.z < -100 || rt->plane->coord.z > 100)
 		return (-1);
-	if (rt->plane->orient.x < -1.0 || rt->plane->orient.x > 1.0 || rt->plane->orient.y < -1.0
-	|| rt->plane->orient.y > 1.0 || rt->plane->orient.z < -1.0 || rt->plane->orient.z > 1.0)
+	if (rt->plane->orient.x < -1.0 || rt->plane->orient.x > 1.0 || \
+	rt->plane->orient.y < -1.0 || rt->plane->orient.y > 1.0 || \
+	rt->plane->orient.z < -1.0 || rt->plane->orient.z > 1.0)
 		return (-1);
-	if (rt->plane->color.x < 0 || rt->plane->color.x > 255 || rt->plane->color.y < 0
-	|| rt->plane->color.y > 255 || rt->plane->color.z < 0 || rt->plane->color.z > 255)
+	if (rt->plane->color.x < 0 || rt->plane->color.x > 255 || \
+	rt->plane->color.y < 0 || rt->plane->color.y > 255 || \
+	rt->plane->color.z < 0 || rt->plane->color.z > 255)
 		return (-1);
 	return (0);
 }
 
-int		parse_plane(char **line, t_rt *rt)
+int	parse_plane(char **line, t_rt *rt)
 {
 	int		size;
 	t_plane	*temp;
@@ -377,16 +390,19 @@ int		parse_plane(char **line, t_rt *rt)
 	return (0);
 }
 
-int		cylinder_errorcheck(t_rt *rt)
+int	cylinder_errorcheck(t_rt *rt)
 {
-	if (rt->cylinder->coord.x < -100 || rt->cylinder->coord.x > 100 || rt->cylinder->coord.y < -100
-	|| rt->cylinder->coord.y > 100 || rt->cylinder->coord.z < -100 || rt->cylinder->coord.z > 100)
+	if (rt->cylinder->coord.x < -100 || rt->cylinder->coord.x > 100 || \
+	rt->cylinder->coord.y < -100 || rt->cylinder->coord.y > 100 || \
+	rt->cylinder->coord.z < -100 || rt->cylinder->coord.z > 100)
 		return (-1);
-	if (rt->cylinder->orient.x < -1.0 || rt->cylinder->orient.x > 1.0 || rt->cylinder->orient.y < -1.0
-	|| rt->cylinder->orient.y > 1.0 || rt->cylinder->orient.z < -1.0 || rt->cylinder->orient.z > 1.0)
+	if (rt->cylinder->orient.x < -1.0 || rt->cylinder->orient.x > 1.0 || \
+	rt->cylinder->orient.y < -1.0 || rt->cylinder->orient.y > 1.0 || \
+	rt->cylinder->orient.z < -1.0 || rt->cylinder->orient.z > 1.0)
 		return (-1);
-	if (rt->cylinder->color.x < 0 || rt->cylinder->color.x > 255 || rt->cylinder->color.y < 0
-	|| rt->cylinder->color.y > 255 || rt->cylinder->color.z < 0 || rt->cylinder->color.z > 255)
+	if (rt->cylinder->color.x < 0 || rt->cylinder->color.x > 255 || \
+	rt->cylinder->color.y < 0 || rt->cylinder->color.y > 255 || \
+	rt->cylinder->color.z < 0 || rt->cylinder->color.z > 255)
 		return (-1);
 	if (rt->cylinder->radius < 0 || rt->cylinder->radius > 100)
 		return (-1);
@@ -395,9 +411,10 @@ int		cylinder_errorcheck(t_rt *rt)
 	return (0);
 }
 
-int		set_cylinder(char **line, t_rt *rt)
+int	set_cylinder(char **line, t_rt *rt)
 {
-	if (comma_check(line[1]) == -1 || comma_check(line[2]) == -1 || comma_check(line[5]) == -1)
+	if (comma_check(line[1]) == -1 || comma_check(line[2]) == -1 \
+	|| comma_check(line[5]) == -1)
 		return (-1);
 	rt->cylinder->coord.x = ft_value(line[1], ',', 0, rt);
 	rt->cylinder->coord.y = ft_value(line[1], ',', 1, rt);
@@ -415,7 +432,7 @@ int		set_cylinder(char **line, t_rt *rt)
 	return (0);
 }
 
-int		parse_cylinder(char **line, t_rt *rt)
+int	parse_cylinder(char **line, t_rt *rt)
 {
 	int			size;
 	t_cylinder	*temp;
@@ -455,7 +472,7 @@ void	free_split(char **line)
 	free (line[i]);
 }
 
-int		parse_line(char *str, t_rt *rt)
+int	parse_line(char *str, t_rt *rt)
 {
 	char	**line;
 
@@ -471,7 +488,7 @@ int		parse_line(char *str, t_rt *rt)
 	else if (line != NULL && ft_strncmp(line[0], "pl", 3) == 0)
 		return (parse_plane(line, rt));
 	else if (line != NULL && ft_strncmp(line[0], "cy", 3) == 0)
-		return  (parse_cylinder(line, rt));
+		return (parse_cylinder(line, rt));
 	else if (line != NULL && ft_strncmp(line[0], "\n", 2) != 0)
 		return (-1);
 	free_split(line);
@@ -496,7 +513,7 @@ char	*fixed_line(char *str)
 	return (str);
 }
 
-int		parse_set_rt(t_rt *rt, int fd)
+int	parse_set_rt(t_rt *rt, int fd)
 {
 	char	*str;
 
