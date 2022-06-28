@@ -98,75 +98,11 @@ t_vect	convert_viewport(int x, int y, t_rt *rt)
 	direction = get_direction(x, y, rt);
 	direction = multiply_vectors(&rt->camera, right, up, direction);
 	direction = subtr_vec(direction, rt->camera.origin);
-	//printf("x = %f, y = %f, z= %f;", direction[0], direction[1], direction[2]); //
 	normalize_vect(&direction);
-
 	return (direction);
 }
 
-void	intersect_sphere(t_vect origin, t_vect direction, t_sphere *sphere, float *intersect)
-{
-	t_vect oc;
-	float a;
-	float b;
-	float c;
-	float discriminant;
 
-	oc = subtr_vec(origin, sphere->coord);
-	a = dot_product_vect(direction, direction);
-	b = 2 * dot_product_vect(oc, direction);
-	c = dot_product_vect(oc, oc) - sphere->radius * sphere->radius;
-
-	discriminant = b * b - 4 * a * c;
-	if (discriminant < 0)
-	{
-		intersect[0] = INF;
-		intersect[1] = INF;
-		return ;
-	}
-	intersect[0] = (-b + sqrt(discriminant)) / (2 * a);
-	intersect[1] = (-b - sqrt(discriminant)) / (2 * a);
-	return ;
-}
-
-void	check_sphere(t_vect origin, t_rt *rt, t_vect direction, t_inter *intersect)
-{
-	t_sphere	*sphere;
-	t_sphere	*closest_sphere;
-	float		*intsect;
-	float		closest_t;
-
-	closest_t = INF;
-	closest_sphere = NULL;
-	sphere = rt->sphere;
-	intsect = calloc(sizeof(float), 2);
-	while (sphere != NULL)
-	{
-		intersect_sphere(origin, direction, sphere, intsect);
-		if (intsect[0] < closest_t &&intersect->min < intsect[0] && intsect[0] < intersect->max)
-		{
-			closest_t = intsect[0];
-			closest_sphere = sphere;
-		}
-		if (intsect[1] < closest_t && intersect->min < intsect[1] && intsect[1] < intersect->max)
-		{
-			closest_t = intsect[1];
-			closest_sphere = sphere;
-		}
-		sphere = sphere->next;
-	}
-	if (closest_sphere == NULL)
-	{
-		free(intsect);
-		return ;
-	}
-	intersect->closest_sphere = closest_sphere;
-	intersect->closest_t = closest_t;
-	intersect->closest_cylinder = NULL;
-	intersect->closest_plane = NULL;
-	intersect->hit_flag = 1;
-	free(intsect);
-}
 
 void	check_plane(t_vect origin, t_rt *rt, t_vect direction, t_inter *intersect)
 {
@@ -290,7 +226,7 @@ t_vect	trace_ray(t_rt *rt, t_vect direction, int min, int max)
 		normal = subtr_vec(point, intersect->closest_sphere->coord);
 		normal = multiply_vect(1.0 / length_vect(normal), normal);
 		view = multiply_vect(-1, direction);
-		color = multiply_vect(lighting(point, normal, rt, 1500 , view), intersect->closest_sphere->color);
+		color = multiply_vect(lighting(point, normal, rt, 2000 , view), intersect->closest_sphere->color);
 	}
 	else if (intersect->closest_plane != NULL)
 	{

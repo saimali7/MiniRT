@@ -39,31 +39,5 @@ void	init_window(t_disp *display, t_rt *rt)
 	if (!init_screen(display))
 		error_exit(-1, "Error: Init screen failed");
 	(void)rt;
-	// ft_calculate(display, rt); 
 	calculate_s(display, rt);
-}
-
-void	ft_free_display(t_disp	*display) // need paste
-{
-	// int	xy;
-	// int	j;
-
-	//xy = 0;
-	if (display)
-	{
-		if (display->img.img)
-			mlx_destroy_image(display->mlx, display->img.img);
-		if (display->mlx_win)
-			mlx_destroy_window(display->mlx, display->mlx_win);
-		if (display->mlx)
-			free(display->mlx);
-		// if (display->buffer)
-		// {
-		// 	j = 0;
-		// 	while (j++ < xy)
-		// 		free(display->buffer[j]);
-		// 	free(display->buffer);
-		// }
-		free(display);
-	}
 }

@@ -77,12 +77,12 @@ int		open_and_check(char *arg)
 	return (fd);
 }
 
-double	ft_value(char *str, char delimeter, int reset)
+double	ft_value(char *str, char delimeter, int reset, t_rt *rt)
 {
-	int k;
-	static int i;
-	char *sub;
-	double value;
+	int			k;
+	static int	i;
+	char		*sub;
+	double		value;
 
 	if (reset == 0)
 		i = 0;
@@ -92,7 +92,7 @@ double	ft_value(char *str, char delimeter, int reset)
 	while (str[i] != '\0' && str[i] != delimeter && str[i] != '\n')
 		i = i + 1;
 	sub = ft_substr(str, k, i - k);
-	value = ft_atod(sub); // change rt_atod with t_rt
+	value = rt_atod(sub, rt);
 	free (sub);
 	return (value);
 }
@@ -135,9 +135,9 @@ int		set_ambient(char **line, t_rt *rt)
 		return (-1);
 	if (comma_check(line[2]) == -1)
 		return (-1);
-	rt->ambient.color.x = ft_value(line[2], ',', 0);
-	rt->ambient.color.y = ft_value(line[2], ',', 1);
-	rt->ambient.color.z = ft_value(line[2], ',', 1);
+	rt->ambient.color.x = ft_value(line[2], ',', 0, rt);
+	rt->ambient.color.y = ft_value(line[2], ',', 1, rt);
+	rt->ambient.color.z = ft_value(line[2], ',', 1, rt);
 	if (rt->ambient.color.x < 0 || rt->ambient.color.x > 255 || rt->ambient.color.y < 0
 	|| rt->ambient.color.y > 255 || rt->ambient.color.z < 0 || rt->ambient.color.z > 255)
 		return (-1);
@@ -196,13 +196,13 @@ int		set_camera(char **line, t_rt *rt)
 {
 	if (comma_check(line[1]) == -1)
 		return (-1);
-	rt->camera.coord.x = ft_value(line[1], ',', 0);
-	rt->camera.coord.y = ft_value(line[1], ',', 1);
-	rt->camera.coord.z = ft_value(line[1], ',', 1);
-	rt->camera.orient.x = ft_value(line[2], ',', 0);
-	rt->camera.orient.y = ft_value(line[2], ',', 1);
-	rt->camera.orient.z = ft_value(line[2], ',', 1);
-	rt->camera.fov = ft_value(line[3], ',', 0);
+	rt->camera.coord.x = ft_value(line[1], ',', 0, rt);
+	rt->camera.coord.y = ft_value(line[1], ',', 1, rt);
+	rt->camera.coord.z = ft_value(line[1], ',', 1, rt);
+	rt->camera.orient.x = ft_value(line[2], ',', 0, rt);
+	rt->camera.orient.y = ft_value(line[2], ',', 1, rt);
+	rt->camera.orient.z = ft_value(line[2], ',', 1, rt);
+	rt->camera.fov = ft_value(line[3], ',', 0, rt);
 	if (rt->camera.coord.x < -100 || rt->camera.coord.x > 100 || rt->camera.coord.y < -100
 	|| rt->camera.coord.y > 100 || rt->camera.coord.z < -100 || rt->camera.coord.z > 100)
 		return (-1);
@@ -238,13 +238,13 @@ int		set_light(char **line, t_rt *rt)
 		return (-1);
 	if (comma_check(line[3]) == -1)
 		return (-1);
-	rt->light.coord.x = ft_value(line[1], ',', 0);
-	rt->light.coord.y = ft_value(line[1], ',', 1);
-	rt->light.coord.z = ft_value(line[1], ',', 1);
-	rt->light.ratio = ft_value(line[2], ',', 0);
-	rt->light.color.x = ft_value(line[3], ',', 0);
-	rt->light.color.y = ft_value(line[3], ',', 1);
-	rt->light.color.z = ft_value(line[3], ',', 1);
+	rt->light.coord.x = ft_value(line[1], ',', 0, rt);
+	rt->light.coord.y = ft_value(line[1], ',', 1, rt);
+	rt->light.coord.z = ft_value(line[1], ',', 1, rt);
+	rt->light.ratio = ft_value(line[2], ',', 0, rt);
+	rt->light.color.x = ft_value(line[3], ',', 0, rt);
+	rt->light.color.y = ft_value(line[3], ',', 1, rt);
+	rt->light.color.z = ft_value(line[3], ',', 1, rt);
 	if (rt->light.color.x < 0 || rt->light.color.x > 255 || rt->light.color.y < 0
 	|| rt->light.color.y > 255 || rt->light.color.z < 0 || rt->light.color.z > 255)
 		return (-1);
@@ -279,14 +279,14 @@ int		set_sphere(char **line,t_rt *rt)
 	if (comma_check(line[1]) == -1 || comma_check(line[3]) == -1)
 		return (-1);
 	//rt->sphere->center = new_sphere(0, 0, 0);	// add free
-	rt->sphere->coord.x = ft_value(line[1], ',', 0); //rt->sphere->center->x
-	rt->sphere->coord.y = ft_value(line[1], ',', 1); //rt->sphere->center->y
-	rt->sphere->coord.z = ft_value(line[1], ',', 1);	////rt->sphere->center->z
-	rt->sphere->diametr = ft_value(line[2], ',', 0);
+	rt->sphere->coord.x = ft_value(line[1], ',', 0, rt); //rt->sphere->center->x
+	rt->sphere->coord.y = ft_value(line[1], ',', 1, rt); //rt->sphere->center->y
+	rt->sphere->coord.z = ft_value(line[1], ',', 1, rt);	////rt->sphere->center->z
+	rt->sphere->diametr = ft_value(line[2], ',', 0, rt);
 	rt->sphere->radius = rt->sphere->diametr / 2.0; // check
-	rt->sphere->color.x = ft_value(line[3], ',', 0);
-	rt->sphere->color.y = ft_value(line[3], ',', 1);
-	rt->sphere->color.z = ft_value(line[3], ',', 1);
+	rt->sphere->color.x = ft_value(line[3], ',', 0, rt);
+	rt->sphere->color.y = ft_value(line[3], ',', 1, rt);
+	rt->sphere->color.z = ft_value(line[3], ',', 1, rt);
 	if (rt->sphere->color.x < 0 || rt->sphere->color.x > 255 || rt->sphere->color.y < 0
 	|| rt->sphere->color.y > 255 || rt->sphere->color.z < 0 || rt->sphere->color.z > 255)
 		return (-1);
@@ -329,15 +329,15 @@ int		set_plane(char **line, t_rt *rt)
 {
 	if (comma_check(line[1]) == -1 || comma_check(line[2]) == -1 || comma_check(line[2]) == -1)
 		return (-1);
-	rt->plane->coord.x = ft_value(line[1], ',', 0);
-	rt->plane->coord.y = ft_value(line[1], ',', 1);
-	rt->plane->coord.z = ft_value(line[1], ',', 1);
-	rt->plane->orient.x = ft_value(line[2], ',', 0);
-	rt->plane->orient.y = ft_value(line[2], ',', 1);
-	rt->plane->orient.z = ft_value(line[2], ',', 1);
-	rt->plane->color.x = ft_value(line[3], ',', 0);
-	rt->plane->color.y = ft_value(line[3], ',', 1);
-	rt->plane->color.z = ft_value(line[3], ',', 1);
+	rt->plane->coord.x = ft_value(line[1], ',', 0, rt);
+	rt->plane->coord.y = ft_value(line[1], ',', 1, rt);
+	rt->plane->coord.z = ft_value(line[1], ',', 1, rt);
+	rt->plane->orient.x = ft_value(line[2], ',', 0, rt);
+	rt->plane->orient.y = ft_value(line[2], ',', 1, rt);
+	rt->plane->orient.z = ft_value(line[2], ',', 1, rt);
+	rt->plane->color.x = ft_value(line[3], ',', 0, rt);
+	rt->plane->color.y = ft_value(line[3], ',', 1, rt);
+	rt->plane->color.z = ft_value(line[3], ',', 1, rt);
 	if (rt->plane->coord.x < -100 || rt->plane->coord.x > 100 || rt->plane->coord.y < -100
 	|| rt->plane->coord.y > 100 || rt->plane->coord.z < -100 || rt->plane->coord.z > 100)
 		return (-1);
@@ -399,17 +399,17 @@ int		set_cylinder(char **line, t_rt *rt)
 {
 	if (comma_check(line[1]) == -1 || comma_check(line[2]) == -1 || comma_check(line[5]) == -1)
 		return (-1);
-	rt->cylinder->coord.x = ft_value(line[1], ',', 0);
-	rt->cylinder->coord.y = ft_value(line[1], ',', 1);
-	rt->cylinder->coord.z = ft_value(line[1], ',', 1);
-	rt->cylinder->orient.x = ft_value(line[2], ',', 0);
-	rt->cylinder->orient.y = ft_value(line[2], ',', 1);
-	rt->cylinder->orient.z = ft_value(line[2], ',', 1);
-	rt->cylinder->radius = ft_value(line[3], ',', 0) / 2;
-	rt->cylinder->height = ft_value(line[4], ',', 0);
-	rt->cylinder->color.x = ft_value(line[5], ',', 0);
-	rt->cylinder->color.y = ft_value(line[5], ',', 1);
-	rt->cylinder->color.z = ft_value(line[5], ',', 1);
+	rt->cylinder->coord.x = ft_value(line[1], ',', 0, rt);
+	rt->cylinder->coord.y = ft_value(line[1], ',', 1, rt);
+	rt->cylinder->coord.z = ft_value(line[1], ',', 1, rt);
+	rt->cylinder->orient.x = ft_value(line[2], ',', 0, rt);
+	rt->cylinder->orient.y = ft_value(line[2], ',', 1, rt);
+	rt->cylinder->orient.z = ft_value(line[2], ',', 1, rt);
+	rt->cylinder->radius = ft_value(line[3], ',', 0, rt) / 2;
+	rt->cylinder->height = ft_value(line[4], ',', 0, rt);
+	rt->cylinder->color.x = ft_value(line[5], ',', 0, rt);
+	rt->cylinder->color.y = ft_value(line[5], ',', 1, rt);
+	rt->cylinder->color.z = ft_value(line[5], ',', 1, rt);
 	if (cylinder_errorcheck(rt) == -1)
 		return (-1);
 	return (0);
@@ -504,7 +504,7 @@ int		parse_set_rt(t_rt *rt, int fd)
 	while (str != NULL)
 	{
 		str = fixed_line(str);
-		if (parse_line(str, rt) == -1)
+		if (ft_strlen(str) > 0 && parse_line(str, rt) == -1)
 		{
 			free(str);
 			return (-1);
@@ -531,4 +531,3 @@ int	parse(t_rt *rt, char *arg)
 	close (fd);
 	return (0);
 }
-

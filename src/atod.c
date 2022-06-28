@@ -27,7 +27,7 @@ int	rt_atoi(const char *str, t_rt *rt)
 	(res > 2147483648 && sign == -1))
 	{
 		free_rt(&rt);
-		exit(1);
+		error_exit(-1, "Error: Invalid argument file\n");
 	}
 	return (res * sign);
 }

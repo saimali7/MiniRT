@@ -32,5 +32,6 @@ typedef struct s_display
 int		ft_key(int key, t_rt *rt);
 int		exit_hook(int x);
 void	my_mlx_pixel_put(t_img *data, int x, int y, int color);
+void	ft_free_display(t_disp	*display);
 
 #endif

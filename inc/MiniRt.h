@@ -96,8 +96,12 @@ void	ray_tracing(t_rt *rt);
 float	is_ray_sphere(t_camera camera, float *ray, t_sphere *sphere);
 unsigned int	ft_get_rgb(int *color);
 void	calculate_s(t_disp *display , t_rt *rt);
+void	free_all(t_rt *ptr_rt);
+int		exit_hook(int x);
+int		ft_key(int key, t_rt *rt);
 
 int		trace_ray_plane(t_rt *rt, float *direction);
+void	check_sphere(t_vect origin, t_rt *rt, t_vect direction, t_inter *intersect);
 void	check_cylinder(t_vect origin, t_rt *rt, t_vect direction, t_inter *intersect);
 float	intersect_plane(t_vect origin, t_vect direction, t_plane *plane, float *intersect);
 

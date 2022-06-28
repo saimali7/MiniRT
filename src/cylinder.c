@@ -2,26 +2,6 @@
 #include "../inc/Minilibx.h"
 #include "../Libft/libft.h"
 
-
-// double	cylinder_discriminant(t_ray *ray, t_cy *cy, t_cylinder *ptr)
-// {
-// 	double	discriminant;
-
-// 	cy->oc = vector_subtraction(ray->origin, ptr->coordinates);
-// 	cy->a = pow(ray->direction[0], 2) + pow(ray->direction[2], 2);
-// 	cy->b = 2.0 * cy->oc[0] * ray->direction[0] + 2.0 * cy->oc[2] \
-// 	* ray->direction[2];
-// 	cy->c = pow(cy->oc[0], 2) + pow(cy->oc[2], 2) - (ptr->diameter / 2);
-// 	discriminant = (pow(cy->b, 2)) - (4 * cy->a * cy->c);
-// 	cy->t0 = (-cy->b - sqrt(discriminant)) / (2.0 * cy->a);
-// 	cy->t1 = (-cy->b + sqrt(discriminant)) / (2.0 * cy->a);
-// 	cy->max = (pow((ptr->diameter / 2), 2)) / 2.0;
-// 	cy->min = -1.0 * cy->max;
-// 	return (discriminant);
-// }
-
-
-
 int	solve_quadratic(float a, float b, float c, float *intsect)
 {
 	float	discriminant;
