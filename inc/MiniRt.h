@@ -27,7 +27,7 @@ typedef struct s_camera
 	t_vect	coord;
 	t_vect	orient;
 	int		fov;
-	t_vect	origin; // need to add in parse NULL
+	t_vect	origin;
 }			t_camera;
 
 typedef struct s_light

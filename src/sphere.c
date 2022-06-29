@@ -37,6 +37,8 @@ void	check_sphere(t_vect origin, t_rt *rt, t_vect dir, t_inter *its)
 	closest_sphere = NULL;
 	sphere = rt->sphere;
 	intsect = ft_calloc(sizeof(float), 2);
+	if (!intsect)
+		error_exit(-1, ERR_MEM_AL);
 	while (sphere != NULL)
 	{
 		intersect_sphere(origin, dir, sphere, intsect);

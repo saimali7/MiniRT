@@ -42,7 +42,7 @@ float	dot_product_vect(t_vect vect1, t_vect vect2)
 {
 	float	res;
 
-	res = ((vect1.x * vect2.x) + (vect1.y * vect2.y) + (vect1.z * vect2.z));
+	res = (vect1.x * vect2.x) + (vect1.y * vect2.y) + (vect1.z * vect2.z);
 	return (res);
 }
 

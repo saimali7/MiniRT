@@ -112,6 +112,8 @@ t_vect	trace_ray(t_rt *rt, t_vect dir, int min, int max)
 	t_inter	*its;
 
 	its = malloc(sizeof(t_inter));
+	if (!its)
+		error_exit(-1, ERR_MEM_AL);;
 	its->closest_sphere = NULL;
 	its->min = min;
 	its->max = max;
@@ -137,8 +139,8 @@ t_vect	trace_ray(t_rt *rt, t_vect dir, int min, int max)
 	else if (its->closest_cylinder != NULL)
 	{
 		point = add_vect(rt->camera.coord, multiply_vect(its->closest_t, dir));
-        // normal = subtr_vec(point, intersect->closest_cylinder->coord);
-        // normal = multiply_vect(1.0 / length_vect(normal), normal);
+        //normal = subtr_vec(point, its->closest_cylinder->coord);
+        //normal = multiply_vect(1.0 / length_vect(normal), normal);
 		normal = get_normal_for_cyl(point, its->closest_cylinder);
 		view = multiply_vect(-1, dir);
 		color = multiply_vect(lighting(point, normal, rt, 1500, view), its->closest_cylinder->color);

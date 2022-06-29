@@ -62,7 +62,7 @@ int	open_and_check(char *arg)
 	if (!buf)
 		error_exit(-1, ERR_MEM_AL);
 	fd = open(arg, O_RDONLY);
-	if (fd == -1) //check is not folder
+	if (fd == -1)
 		return (-1);
 	rd = read(fd, buf, 1);
 	if (rd < 0)
@@ -218,6 +218,7 @@ int	set_camera(char **line, t_rt *rt)
 		return (-1);
 	if (rt->camera.fov < 0 || rt->camera.fov > 180)
 		return (-1);
+	normalize_vect(&rt->camera.orient);
 	return (0);
 }
 
@@ -287,12 +288,11 @@ int	set_sphere(char **line,t_rt *rt)
 {
 	if (comma_check(line[1]) == -1 || comma_check(line[3]) == -1)
 		return (-1);
-	//rt->sphere->center = new_sphere(0, 0, 0);	// add free
-	rt->sphere->coord.x = ft_value(line[1], ',', 0, rt); //rt->sphere->center->x
-	rt->sphere->coord.y = ft_value(line[1], ',', 1, rt); //rt->sphere->center->y
-	rt->sphere->coord.z = ft_value(line[1], ',', 1, rt);	////rt->sphere->center->z
+	rt->sphere->coord.x = ft_value(line[1], ',', 0, rt);
+	rt->sphere->coord.y = ft_value(line[1], ',', 1, rt);
+	rt->sphere->coord.z = ft_value(line[1], ',', 1, rt);
 	rt->sphere->diametr = ft_value(line[2], ',', 0, rt);
-	rt->sphere->radius = rt->sphere->diametr / 2.0; // check
+	rt->sphere->radius = rt->sphere->diametr / 2.0; // check using diametr
 	rt->sphere->color.x = ft_value(line[3], ',', 0, rt);
 	rt->sphere->color.y = ft_value(line[3], ',', 1, rt);
 	rt->sphere->color.z = ft_value(line[3], ',', 1, rt);
@@ -345,6 +345,7 @@ int	set_plane(char **line, t_rt *rt)
 	rt->plane->orient.x = ft_value(line[2], ',', 0, rt);
 	rt->plane->orient.y = ft_value(line[2], ',', 1, rt);
 	rt->plane->orient.z = ft_value(line[2], ',', 1, rt);
+	normalize_vect(&rt->plane->orient);
 	rt->plane->color.x = ft_value(line[3], ',', 0, rt);
 	rt->plane->color.y = ft_value(line[3], ',', 1, rt);
 	rt->plane->color.z = ft_value(line[3], ',', 1, rt);
@@ -422,6 +423,7 @@ int	set_cylinder(char **line, t_rt *rt)
 	rt->cylinder->orient.x = ft_value(line[2], ',', 0, rt);
 	rt->cylinder->orient.y = ft_value(line[2], ',', 1, rt);
 	rt->cylinder->orient.z = ft_value(line[2], ',', 1, rt);
+	normalize_vect(&rt->cylinder->orient);
 	rt->cylinder->radius = ft_value(line[3], ',', 0, rt) / 2;
 	rt->cylinder->height = ft_value(line[4], ',', 0, rt);
 	rt->cylinder->color.x = ft_value(line[5], ',', 0, rt);

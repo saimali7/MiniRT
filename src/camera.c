@@ -55,15 +55,10 @@ t_vect	convert_viewport(int x, int y, t_rt *rt)
 	t_vect	dir;
 	t_vect	right;
 	t_vect	up;
-	//t_vect	to_origin;
 
 	right = get_look_right(&rt->camera);
 	up = get_look_up(&rt->camera, right);
 	rt->camera.origin = multiply_vectors(&rt->camera, right, up, new_vect(0, 0, 0));
-
-	// rt->camera.origin.x = to_origin.x;
-	// rt->camera.origin.y = to_origin.y;
-	// rt->camera.origin.z = to_origin.z;
 	dir = get_direction(x, y, rt);
 	dir = multiply_vectors(&rt->camera, right, up, dir);
 	dir = subtr_vec(dir, rt->camera.origin);
