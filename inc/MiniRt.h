@@ -42,6 +42,8 @@ typedef struct s_sphere
 	t_vect			coord;
 	float			diametr;
 	float			radius;
+	float			specular;
+	float			reflect;
 	t_vect			color;
 	struct s_sphere	*next;
 }					t_sphere;
@@ -51,6 +53,8 @@ typedef struct s_plane
 	t_vect			coord;
 	t_vect			orient;
 	t_vect			color;
+	float			reflect;
+	float			specular;
 	struct s_plane	*next;
 }					t_plane;
 
@@ -61,6 +65,8 @@ typedef struct s_cylinder
 	t_vect				color;
 	float				radius;
 	float				height;
+	float				specular;
+	float			reflect;
 	struct s_cylinder	*next;
 }						t_cylinder;
 
@@ -86,6 +92,14 @@ typedef struct s_rt
 	t_disp		*display;
 }				t_rt;
 
+typedef struct s_traceray
+{
+	t_vect origin;
+	t_vect dir;
+	float  min;
+	float  max;
+}	t_ray;
+
 int		parse(t_rt *rt, char *arg);
 double	rt_atod(const char *str, t_rt *rt);
 void	init_window(t_disp *display, t_rt *rt);
@@ -101,7 +115,6 @@ int		ft_key(int key, t_rt *rt);
 
 t_vect	convert_viewport(int x, int y, t_rt *rt);
 void	put_intersect(t_inter *its, float closest_t, char f);
-
 
 int		trace_ray_plane(t_rt *rt, float *dir);
 void	check_sphere(t_vect origin, t_rt *rt, t_vect dir, t_inter *its);

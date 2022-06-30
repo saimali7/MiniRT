@@ -30,7 +30,7 @@ float	intersect_plane(t_vect origin, t_vect dir, t_plane *plane, float *its)
 	t_vect	pl;
 
 	denom = dot_product_vect(plane->orient, dir);
-	if (fabs(denom) > 1e-6)
+	if (denom != 0)
 	{
 		pl = subtr_vec(plane->coord, origin);
 		*its = dot_product_vect(pl, plane->orient) / denom;

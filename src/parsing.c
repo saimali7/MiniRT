@@ -99,7 +99,7 @@ double	ft_value(char *str, char delimeter, int reset, t_rt *rt)
 
 int		comma_helper(char *str, int *i)
 {
-	while (str[*i] != ',' && str[*i] != '\0' && str[*i] != '\n')
+	while (str != NULL && str[*i] != ',' && str[*i] != '\0' && str[*i] != '\n')
 	{
 		if (ft_isdigit(str[*i]) != 1 && str[*i] != '.' \
 		&& str[*i] != '-' && str[*i] != '+')
@@ -108,8 +108,8 @@ int		comma_helper(char *str, int *i)
 	}
 	if (str[*i] != ',' && str[*i] != '\0' && str[*i] != '\n')
 		return (-1);
-	if (str[*i + 1] != '+' && str[*i + 1] != '-' && \
-		ft_isdigit(str[*i + 1]) != 1 && str[*i] != '\0' && str[*i] != '\n')
+	if (str[*i] != '\0' && str[*i + 1] != '+' && str[*i + 1] != '-' && \
+		ft_isdigit(str[*i + 1]) != 1 && str[*i] != '\n')
 		return (-1);
 	return (0);
 }
@@ -296,6 +296,8 @@ int	set_sphere(char **line,t_rt *rt)
 	rt->sphere->color.x = ft_value(line[3], ',', 0, rt);
 	rt->sphere->color.y = ft_value(line[3], ',', 1, rt);
 	rt->sphere->color.z = ft_value(line[3], ',', 1, rt);
+	rt->sphere->reflect = 0.4;
+	rt->sphere->specular = 2000;
 	if (rt->sphere->color.x < 0 || rt->sphere->color.x > 255 || rt->sphere->color.y < 0
 	|| rt->sphere->color.y > 255 || rt->sphere->color.z < 0 || rt->sphere->color.z > 255)
 		return (-1);
@@ -349,9 +351,11 @@ int	set_plane(char **line, t_rt *rt)
 	rt->plane->color.x = ft_value(line[3], ',', 0, rt);
 	rt->plane->color.y = ft_value(line[3], ',', 1, rt);
 	rt->plane->color.z = ft_value(line[3], ',', 1, rt);
-	if (rt->plane->coord.x < -100 || rt->plane->coord.x > 100 || \
-	rt->plane->coord.y < -100 || rt->plane->coord.y > 100 || \
-	rt->plane->coord.z < -100 || rt->plane->coord.z > 100)
+	rt->plane->specular = 10;
+	rt->plane->reflect = 0.9;
+	if (rt->plane->coord.x < -100|| rt->plane->coord.x > MAX_SIZE || \
+	rt->plane->coord.y < -MAX_SIZE || rt->plane->coord.y > MAX_SIZE || \
+	rt->plane->coord.z < -MAX_SIZE || rt->plane->coord.z > MAX_SIZE)
 		return (-1);
 	if (rt->plane->orient.x < -1.0 || rt->plane->orient.x > 1.0 || \
 	rt->plane->orient.y < -1.0 || rt->plane->orient.y > 1.0 || \
@@ -429,6 +433,8 @@ int	set_cylinder(char **line, t_rt *rt)
 	rt->cylinder->color.x = ft_value(line[5], ',', 0, rt);
 	rt->cylinder->color.y = ft_value(line[5], ',', 1, rt);
 	rt->cylinder->color.z = ft_value(line[5], ',', 1, rt);
+	rt->cylinder->specular = 1500;
+	rt->cylinder->reflect = 0.4;
 	if (cylinder_errorcheck(rt) == -1)
 		return (-1);
 	return (0);
@@ -472,29 +478,32 @@ void	free_split(char **line)
 		i++;
 	}
 	free (line[i]);
+	free (line);
 }
 
 int	parse_line(char *str, t_rt *rt)
 {
 	char	**line;
+	int		ret;
 
 	line = ft_split(str, ' ');
+	ret = 0;
 	if (line != NULL && ft_strncmp(line[0], "A", 2) == 0)
-		return (parse_ambient(line, rt));
+		ret = parse_ambient(line, rt);
 	else if (line != NULL && ft_strncmp(line[0], "C", 2) == 0)
-		return (parse_camera(line, rt));
+		ret = parse_camera(line, rt);
 	else if (line != NULL && ft_strncmp(line[0], "L", 2) == 0)
-		return (parse_light(line, rt));
+		ret = parse_light(line, rt);
 	else if (line != NULL && ft_strncmp(line[0], "sp", 3) == 0)
-		return (parse_sphere(line, rt));
+		ret = parse_sphere(line, rt);
 	else if (line != NULL && ft_strncmp(line[0], "pl", 3) == 0)
-		return (parse_plane(line, rt));
+		ret = parse_plane(line, rt);
 	else if (line != NULL && ft_strncmp(line[0], "cy", 3) == 0)
-		return (parse_cylinder(line, rt));
+		ret = parse_cylinder(line, rt);
 	else if (line != NULL && ft_strncmp(line[0], "\n", 2) != 0)
-		return (-1);
+		ret =  -1;
 	free_split(line);
-	return (0);
+	return (ret);
 }
 
 char	*fixed_line(char *str)

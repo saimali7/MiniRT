@@ -3,6 +3,17 @@
 #include "../inc/Minilibx.h"
 #include "../Libft/libft.h"
 
+t_ray set_ray(t_vect origin, t_vect dir, float min, float max)
+{
+	t_ray temp;
+
+	temp.origin = origin;
+	temp.dir = dir;
+	temp.min = min;
+	temp.max = max;
+	return (temp);
+}
+
 t_vect	clamp(float min, float max, t_vect value)
 {
 	if (value.x > max)
@@ -70,7 +81,7 @@ float	lighting(t_vect point, t_vect normal, t_rt *rt, float specular, t_vect vie
 	t_max = 1.0;
 
     // shadow check
-	its.min = 0.0001;
+	its.min = EPSILON;
 	its.max = t_max;
 	closest_intersection(point, rt, vec_light, &its);
 	if (its.hit_flag != -1)
@@ -103,56 +114,74 @@ t_vect		get_normal_for_cyl(t_vect point, t_cylinder *cylinder)
 	return (normal);
 }
 
-t_vect	trace_ray(t_rt *rt, t_vect dir, int min, int max)
+t_vect	trace_ray(t_rt *rt, t_ray ray, int dept)
 {
 	t_vect	point;
 	t_vect	normal;
 	t_vect	color;
 	t_vect	view;
-	t_inter	*its;
+	t_inter	its;
+	t_vect r_ray;
+	t_vect reflect_color;
 
-	its = malloc(sizeof(t_inter));
-	if (!its)
-		error_exit(-1, ERR_MEM_AL);;
-	its->closest_sphere = NULL;
-	its->min = min;
-	its->max = max;
-	closest_intersection(rt->camera.origin, rt, dir, its);
-	if (its->hit_flag == -1)
+	color.x = 0;
+	color.y = 0;
+	color.z = 0;
+	its.closest_sphere = NULL;
+	its.min = ray.min;
+	its.max = ray.max;
+	closest_intersection(ray.origin, rt, ray.dir, &its);
+	if (its.hit_flag == -1)
 		return (new_vect(0,0,0));
-	if (its->closest_sphere != NULL)
+	if (its.closest_sphere != NULL)
 	{
-		point = add_vect(rt->camera.coord, multiply_vect(its->closest_t, dir));
-		normal = subtr_vec(point, its->closest_sphere->coord);
+		point = add_vect(ray.origin, multiply_vect(its.closest_t, ray.dir));
+		normal = subtr_vec(point, its.closest_sphere->coord);
 		normal = multiply_vect(1.0 / length_vect(normal), normal);
-		view = multiply_vect(-1, dir);
-		color = multiply_vect(lighting(point, normal, rt, 2000 , view), its->closest_sphere->color);
+		view = multiply_vect(-1, ray.dir);
+		color = multiply_vect(lighting(point, normal, rt, 4000 , view), its.closest_sphere->color);
+		if (its.closest_sphere->reflect > 0 && dept > 0)
+		{
+			r_ray = subtr_vec(multiply_vect(2.0*dot_product_vect(view, normal), normal), view);
+			reflect_color = trace_ray(rt, set_ray(point, r_ray, EPSILON, INF), dept - 1);
+			color = add_vect(multiply_vect(1.0 - its.closest_sphere->reflect, color), multiply_vect(its.closest_sphere->reflect, reflect_color));
+		}
 	}
-	else if (its->closest_plane != NULL)
+	else if (its.closest_plane != NULL)
 	{
-		point = add_vect(rt->camera.coord, multiply_vect(its->closest_t, dir));
-		normal = its->closest_plane->orient;
+		point = add_vect(rt->camera.coord, multiply_vect(its.closest_t, ray.dir));
+		normal = its.closest_plane->orient;
 		normal = multiply_vect(1.0 / length_vect(normal), normal);
-		view = multiply_vect(-1, dir);
-		color = multiply_vect(lighting(point, normal, rt, 10, view), its->closest_plane->color);
+		view = multiply_vect(-1, ray.dir);
+		color = multiply_vect(lighting(point, normal, rt, 10, view), its.closest_plane->color);
+		if (its.closest_plane->reflect > 0 && dept > 0)
+		{
+			r_ray = subtr_vec(multiply_vect(2.0*dot_product_vect(view, normal), normal), view);
+			reflect_color = trace_ray(rt, set_ray(point, r_ray, EPSILON, INF), dept - 1);
+			color = add_vect(multiply_vect(1.0 - its.closest_plane->reflect, color), multiply_vect(its.closest_plane->reflect, reflect_color));
+		}
 	}
-	else if (its->closest_cylinder != NULL)
+	else if (its.closest_cylinder != NULL)
 	{
-		point = add_vect(rt->camera.coord, multiply_vect(its->closest_t, dir));
-        //normal = subtr_vec(point, its->closest_cylinder->coord);
+		point = add_vect(rt->camera.coord, multiply_vect(its.closest_t, ray.dir));
+        //normal = subtr_vec(point, its.closest_cylinder->coord);
         //normal = multiply_vect(1.0 / length_vect(normal), normal);
-		normal = get_normal_for_cyl(point, its->closest_cylinder);
-		view = multiply_vect(-1, dir);
-		color = multiply_vect(lighting(point, normal, rt, 1500, view), its->closest_cylinder->color);
+		normal = get_normal_for_cyl(point, its.closest_cylinder);
+		view = multiply_vect(-1, ray.dir);
+		color = multiply_vect(lighting(point, normal, rt, 1500, view), its.closest_cylinder->color);
+		if (its.closest_cylinder->reflect > 0 && dept > 0)
+		{
+			r_ray = subtr_vec(multiply_vect(2.0*dot_product_vect(view, normal), normal), view);
+			reflect_color = trace_ray(rt, set_ray(point, r_ray, EPSILON, INF), dept - 1);
+			color = add_vect(multiply_vect(1.0 - its.closest_cylinder->reflect, color), multiply_vect(its.closest_cylinder->reflect, reflect_color));
+		}
 	}
-
 	if (rt->ambient.ratio > 0.0)
 	{
-		color.x += (rt->ambient.color.x * rt->ambient.ratio);
-		color.y += (rt->ambient.color.y * rt->ambient.ratio);
-		color.z += (rt->ambient.color.z * rt->ambient.ratio);
+		color.x += (rt->ambient.color.x * rt->ambient.ratio) * color.x / 255;
+		color.y += (rt->ambient.color.y * rt->ambient.ratio) * color.y / 255;
+		color.z += (rt->ambient.color.z * rt->ambient.ratio) * color.z / 255;
 	}
-	free (its);
 	return (color);
 }
 
@@ -171,7 +200,7 @@ void	calculate_s(t_disp *display , t_rt *rt)
 		while (x < WIDHT / 2)
 		{
 			dir = convert_viewport(x, y, rt);
-			color = trace_ray(rt, dir, 1, INF);
+			color = trace_ray(rt ,set_ray(rt->camera.coord, dir, 1, INF), 3);
 			ft_putpixel(x, y, clamp(0.0, 255.0, color), display);
 			x++;
 		}

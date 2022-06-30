@@ -6,8 +6,8 @@
 
 # define WIDHT 1200.00
 # define HEIGHT 800.00
-# define INF 100000
-
+# define INF 100000000
+# define EPSILON 0.01
 typedef struct s_rt	t_rt;
 
 typedef struct s_img
