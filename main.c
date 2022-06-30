@@ -11,6 +11,7 @@ t_rt	*init_rt(void)
 	ptr->plane = NULL;
 	ptr->sphere = NULL;
 	ptr->cylinder = NULL;
+	ptr->parab = NULL;
 	ptr->display = NULL;
 	return (ptr);
 }
@@ -35,6 +36,11 @@ void	print_rt(t_rt *rt)		//DELETE
 		printf("Cylinder: %f,%f,%f %f,%f,%f %f %f %f,%f,%f\n", rt->cylinder->coord.x, rt->cylinder->coord.y, rt->cylinder->coord.z, rt->cylinder->orient.x, rt->cylinder->orient.y, rt->cylinder->orient.z, rt->cylinder->radius, rt->cylinder->height, rt->cylinder->color.x, rt->cylinder->color.y, rt->cylinder->color.z);
 		rt->cylinder = rt->cylinder->next;
 	}
+	while (rt->parab != NULL)
+	{
+		printf("Paraboloid: %f,%f,%f %f,%f,%f %f %f,%f,%f\n", rt->parab->extremum.x, rt->parab->extremum.y, rt->parab->extremum.z, rt->parab->orient.x, rt->parab->orient.y, rt->parab->orient.z, rt->parab->height, rt->parab->color.x, rt->parab->color.y, rt->parab->color.z);
+		rt->parab = rt->parab->next;
+	}
 }
 
 
@@ -44,7 +50,7 @@ int	main(int argc, char **argv)
 
 	rt = init_rt();
 	if (!rt)
-		exit(1);
+		exit(1); // error exit
 	if (argc == 2)
 	{
 		if (parse(rt, argv[1]) == -1)

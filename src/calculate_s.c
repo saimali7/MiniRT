@@ -36,7 +36,7 @@ void	ft_putpixel(int x, int y, t_vect color, t_disp *display)
 	char	*temp;
 	int		position;
 
-	x = WIDHT /2 + x;
+	x = WIDHT / 2 + x;
 	y = HEIGHT /2 - y - 1;
 	position = x * 4 + 4 * WIDHT * y;
 	temp = display->img.addr;
@@ -51,10 +51,12 @@ void	closest_intersection(t_vect origin, t_rt *rt, t_vect dir, t_inter *its)
 	its->closest_cylinder = NULL;
 	its->closest_plane = NULL;
 	its->closest_sphere = NULL;
+	its->closest_parab = NULL;
 	its->closest_t = INF;
 	check_sphere(origin, rt, dir, its);
 	check_cylinder(origin, rt, dir, its);
 	check_plane(origin, rt, dir, its);
+	check_paraboloid(origin, rt, dir, its);
 }
 
 float	lighting(t_vect point, t_vect normal, t_rt *rt, float specular, t_vect view)
@@ -114,6 +116,17 @@ t_vect		get_normal_for_cyl(t_vect point, t_cylinder *cylinder)
 	return (normal);
 }
 
+t_vect		get_normal_for_parab(t_vect point, t_parab *parab)
+{
+	t_vect tmp;
+	t_vect normal;
+
+	tmp = subtr_vec(point, parab->extremum);
+	normal = subtr_vec(tmp, multiply_vect(dot_product_vect(parab->orient, tmp), parab->orient));
+	normalize_vect(&normal);
+	return (normal);
+}
+
 t_vect	trace_ray(t_rt *rt, t_ray ray, int dept)
 {
 	t_vect	point;
@@ -164,8 +177,8 @@ t_vect	trace_ray(t_rt *rt, t_ray ray, int dept)
 	else if (its.closest_cylinder != NULL)
 	{
 		point = add_vect(rt->camera.coord, multiply_vect(its.closest_t, ray.dir));
-        //normal = subtr_vec(point, its.closest_cylinder->coord);
-        //normal = multiply_vect(1.0 / length_vect(normal), normal);
+        // normal = subtr_vec(point, its.closest_cylinder->coord);
+        // normal = multiply_vect(1.0 / length_vect(normal), normal);
 		normal = get_normal_for_cyl(point, its.closest_cylinder);
 		view = multiply_vect(-1, ray.dir);
 		color = multiply_vect(lighting(point, normal, rt, 1500, view), its.closest_cylinder->color);
@@ -174,6 +187,21 @@ t_vect	trace_ray(t_rt *rt, t_ray ray, int dept)
 			r_ray = subtr_vec(multiply_vect(2.0*dot_product_vect(view, normal), normal), view);
 			reflect_color = trace_ray(rt, set_ray(point, r_ray, EPSILON, INF), dept - 1);
 			color = add_vect(multiply_vect(1.0 - its.closest_cylinder->reflect, color), multiply_vect(its.closest_cylinder->reflect, reflect_color));
+		}
+	}
+	else if (its.closest_parab != NULL)
+	{
+		point = add_vect(ray.origin, multiply_vect(its.closest_t, ray.dir));
+		// normal = subtr_vec(point, its.closest_parab->extremum);
+		// normal = multiply_vect(1.0 / length_vect(normal), normal);
+		normal = get_normal_for_parab(point, its.closest_parab);
+		view = multiply_vect(-1, ray.dir);
+		color = multiply_vect(lighting(point, normal, rt, 1500 , view), its.closest_parab->color);
+		if (its.closest_parab->reflect > 0 && dept > 0)
+		{
+			r_ray = subtr_vec(multiply_vect(2.0*dot_product_vect(view, normal), normal), view);
+			reflect_color = trace_ray(rt, set_ray(point, r_ray, EPSILON, INF), dept - 1);
+			color = add_vect(multiply_vect(1.0 - its.closest_parab->reflect, color), multiply_vect(its.closest_parab->reflect, reflect_color));
 		}
 	}
 	if (rt->ambient.ratio > 0.0)

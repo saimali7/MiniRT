@@ -66,15 +66,27 @@ typedef struct s_cylinder
 	float				radius;
 	float				height;
 	float				specular;
-	float			reflect;
+	float				reflect;
 	struct s_cylinder	*next;
 }						t_cylinder;
+
+typedef struct s_parab
+{
+	t_vect				extremum;
+	t_vect				orient;
+	t_vect				color;
+	float				height;
+	float				specular;
+	float				reflect;
+	struct s_parab		*next;
+}						t_parab;
 
 typedef struct s_intersect
 {
 	t_plane		*closest_plane;
 	t_sphere	*closest_sphere;
 	t_cylinder	*closest_cylinder;
+	t_parab		*closest_parab;
 	float		closest_t;
 	float		min;
 	float		max;
@@ -89,6 +101,7 @@ typedef struct s_rt
 	t_plane		*plane;
 	t_sphere	*sphere;
 	t_cylinder	*cylinder;
+	t_parab		*parab;
 	t_disp		*display;
 }				t_rt;
 
@@ -120,6 +133,7 @@ int		trace_ray_plane(t_rt *rt, float *dir);
 void	check_sphere(t_vect origin, t_rt *rt, t_vect dir, t_inter *its);
 void	check_cylinder(t_vect origin, t_rt *rt, t_vect dir, t_inter *its);
 void	check_plane(t_vect origin, t_rt *rt, t_vect dir, t_inter *its);
+void 	check_paraboloid(t_vect origin, t_rt *rt, t_vect dir, t_inter *its);
 
 //unsigned int	ft_get_rgb(int *color);
 

@@ -9,16 +9,25 @@ void	put_intersect(t_inter *intersect, float closest_t, char f)
 	{
 		intersect->closest_cylinder = NULL;
 		intersect->closest_sphere = NULL;
+		intersect->closest_parab = NULL;
 	}
 	else if (f == 's')
 	{
 		intersect->closest_cylinder = NULL;
 		intersect->closest_plane = NULL;
+		intersect->closest_parab = NULL;
 	}
 	else if (f == 'c')
 	{
 		intersect->closest_sphere = NULL;
 		intersect->closest_plane = NULL;
+		intersect->closest_parab = NULL;
+	}
+	else if (f == 'b')
+	{
+		intersect->closest_sphere = NULL;
+		intersect->closest_plane = NULL;
+		intersect->closest_cylinder = NULL;
 	}
 	intersect->closest_t = closest_t;
 	intersect->hit_flag = 1;

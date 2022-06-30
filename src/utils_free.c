@@ -8,11 +8,13 @@ void	free_rt(t_rt **ptr_rt)
 	t_plane		*plane;
 	t_sphere	*sphere;
 	t_cylinder	*cylinder;
+	t_parab		*parab;
 
 	rt = *ptr_rt;
 	// plane = NULL;
 	// sphere = NULL;
 	// cylinder = NULL;
+	// parab = NULL;
 	while (rt->plane != NULL)
 	{
 		plane = rt->plane;
@@ -30,6 +32,12 @@ void	free_rt(t_rt **ptr_rt)
 		cylinder = rt->cylinder;
 		rt->cylinder = rt->cylinder->next;
 		free (cylinder);
+	}
+	while (rt->parab != NULL)
+	{
+		parab = rt->parab;
+		rt->parab = rt->parab->next;
+		free (parab);
 	}
 	free (rt);
 }

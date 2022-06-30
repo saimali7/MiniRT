@@ -33,6 +33,17 @@ t_cylinder	*new_cylinder(void)
 	return (ptr);
 }
 
+t_parab	*new_paraboloid(void)
+{
+	t_parab	*ptr;
+
+	ptr = (t_parab *) malloc(sizeof(t_parab));
+	if (!ptr)
+		error_exit(-1, ERR_MEM_AL);
+	ptr->next = NULL;
+	return (ptr);
+}
+
 int	extension_check(char *arg)
 {
 	int	i;
@@ -296,7 +307,7 @@ int	set_sphere(char **line,t_rt *rt)
 	rt->sphere->color.x = ft_value(line[3], ',', 0, rt);
 	rt->sphere->color.y = ft_value(line[3], ',', 1, rt);
 	rt->sphere->color.z = ft_value(line[3], ',', 1, rt);
-	rt->sphere->reflect = 0.4;
+	rt->sphere->reflect = 0.0;
 	rt->sphere->specular = 2000;
 	if (rt->sphere->color.x < 0 || rt->sphere->color.x > 255 || rt->sphere->color.y < 0
 	|| rt->sphere->color.y > 255 || rt->sphere->color.z < 0 || rt->sphere->color.z > 255)
@@ -351,8 +362,8 @@ int	set_plane(char **line, t_rt *rt)
 	rt->plane->color.x = ft_value(line[3], ',', 0, rt);
 	rt->plane->color.y = ft_value(line[3], ',', 1, rt);
 	rt->plane->color.z = ft_value(line[3], ',', 1, rt);
-	rt->plane->specular = 10;
-	rt->plane->reflect = 0.9;
+	rt->plane->specular = 0;
+	rt->plane->reflect = 0.0;
 	if (rt->plane->coord.x < -100|| rt->plane->coord.x > MAX_SIZE || \
 	rt->plane->coord.y < -MAX_SIZE || rt->plane->coord.y > MAX_SIZE || \
 	rt->plane->coord.z < -MAX_SIZE || rt->plane->coord.z > MAX_SIZE)
@@ -434,7 +445,7 @@ int	set_cylinder(char **line, t_rt *rt)
 	rt->cylinder->color.y = ft_value(line[5], ',', 1, rt);
 	rt->cylinder->color.z = ft_value(line[5], ',', 1, rt);
 	rt->cylinder->specular = 1500;
-	rt->cylinder->reflect = 0.4;
+	rt->cylinder->reflect = 0.0;
 	if (cylinder_errorcheck(rt) == -1)
 		return (-1);
 	return (0);
@@ -464,6 +475,78 @@ int	parse_cylinder(char **line, t_rt *rt)
 		return (-1);
 	if (temp != NULL)
 		rt->cylinder = temp;
+	return (0);
+}
+
+int	parab_errorcheck(t_rt *rt)
+{
+	if (rt->parab->extremum.x < -MAX_SIZE || rt->parab->extremum.x > MAX_SIZE || \
+	rt->parab->extremum.y < -MAX_SIZE || rt->parab->extremum.y > MAX_SIZE || \
+	rt->parab->extremum.z < -MAX_SIZE || rt->parab->extremum.z > MAX_SIZE)
+		return (-1);
+	if (rt->parab->orient.x < -1.0 || rt->parab->orient.x > 1.0 || \
+	rt->parab->orient.y < -1.0 || rt->parab->orient.y > 1.0 || \
+	rt->parab->orient.z < -1.0 || rt->parab->orient.z > 1.0)
+		return (-1);
+	if (rt->parab->color.x < 0 || rt->parab->color.x > 255 || \
+	rt->parab->color.y < 0 || rt->parab->color.y > 255 || \
+	rt->parab->color.z < 0 || rt->parab->color.z > 255)
+		return (-1);
+	if (rt->parab->height < 0 || rt->parab->height > MAX_SIZE)
+		return (-1);
+	return (0);
+}
+
+int	set_paraboloid(char **line,t_rt *rt)
+{
+	if (comma_check(line[1]) == -1 || comma_check(line[2]) == -1 ||comma_check(line[4]) == -1)
+		return (-1);
+	rt->parab->extremum.x = ft_value(line[1], ',', 0, rt);
+	rt->parab->extremum.y = ft_value(line[1], ',', 1, rt);
+	rt->parab->extremum.z = ft_value(line[1], ',', 1, rt);
+
+	rt->parab->orient.x = ft_value(line[2], ',', 0, rt);
+	rt->parab->orient.y = ft_value(line[2], ',', 1, rt);
+	rt->parab->orient.z = ft_value(line[2], ',', 1, rt);
+    normalize_vect(&rt->parab->orient);
+	
+    rt->parab->height = ft_value(line[3], ',', 0, rt);
+
+	rt->parab->color.x = ft_value(line[4], ',', 0, rt);
+	rt->parab->color.y = ft_value(line[4], ',', 1, rt);
+	rt->parab->color.z = ft_value(line[4], ',', 1, rt);
+
+	rt->parab->reflect = 0.0;
+	rt->parab->specular = 2000;
+    if (parab_errorcheck(rt) == -1)
+		return (-1);
+	return (0);
+}
+
+int	parse_paraboloid(char **line, t_rt *rt)
+{
+	int			size;
+	t_parab		*temp;
+
+	temp = rt->parab;
+	while (rt->parab != NULL && rt->parab->next != NULL)
+		rt->parab = rt->parab->next;
+	if (rt->parab == NULL)
+		rt->parab = new_paraboloid();
+	else
+	{
+		rt->parab->next = new_paraboloid();
+		rt->parab = rt->parab->next;
+	}
+	size = array_size(line);
+	if (size != 5)
+		return (-1);
+	if (alpha_check(line) == -1)
+		return (-1);
+	if (set_paraboloid(line, rt) == -1)
+		return (-1);
+	if (temp != NULL)
+		rt->parab = temp;
 	return (0);
 }
 
@@ -500,6 +583,8 @@ int	parse_line(char *str, t_rt *rt)
 		ret = parse_plane(line, rt);
 	else if (line != NULL && ft_strncmp(line[0], "cy", 3) == 0)
 		ret = parse_cylinder(line, rt);
+	else if (line != NULL && ft_strncmp(line[0], "pa", 3) == 0)
+		ret = parse_paraboloid(line, rt);
 	else if (line != NULL && ft_strncmp(line[0], "\n", 2) != 0)
 		ret =  -1;
 	free_split(line);
