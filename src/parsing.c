@@ -4,7 +4,7 @@ t_plane	*new_plane(void)
 {
 	t_plane	*ptr;
 
-	ptr = (t_plane *) malloc(sizeof(t_plane));
+	ptr = (t_plane *) ft_calloc(sizeof(t_plane), 1);
 	if (!ptr)
 		error_exit(-1, ERR_MEM_AL);
 	ptr->next = NULL;
@@ -15,7 +15,7 @@ t_sphere	*new_sphere(void)
 {
 	t_sphere	*ptr;
 
-	ptr = (t_sphere *) malloc(sizeof(t_sphere));
+	ptr = (t_sphere *) ft_calloc(sizeof(t_sphere), 1);
 	if (!ptr)
 		error_exit(-1, ERR_MEM_AL);
 	ptr->next = NULL;
@@ -26,7 +26,7 @@ t_cylinder	*new_cylinder(void)
 {
 	t_cylinder	*ptr;
 
-	ptr = (t_cylinder *) malloc(sizeof(t_cylinder));
+	ptr = (t_cylinder *) ft_calloc(sizeof(t_cylinder), 1);
 	if (!ptr)
 		error_exit(-1, ERR_MEM_AL);
 	ptr->next = NULL;
@@ -37,7 +37,7 @@ t_parab	*new_paraboloid(void)
 {
 	t_parab	*ptr;
 
-	ptr = (t_parab *) malloc(sizeof(t_parab));
+	ptr = (t_parab *) ft_calloc(sizeof(t_parab), 1);
 	if (!ptr)
 		error_exit(-1, ERR_MEM_AL);
 	ptr->next = NULL;
@@ -307,8 +307,10 @@ int	set_sphere(char **line,t_rt *rt)
 	rt->sphere->color.x = ft_value(line[3], ',', 0, rt);
 	rt->sphere->color.y = ft_value(line[3], ',', 1, rt);
 	rt->sphere->color.z = ft_value(line[3], ',', 1, rt);
-	rt->sphere->reflect = 0.0;
-	rt->sphere->specular = 2000;
+	if (array_size(line) >= 5)
+		rt->sphere->reflect = ft_value(line[4], ',', 0, rt);
+	if (array_size(line) == 6)
+		rt->sphere->specular = ft_value(line[5], ',', 0, rt);
 	if (rt->sphere->color.x < 0 || rt->sphere->color.x > 255 || rt->sphere->color.y < 0
 	|| rt->sphere->color.y > 255 || rt->sphere->color.z < 0 || rt->sphere->color.z > 255)
 		return (-1);
@@ -316,6 +318,8 @@ int	set_sphere(char **line,t_rt *rt)
 	|| rt->sphere->coord.y > MAX_SIZE || rt->sphere->coord.z < -MAX_SIZE || rt->sphere->coord.z > MAX_SIZE)
 		return (-1);
 	if (rt->sphere->diametr < 0 || rt->sphere->diametr > MAX_SIZE)
+		return(-1);
+	if (rt->sphere->reflect < 0 || rt->sphere->reflect > 1 || rt->sphere->specular < 0 || rt->sphere->specular > 5000)
 		return(-1);
 	return (0);
 }
@@ -336,7 +340,7 @@ int	parse_sphere(char **line, t_rt *rt)
 		rt->sphere = rt->sphere->next;
 	}
 	size = array_size(line);
-	if (size != 4)
+	if (size < 4 || size > 6)
 		return (-1);
 	if (alpha_check(line) == -1)
 		return (-1);
@@ -362,8 +366,10 @@ int	set_plane(char **line, t_rt *rt)
 	rt->plane->color.x = ft_value(line[3], ',', 0, rt);
 	rt->plane->color.y = ft_value(line[3], ',', 1, rt);
 	rt->plane->color.z = ft_value(line[3], ',', 1, rt);
-	rt->plane->specular = 0;
-	rt->plane->reflect = 0.0;
+	if (array_size(line) >= 5)
+		rt->plane->reflect = ft_value(line[4], ',', 0, rt);
+	if (array_size(line) == 6)
+		rt->plane->specular = ft_value(line[5], ',', 0, rt);
 	if (rt->plane->coord.x < -100|| rt->plane->coord.x > MAX_SIZE || \
 	rt->plane->coord.y < -MAX_SIZE || rt->plane->coord.y > MAX_SIZE || \
 	rt->plane->coord.z < -MAX_SIZE || rt->plane->coord.z > MAX_SIZE)
@@ -376,6 +382,8 @@ int	set_plane(char **line, t_rt *rt)
 	rt->plane->color.y < 0 || rt->plane->color.y > 255 || \
 	rt->plane->color.z < 0 || rt->plane->color.z > 255)
 		return (-1);
+	if (rt->plane->reflect < 0 || rt->plane->reflect > 1 || rt->plane->specular < 0 || rt->plane->specular > 5000)
+		return(-1);
 	return (0);
 }
 
@@ -395,7 +403,7 @@ int	parse_plane(char **line, t_rt *rt)
 		rt->plane = rt->plane->next;
 	}
 	size = array_size(line);
-	if (size != 4)
+	if (size < 4 || size > 6)
 		return (-1);
 	if (alpha_check(line) == -1)
 		return (-1);
@@ -424,6 +432,9 @@ int	cylinder_errorcheck(t_rt *rt)
 		return (-1);
 	if (rt->cylinder->height < 0 || rt->cylinder->height > 100)
 		return (-1);
+	if (rt->cylinder->reflect < 0 || rt->cylinder->reflect > 1
+	|| rt->cylinder->specular < 0 || rt->cylinder->specular > 5000)
+		return(-1);
 	return (0);
 }
 
@@ -444,8 +455,10 @@ int	set_cylinder(char **line, t_rt *rt)
 	rt->cylinder->color.x = ft_value(line[5], ',', 0, rt);
 	rt->cylinder->color.y = ft_value(line[5], ',', 1, rt);
 	rt->cylinder->color.z = ft_value(line[5], ',', 1, rt);
-	rt->cylinder->specular = 1500;
-	rt->cylinder->reflect = 0.0;
+	if (array_size(line) >= 7)
+		rt->cylinder->reflect = ft_value(line[6], ',', 0, rt);
+	if (array_size(line) == 8)
+		rt->cylinder->specular = ft_value(line[7], ',', 0, rt);
 	if (cylinder_errorcheck(rt) == -1)
 		return (-1);
 	return (0);
@@ -467,7 +480,7 @@ int	parse_cylinder(char **line, t_rt *rt)
 		rt->cylinder = rt->cylinder->next;
 	}
 	size = array_size(line);
-	if (size != 6)
+	if (size < 6 || size > 8)
 		return (-1);
 	if (alpha_check(line) == -1)
 		return (-1);
@@ -494,6 +507,8 @@ int	parab_errorcheck(t_rt *rt)
 		return (-1);
 	if (rt->parab->height < 0 || rt->parab->height > MAX_SIZE)
 		return (-1);
+	if (rt->parab->reflect < 0 || rt->parab->reflect > 1 || rt->parab->specular < 0 || rt->parab->specular > 5000)
+		return(-1);
 	return (0);
 }
 
@@ -516,8 +531,10 @@ int	set_paraboloid(char **line,t_rt *rt)
 	rt->parab->color.y = ft_value(line[4], ',', 1, rt);
 	rt->parab->color.z = ft_value(line[4], ',', 1, rt);
 
-	rt->parab->reflect = 0.0;
-	rt->parab->specular = 2000;
+	if (array_size(line) >= 6)
+		rt->parab->reflect = ft_value(line[5], ',', 0, rt);
+	if (array_size(line) == 7)
+		rt->parab->specular = ft_value(line[6], ',', 0, rt);
     if (parab_errorcheck(rt) == -1)
 		return (-1);
 	return (0);
@@ -539,7 +556,7 @@ int	parse_paraboloid(char **line, t_rt *rt)
 		rt->parab = rt->parab->next;
 	}
 	size = array_size(line);
-	if (size != 5)
+	if (size < 5 || size > 7)
 		return (-1);
 	if (alpha_check(line) == -1)
 		return (-1);
