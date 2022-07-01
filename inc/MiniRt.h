@@ -44,6 +44,7 @@ typedef struct s_sphere
 	float			radius;
 	float			specular;
 	float			reflect;
+	float			is_chess;
 	t_vect			color;
 	struct s_sphere	*next;
 }					t_sphere;
@@ -55,6 +56,7 @@ typedef struct s_plane
 	t_vect			color;
 	float			reflect;
 	float			specular;
+	float			is_chess;
 	struct s_plane	*next;
 }					t_plane;
 
@@ -67,6 +69,7 @@ typedef struct s_cylinder
 	float				height;
 	float				specular;
 	float				reflect;
+	float				is_chess;
 	struct s_cylinder	*next;
 }						t_cylinder;
 
@@ -78,6 +81,7 @@ typedef struct s_parab
 	float				height;
 	float				specular;
 	float				reflect;
+	float				is_chess;
 	struct s_parab		*next;
 }						t_parab;
 
@@ -134,6 +138,9 @@ void	check_sphere(t_vect origin, t_rt *rt, t_vect dir, t_inter *its);
 void	check_cylinder(t_vect origin, t_rt *rt, t_vect dir, t_inter *its);
 void	check_plane(t_vect origin, t_rt *rt, t_vect dir, t_inter *its);
 void 	check_paraboloid(t_vect origin, t_rt *rt, t_vect dir, t_inter *its);
+
+t_vect inverse_color(t_vect color);
+t_vect chessboard(t_ray ray, t_vect even, t_vect odd, float closest_t, float koef);
 
 //unsigned int	ft_get_rgb(int *color);
 

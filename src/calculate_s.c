@@ -152,7 +152,15 @@ t_vect	trace_ray(t_rt *rt, t_ray ray, int recurse)
 		normal = subtr_vec(point, its.closest_sphere->coord);
 		normal = multiply_vect(1.0 / length_vect(normal), normal);
 		view = multiply_vect(-1, ray.dir);
-		color = multiply_vect(lighting(point, normal, rt, its.closest_sphere->specular, view), its.closest_sphere->color);
+		if (its.closest_sphere->is_chess)
+		{
+			t_vect even_color = its.closest_sphere->color;
+			t_vect odd_color = inverse_color(even_color);
+			color = chessboard(ray, even_color, odd_color, its.closest_t, its.closest_sphere->is_chess);
+			color = multiply_vect(lighting(point, normal, rt, its.closest_sphere->specular, view), color);
+		}
+		else
+			color = multiply_vect(lighting(point, normal, rt, its.closest_sphere->specular, view), its.closest_sphere->color);
 		if (its.closest_sphere->reflect > 0 && recurse > 0)
 		{
 			r_ray = subtr_vec(multiply_vect(2.0*dot_product_vect(view, normal), normal), view);
@@ -166,7 +174,15 @@ t_vect	trace_ray(t_rt *rt, t_ray ray, int recurse)
 		normal = its.closest_plane->orient;
 		normal = multiply_vect(1.0 / length_vect(normal), normal);
 		view = multiply_vect(-1, ray.dir);
-		color = multiply_vect(lighting(point, normal, rt, its.closest_plane->specular, view), its.closest_plane->color);
+		if (its.closest_plane->is_chess)
+		{
+			t_vect even_color = its.closest_plane->color;
+			t_vect odd_color = inverse_color(even_color);
+			color = chessboard(ray, even_color, odd_color, its.closest_t, its.closest_plane->is_chess);
+			color = multiply_vect(lighting(point, normal, rt, its.closest_plane->specular, view), color);
+		}
+		else
+			color = multiply_vect(lighting(point, normal, rt, its.closest_plane->specular, view), its.closest_plane->color);
 		if (its.closest_plane->reflect > 0 && recurse > 0)
 		{
 			r_ray = subtr_vec(multiply_vect(2.0*dot_product_vect(view, normal), normal), view);
@@ -181,7 +197,15 @@ t_vect	trace_ray(t_rt *rt, t_ray ray, int recurse)
         // normal = multiply_vect(1.0 / length_vect(normal), normal);
 		normal = get_normal_for_cyl(point, its.closest_cylinder);
 		view = multiply_vect(-1, ray.dir);
-		color = multiply_vect(lighting(point, normal, rt, its.closest_cylinder->specular, view), its.closest_cylinder->color);
+		if (its.closest_cylinder->is_chess)
+		{
+			t_vect even_color = its.closest_cylinder->color;
+			t_vect odd_color = inverse_color(even_color);
+			color = chessboard(ray, even_color, odd_color, its.closest_t, its.closest_cylinder->is_chess);
+			color = multiply_vect(lighting(point, normal, rt, its.closest_cylinder->specular, view), color);
+		}
+		else
+			color = multiply_vect(lighting(point, normal, rt, its.closest_cylinder->specular, view), its.closest_cylinder->color);
 		if (its.closest_cylinder->reflect > 0 && recurse > 0)
 		{
 			r_ray = subtr_vec(multiply_vect(2.0*dot_product_vect(view, normal), normal), view);
@@ -196,6 +220,14 @@ t_vect	trace_ray(t_rt *rt, t_ray ray, int recurse)
 		// normal = multiply_vect(1.0 / length_vect(normal), normal);
 		normal = get_normal_for_parab(point, its.closest_parab);
 		view = multiply_vect(-1, ray.dir);
+		if (its.closest_parab->is_chess)
+		{
+			t_vect even_color = its.closest_parab->color;
+			t_vect odd_color = inverse_color(even_color);
+			color = chessboard(ray, even_color, odd_color, its.closest_t, its.closest_parab->is_chess);
+			color = multiply_vect(lighting(point, normal, rt, its.closest_parab->specular, view), color);
+		}
+		else
 		color = multiply_vect(lighting(point, normal, rt, its.closest_parab->specular, view), its.closest_parab->color);
 		if (its.closest_parab->reflect > 0 && recurse > 0)
 		{
