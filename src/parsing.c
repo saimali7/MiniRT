@@ -311,6 +311,8 @@ int	set_sphere(char **line,t_rt *rt)
 		rt->sphere->reflect = ft_value(line[4], ',', 0, rt);
 	if (array_size(line) >= 6)
 		rt->sphere->specular = ft_value(line[5], ',', 0, rt);
+	else
+		rt->sphere->specular = 2000;
 	if (array_size(line) == 7)
 		rt->sphere->is_chess = ft_value(line[6], ',', 0, rt);
 	if (rt->sphere->color.x < 0 || rt->sphere->color.x > 255 || rt->sphere->color.y < 0
@@ -373,6 +375,8 @@ int	set_plane(char **line, t_rt *rt)
 		rt->plane->reflect = ft_value(line[4], ',', 0, rt);
 	if (array_size(line) >= 6)
 		rt->plane->specular = ft_value(line[5], ',', 0, rt);
+	else
+		rt->plane->specular = 10;
 	if (array_size(line) == 7)
 		rt->plane->is_chess = ft_value(line[6], ',', 0, rt);
 	if (rt->plane->coord.x < -100|| rt->plane->coord.x > MAX_SIZE || \
@@ -467,6 +471,8 @@ int	set_cylinder(char **line, t_rt *rt)
 		rt->cylinder->reflect = ft_value(line[6], ',', 0, rt);
 	if (array_size(line) >= 8)
 		rt->cylinder->specular = ft_value(line[7], ',', 0, rt);
+	else
+		rt->cylinder->specular = 2000;
 	if (array_size(line) == 9)
 		rt->cylinder->is_chess = ft_value(line[8], ',', 0, rt);
 	if (cylinder_errorcheck(rt) == -1)
@@ -542,6 +548,8 @@ int	set_paraboloid(char **line,t_rt *rt)
 		rt->parab->reflect = ft_value(line[5], ',', 0, rt);
 	if (array_size(line) >= 7)
 		rt->parab->specular = ft_value(line[6], ',', 0, rt);
+	else
+		rt->parab->specular = 2000;
 	if (array_size(line) == 8)
 		rt->parab->is_chess = ft_value(line[7], ',', 0, rt);		
     if (parab_errorcheck(rt) == -1)
