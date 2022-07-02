@@ -36,9 +36,9 @@ t_vect chessboard(t_ray ray, t_vect even, t_vect odd, float closest_t, float koe
 	tmp_p = multiply_vect(closest_t, ray.dir);
 	tmp_p = add_vect(ray.origin, tmp_p);
 	tmp_p = multiply_vect(1.0 / koef, tmp_p);
-	tmp_p.x = round(tmp_p.x);
-	tmp_p.y = round(tmp_p.y);
-	tmp_p.z = round(tmp_p.z);
+	tmp_p.x = floorf(tmp_p.x); //round(tmp_p.x);
+	tmp_p.y = floorf(tmp_p.y); //round(tmp_p.y);
+	tmp_p.z = floorf(tmp_p.z); //round(tmp_p.z);
 	chessboard = tmp_p.x + tmp_p.y + tmp_p.z;
 	chessboard = modff(chessboard * 0.5, &cc1);
 	chessboard *= 2.0;
