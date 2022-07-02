@@ -2,9 +2,14 @@ NAME = miniRT
 
 CC = gcc
 
-LIST =	main.c	src/atod.c	src/display.c	src/calculate.c src/errors.c  src/utils_free.c\
-		src/sphere.c src/ray_tracing.c src/vectors.c src/calculate_s.c   src/camera.c\
-		src/plane.c	src/cylinder2.c src/parsing.c	src/paraboloid.c	src/chessboard.c
+LIST =	src/main.c	src/geometry/plane.c	src/geometry/sphere.c	src/geometry/paraboloid.c	\
+		src/geometry/vectors_p1.c	src/geometry/vectors_p2.c  	src/geometry/cylinder.c		src/parsing/parsing.c	\
+		src/parsing/parse_sphere.c	src/parsing/parse_plane.c	src/parsing/parse_cylinder.c	src/parsing/parse_paraboloid.c	\
+		src/parsing/parse_ambient_light.c 	src/parsing/parse_camera.c 	src/parsing/parsing_utils.c  src/parsing/parse_rt_line.c\
+		src/render/calculate.c src/render/trace_ray.c	src/render/render_utils.c\
+		src/utils/errors.c	src/utils/atod.c	src/utils/utils_free.c	\
+		src/render/camera.c		src/render/chessboard.c	src/render/display.c	\
+
 
 OBJ = $(LIST:.c=.o)
 

@@ -23,7 +23,6 @@ typedef struct s_display
 {
 	void	*mlx;
 	void	*mlx_win;
-	//unsigned int	**buffer;
 	t_img	img;
 	float	width;
 	float	height;
