@@ -17,12 +17,13 @@ int	set_ambient(char **line, t_rt *rt)
 	return (0);
 }
 
-int	parse_ambient(char **line, t_rt *rt)
+int	parse_ambient(char **line, t_rt *rt, t_parsecheck *min_check)
 {
 	int			size;
 	static int	a;
 
 	a++;
+	min_check->ambient = 1;
 	if (a > 1)
 		return (-1);
 	size = array_size(line);
@@ -61,12 +62,13 @@ int	set_light(char **line, t_rt *rt)
 	return (0);
 }
 
-int	parse_light(char **line, t_rt *rt)
+int	parse_light(char **line, t_rt *rt,  t_parsecheck *min_check)
 {
 	int			size;
 	static int	l;
 
 	l++;
+	min_check->light = 1;
 	if (l > 1)
 		return (-1);
 	size = array_size(line);

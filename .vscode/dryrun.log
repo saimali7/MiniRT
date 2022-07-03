@@ -1,0 +1,35 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory '/home/saim/Desktop/MiniRT'
+gcc -Wall -Wextra -Werror -Imlx -c src/main.c -o src/main.o
+gcc -Wall -Wextra -Werror -Imlx -c src/geometry/plane.c -o src/geometry/plane.o
+gcc -Wall -Wextra -Werror -Imlx -c src/geometry/sphere.c -o src/geometry/sphere.o
+gcc -Wall -Wextra -Werror -Imlx -c src/geometry/paraboloid.c -o src/geometry/paraboloid.o
+gcc -Wall -Wextra -Werror -Imlx -c src/geometry/vectors_p1.c -o src/geometry/vectors_p1.o
+gcc -Wall -Wextra -Werror -Imlx -c src/geometry/vectors_p2.c -o src/geometry/vectors_p2.o
+gcc -Wall -Wextra -Werror -Imlx -c src/geometry/cylinder.c -o src/geometry/cylinder.o
+gcc -Wall -Wextra -Werror -Imlx -c src/parsing/parsing.c -o src/parsing/parsing.o
+gcc -Wall -Wextra -Werror -Imlx -c src/parsing/parse_sphere.c -o src/parsing/parse_sphere.o
+gcc -Wall -Wextra -Werror -Imlx -c src/parsing/parse_plane.c -o src/parsing/parse_plane.o
+gcc -Wall -Wextra -Werror -Imlx -c src/parsing/parse_cylinder.c -o src/parsing/parse_cylinder.o
+gcc -Wall -Wextra -Werror -Imlx -c src/parsing/parse_paraboloid.c -o src/parsing/parse_paraboloid.o
+gcc -Wall -Wextra -Werror -Imlx -c src/parsing/parse_ambient_light.c -o src/parsing/parse_ambient_light.o
+gcc -Wall -Wextra -Werror -Imlx -c src/parsing/parse_camera.c -o src/parsing/parse_camera.o
+gcc -Wall -Wextra -Werror -Imlx -c src/parsing/parsing_utils.c -o src/parsing/parsing_utils.o
+gcc -Wall -Wextra -Werror -Imlx -c src/parsing/parse_rt_line.c -o src/parsing/parse_rt_line.o
+gcc -Wall -Wextra -Werror -Imlx -c src/render/calculate.c -o src/render/calculate.o
+gcc -Wall -Wextra -Werror -Imlx -c src/render/trace_ray.c -o src/render/trace_ray.o
+gcc -Wall -Wextra -Werror -Imlx -c src/render/render_utils.c -o src/render/render_utils.o
+gcc -Wall -Wextra -Werror -Imlx -c src/utils/errors.c -o src/utils/errors.o
+gcc -Wall -Wextra -Werror -Imlx -c src/utils/atod.c -o src/utils/atod.o
+gcc -Wall -Wextra -Werror -Imlx -c src/utils/utils_free.c -o src/utils/utils_free.o
+gcc -Wall -Wextra -Werror -Imlx -c src/render/camera.c -o src/render/camera.o
+gcc -Wall -Wextra -Werror -Imlx -c src/render/chessboard.c -o src/render/chessboard.o
+gcc -Wall -Wextra -Werror -Imlx -c src/render/display.c -o src/render/display.o
+make -C ./libft
+make[1]: Entering directory '/home/saim/Desktop/MiniRT'
+make[1]: Leaving directory '/home/saim/Desktop/MiniRT'
+make: Leaving directory '/home/saim/Desktop/MiniRT'
+ 
+make[1]: *** libft: No such file or directory.  Stop.
+make: *** [Makefile:21: miniRT] Error 2
+

@@ -69,7 +69,7 @@ void  check_paraboloid(t_vect origin, t_rt *rt, t_vect dir, t_inter *its)
     }
     if (closest_parab != NULL && closest_t < its->closest_t)
 	{
-		its->closest_parab = closest_parab;
+		its->c_parab = closest_parab;
 		put_intersect(its, closest_t, 'b');
 	}
     free(ip);

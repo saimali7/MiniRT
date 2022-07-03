@@ -4,27 +4,27 @@ void	put_intersect(t_inter *its, float closest_t, char f)
 {
 	if (f == 'p')
 	{
-		its->closest_cylndr = NULL;
-		its->closest_sphere = NULL;
-		its->closest_parab = NULL;
+		its->c_cylndr = NULL;
+		its->c_sphere = NULL;
+		its->c_parab = NULL;
 	}
 	else if (f == 's')
 	{
-		its->closest_cylndr = NULL;
-		its->closest_plane = NULL;
-		its->closest_parab = NULL;
+		its->c_cylndr = NULL;
+		its->c_plane = NULL;
+		its->c_parab = NULL;
 	}
 	else if (f == 'c')
 	{
-		its->closest_sphere = NULL;
-		its->closest_plane = NULL;
-		its->closest_parab = NULL;
+		its->c_sphere = NULL;
+		its->c_plane = NULL;
+		its->c_parab = NULL;
 	}
 	else if (f == 'b')
 	{
-		its->closest_sphere = NULL;
-		its->closest_plane = NULL;
-		its->closest_cylndr = NULL;
+		its->c_sphere = NULL;
+		its->c_plane = NULL;
+		its->c_cylndr = NULL;
 	}
 	its->closest_t = closest_t;
 	its->hit_flag = 1;
@@ -67,7 +67,7 @@ void	check_plane(t_vect origin, t_rt *rt, t_vect dir, t_inter *its)
 	}
 	if (closest_plane != NULL && closest_t < its->closest_t)
 	{
-		its->closest_plane = closest_plane;
+		its->c_plane = closest_plane;
 		put_intersect(its, closest_t, 'p');
 	}
 }

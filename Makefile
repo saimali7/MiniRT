@@ -9,6 +9,7 @@ LIST =	src/main.c	src/geometry/plane.c	src/geometry/sphere.c	src/geometry/parabo
 		src/render/calculate.c src/render/trace_ray.c	src/render/render_utils.c\
 		src/utils/errors.c	src/utils/atod.c	src/utils/utils_free.c	\
 		src/render/camera.c		src/render/chessboard.c	src/render/display.c	\
+		src/render/render_shapes.c			src/render/render_shape_utils.c
 
 
 OBJ = $(LIST:.c=.o)

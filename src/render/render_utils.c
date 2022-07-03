@@ -3,10 +3,10 @@
 void	closest_intersection(t_vect origin, t_rt *rt, t_vect dir, t_inter *its)
 {
 	its->hit_flag = -1;
-	its->closest_cylndr = NULL;
-	its->closest_plane = NULL;
-	its->closest_sphere = NULL;
-	its->closest_parab = NULL;
+	its->c_cylndr = NULL;
+	its->c_plane = NULL;
+	its->c_sphere = NULL;
+	its->c_parab = NULL;
 	its->closest_t = INF;
 	check_sphere(origin, rt, dir, its);
 	check_cylinder(origin, rt, dir, its);

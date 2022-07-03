@@ -85,10 +85,10 @@ typedef struct s_parab
 
 typedef struct s_intersect
 {
-	t_plane		*closest_plane;
-	t_sphere	*closest_sphere;
-	t_cylndr	*closest_cylndr;
-	t_parab		*closest_parab;
+	t_plane		*c_plane;
+	t_sphere	*c_sphere;
+	t_cylndr	*c_cylndr;
+	t_parab		*c_parab;
 	float		closest_t;
 	float		min;
 	float		max;
@@ -115,6 +115,39 @@ typedef struct s_traceray
 	float  max;
 }	t_ray;
 
+typedef struct s_rayvars
+{
+	t_vect	point;
+	t_vect	normal;
+	t_vect	color;
+	t_vect	view;
+	t_inter	its;
+	t_vect	r_ray;
+	t_vect	reflect_color;
+	t_vect even_color;
+	t_vect odd_color;
+}	t_ray_var;
+
+typedef struct s_parsecheck
+{
+	int ambient;
+	int light;
+	int camera;
+}	t_parsecheck;
+
+typedef struct s_lightvar
+{
+	float	intensity;
+	t_vect	vec_light;
+	float	normal_dot;
+	float	length_n;
+	float	length_v;
+	t_vect	r;
+	float	r_dot_v;
+	float	t_max;
+	t_inter	its;
+}	t_lightvar;
+
 int		parse(t_rt *rt, char *arg);
 double	rt_atod(const char *str, t_rt *rt);
 void	init_window(t_disp *display, t_rt *rt);
@@ -123,9 +156,9 @@ int		comma_check(char *str);
 int		alpha_check(char **line);
 int		array_size(char **line);
 int		parse_set_rt(t_rt *rt, int fd);
-int		parse_ambient(char **line, t_rt *rt);
-int		parse_camera(char **line, t_rt *rt);
-int		parse_light(char **line, t_rt *rt);
+int		parse_ambient(char **line, t_rt *rt, t_parsecheck *min_check);
+int		parse_camera(char **line, t_rt *rt, t_parsecheck *min_check);
+int		parse_light(char **line, t_rt *rt, t_parsecheck *min_check);
 int		parse_sphere(char **line, t_rt *rt);
 int		parse_plane(char **line, t_rt *rt);
 int		parse_cylinder(char **line, t_rt *rt);
@@ -146,6 +179,17 @@ t_vect	convert_viewport(int x, int y, t_rt *rt);
 void	put_intersect(t_inter *its, float closest_t, char f);
 
 int		trace_ray_plane(t_rt *rt, float *dir);
+void 	render_plane(t_ray_var *v, t_ray ray, int recurse, t_rt *rt);
+void  	render_sphere(t_ray_var *v, t_ray ray, int recurse, t_rt *rt);
+void 	render_parab(t_ray_var *v, t_ray ray, int recurse, t_rt *rt);
+void  	render_cylinder(t_ray_var *v, t_ray ray, int recurse, t_rt *rt);
+void	parab_reflection(t_ray_var *v, t_ray ray, int recurse, t_rt *rt);
+void sphere_reflection(t_ray_var *v, t_ray ray, int recurse, t_rt *rt);
+void	cylinder_reflection(t_ray_var *v, t_ray ray, int recurse, t_rt *rt);
+void	plane_reflection(t_ray_var *v, t_ray ray, int recurse, t_rt *rt);
+t_vect		get_normal_for_parab(t_vect point, t_parab *parab);
+t_vect		get_normal_for_cyl(t_vect point, t_cylndr *cylndr);
+
 void	closest_intersection(t_vect origin, t_rt *rt, t_vect dir, t_inter *its);
 void	check_sphere(t_vect origin, t_rt *rt, t_vect dir, t_inter *its);
 void	check_cylinder(t_vect origin, t_rt *rt, t_vect dir, t_inter *its);

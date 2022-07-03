@@ -26,12 +26,13 @@ int	set_camera(char **line, t_rt *rt)
 	return (0);
 }
 
-int	parse_camera(char **line, t_rt *rt)
+int	parse_camera(char **line, t_rt *rt, t_parsecheck *min_check)
 {
 	int			size;
 	static int	c;
 
 	c++;
+	min_check->camera = 1;
 	if (c > 1)
 		return (-1);
 	size = array_size(line);

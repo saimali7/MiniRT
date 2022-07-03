@@ -54,7 +54,7 @@ void	check_sphere(t_vect origin, t_rt *rt, t_vect dir, t_inter *its)
 	}
 	if (closest_sphere != NULL && closest_t < its->closest_t)
 	{
-		its->closest_sphere = closest_sphere;
+		its->c_sphere = closest_sphere;
 		put_intersect(its, closest_t, 's');
 	}
 	free(ip);

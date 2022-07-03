@@ -1,49 +1,39 @@
 #include "../../inc/MiniRt.h"
 
+void	init_light_var(t_lightvar *var, t_rt *rt, t_vect point)
+{
+	var->intensity = 0.0;
+	if (rt->ambient.ratio > 0)
+		var->intensity += rt->ambient.ratio;
+	var->vec_light = subtr_vec(rt->light.coord, point);
+	var->its.min = EPSILON;
+	var->its.max = 1.0;
+}
+
 float	lighting(t_vect point, t_vect normal, t_rt *rt, float specular, t_vect view)
 {
-	float	intensity;
-	t_vect	vec_light;
-	float	normal_dot;
-	float	length_n;
-	float	length_v;
-	t_vect	r;
-	float	r_dot_v;
-	float	t_max;
-	t_inter	its;
+	t_lightvar var;
 
-	length_n = length_vect(normal);
-	length_v = length_vect(view);
-	intensity = 0.0;
-
-	if (rt->ambient.ratio > 0)
-	intensity += rt->ambient.ratio;
-
-    //point light
-	vec_light = subtr_vec(rt->light.coord, point);
-	t_max = 1.0;
-
-    // shadow check
-	its.min = EPSILON;
-	its.max = t_max;
-	closest_intersection(point, rt, vec_light, &its);
-	if (its.hit_flag != -1)
-		return intensity;
-
-    // diffuse light
-	normal_dot = dot_product(normal, vec_light);
-	if (normal_dot > 0)
-		intensity += rt->light.ratio * normal_dot / (length_n * length_vect(vec_light));
-
-    //specular light
+	var.length_n = length_vect(normal);
+	var.length_v = length_vect(view);
+	init_light_var(&var, rt, point);
+	closest_intersection(point, rt, var.vec_light, &var.its);
+	if (var.its.hit_flag != -1)
+		return var.intensity;
+	var.normal_dot = dot_product(normal, var.vec_light);
+	if (var.normal_dot > 0)
+		var.intensity += rt->light.ratio * var.normal_dot
+		/ (var.length_n * length_vect(var.vec_light));
 	if (specular != -1)
 	{
-		r = subtr_vec(multiply_vect(2.0 * dot_product(normal, vec_light), normal), vec_light);
-		r_dot_v = dot_product(r, view);
-		if (r_dot_v > 0)
-			intensity += rt->light.ratio * pow(r_dot_v / (length_vect(r) * length_v), specular);
+		var.r = subtr_vec(multiply_vect(2.0 * dot_product(normal,
+		var.vec_light), normal), var.vec_light);
+		var.r_dot_v = dot_product(var.r, view);
+		if (var.r_dot_v > 0)
+			var.intensity += rt->light.ratio * pow(var.r_dot_v
+			/ (length_vect(var.r) * var.length_v), specular);
 	}
-	return (intensity);
+	return (var.intensity);
 }
 
 void	calculate(t_disp *display , t_rt *rt)

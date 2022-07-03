@@ -92,7 +92,7 @@ void	check_cylinder(t_vect origin, t_rt *rt, t_vect dir, t_inter *its)
     }
 	if (closest_cylndr != NULL && closest_t < its->closest_t)
     {
-		its->closest_cylndr = closest_cylndr;
+		its->c_cylndr = closest_cylndr;
 		put_intersect(its, closest_t, 'c');
 	}
 }
