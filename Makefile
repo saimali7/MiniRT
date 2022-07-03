@@ -14,30 +14,46 @@ LIST =	src/main.c	src/geometry/plane.c	src/geometry/sphere.c	src/geometry/parabo
 
 OBJ = $(LIST:.c=.o)
 
+HEADERS = inc/MiniRt.h inc/Minilibx.h inc/Vector.h
+
 CFLAGS = -Wall -Wextra -Werror
+
+GREEN = "\033[32m"
+RESET = "\033[0m"
+CUT = "\033[K"
+DOWN = "\033[B"
+UP = "\033[A"
+SAVE = "\033[s"
 
 all : $(NAME)
 
 $(NAME) :	$(OBJ)
-			$(MAKE) -C ./libft
-			$(MAKE) -C ./mlx
-			$(CC) $(LIST) $(CFLAGS) $(OBJS) -L ./mlx -l mlx -framework OpenGL -Ofast -framework AppKit -L ./libft -l ft -lm -o $(NAME)
+			@ar rc $@ $(OBJ)
+			@$(MAKE) -C ./libft
+			@$(MAKE) -C ./mlx
+			@$(CC) $(LIST) $(CFLAGS) $(OBJS) -L ./mlx -l mlx -framework OpenGL -Ofast -framework AppKit -L ./libft -l ft -lm -o $(NAME)
+			@printf $(CUT) $(DOWN)
+			@echo $(GREEN)miniRT compiled 🌏 $(RESET)
 
 %.o : %.c
-	$(CC) -Wall -Wextra -Werror -Imlx -c $< -o $@
+	@$(CC) -Wall -Wextra -Werror -Imlx -c $< -o $@
+	@echo $(SAVE)$(CUT)$(GREEN) Compiling with $(CFLAGS)...$(RESET)
+	@echo $(CUT) $(GREEN)[$^] to [$@] $(RESET)
+	@printf $(UP)$(UP)
 
 bonus : $(NAME)
 
 clean:
-	rm -rf $(OBJ)
-	rm -f ./mlx/*.a
-	rm -f ./libft/*.o
-	rm -f ./libft/*.a
-	rm -f ./libft/gnl/*.o
-	rm -f ./libft/gnl/*.a
+	@rm -rf $(OBJ)
+	@rm -f ./mlx/*.a
+	@rm -f ./libft/*.o
+	@rm -f ./libft/*.a
+	@rm -f ./libft/gnl/*.o
+	@rm -f ./libft/gnl/*.a
 
 fclean: clean
-	rm -rf $(NAME)
+	@rm -rf $(NAME)
+	@echo $(GREEN)OBJ files removed 🧹$(RESET)
 
 re: fclean all
 

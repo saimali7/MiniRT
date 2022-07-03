@@ -10,8 +10,8 @@ RM 		= rm -rf
 all: ${NAME}
 
 ${NAME}:	$(OBJ)
-			${CC} ${CFLAGS} -c ${SRC}
-			${LIBC} ${NAME} ${OBJ} $@
+			@gcc -c $(CFLAGS) $(SRC)
+			@ar rc $(NAME) $(OBJ)
 
 clean:
 	${RM} ${OBJ}

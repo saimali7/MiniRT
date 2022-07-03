@@ -32,16 +32,27 @@ LIST =	ft_atoi.c			ft_bzero.c			ft_calloc.c\
 
 OBJ = $(LIST:.c=.o)
 
+CC = gcc
+
 FLAGS = -Wall -Wextra -Werror
+
+SAVE = "\033[s"
+CUT = "\033[K"
+GREEN = "\033[32m"
+RESET = "\033[0m"
+UP = "\033[A"
 
 all : $(NAME)
 
 $(NAME) :	$(OBJ)
-			gcc -c $(FLAGS) $(LIST)
-			ar -rc $(NAME) $(OBJ)
+			@gcc -c $(FLAGS) $(LIST)
+			@ar rc $(NAME) $(OBJ)
 
 %.o : %.c
-	gcc $(FLAGS) -c $< -o $(<:%.c=%.o)
+	@$(CC) $(FLAGS) -c $< -o $(<:%.c=%.o)
+	@echo $(SAVE)$(CUT)$(GREEN) Compiling with $(CFLAGS)...$(RESET)
+	@echo $(CUT) $(GREEN)[$^] to [$@] $(RESET)
+	@printf $(UP)$(UP)
 
 clean:
 	rm -f $(OBJ)

@@ -11,11 +11,20 @@ CFLAGS+=-O2
 # add to match string put with X11 in size and position
 CFLAGS+= -DSTRINGPUTX11
 
+SAVE = "\033[s"
+CUT = "\033[K"
+GREEN = "\033[32m"
+RESET = "\033[0m"
+UP = "\033[A"
+
 all: $(NOM)
 
 $(NOM):	$(OBJ)
-	ar -r $(NOM) $(OBJ)
-	ranlib $(NOM)
+	@ar -cr $(NOM) $(OBJ)
+	@ranlib $(NOM)
+	@echo $(SAVE)$(CUT)$(GREEN) Compiling with $(CFLAGS)...$(RESET)
+	@echo $(CUT) $(GREEN)[$^] to [$@] $(RESET)
+	@printf $(UP)$(UP)
 
 clean:
 	rm -f $(NOM) $(OBJ) *~

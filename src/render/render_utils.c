@@ -12,6 +12,7 @@ void	closest_intersection(t_vect origin, t_rt *rt, t_vect dir, t_inter *its)
 	check_cylinder(origin, rt, dir, its);
 	check_plane(origin, rt, dir, its);
 	check_paraboloid(origin, rt, dir, its);
+	(void)rt;
 }
 
 t_ray set_ray(t_vect origin, t_vect dir, float min, float max)

@@ -33,5 +33,6 @@ void	plane_reflection(t_ray_var *v, t_ray ray, int recurse, t_rt *rt)
 		v->color = add_vect(multiply_vect(1.0 - v->its.c_plane->reflect,
 		v->color), multiply_vect(v->its.c_plane->reflect, v->reflect_color));
 	}
+	(void) ray;
 }
 
