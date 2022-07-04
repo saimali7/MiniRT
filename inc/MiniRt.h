@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MiniRt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anifanto <anifanto@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: Sali <sali@student.42abudhabi.ae>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/04 16:22:49 by anifanto          #+#    #+#             */
-/*   Updated: 2022/07/04 19:17:39 by anifanto         ###   ########.fr       */
+/*   Updated: 2022/07/04 22:08:16 by Sali             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,6 +158,10 @@ typedef struct s_lightvar
 	float	r_dot_v;
 	float	t_max;
 	t_inter	its;
+	t_vect  normal;
+	t_vect point;
+	float specular;
+	t_vect view;
 }			t_lightvar;
 
 int		parse(t_rt *rt, char *arg);
@@ -178,12 +182,14 @@ int		parse_paraboloid(char **line, t_rt *rt);
 void	ft_calculate(t_disp *display, t_rt *rt);
 t_vect	trace_ray(t_rt *rt, t_ray ray, int recurse);
 t_ray	set_ray(t_vect origin, t_vect dir, float min, float max);
-void	free_rt(t_rt **ptr_rt);
 void	error_exit(int code, char *str, t_rt *rt);
 void	ray_tracing(t_rt *rt);
 float	is_ray_sphere(t_camera camera, float *ray, t_sphere *sphere);
 void	calculate(t_disp *display, t_rt *rt);
 void	free_all(t_rt *ptr_rt);
+void	free_cyl_parab(t_rt **ptr_rt);
+void	free_plane_sphere(t_rt **ptr_rt);
+
 int		ft_key(int key, t_rt *rt);
 
 t_vect	convert_viewport(int x, int y, t_rt *rt);
@@ -211,7 +217,8 @@ void	ft_putpixel(int x, int y, t_vect color, t_disp *display);
 t_vect	inverse_color(t_vect color);
 t_vect	chessboard(t_ray ray, t_ray_var *v, float koef);
 
-float	lighting(t_vect point, t_vect normal, t_rt *rt, float specular, t_vect view);
+t_lightvar light_var(t_vect point, t_vect normal, float specular, t_vect view);
+float	lighting(t_lightvar v, t_rt *rt);
 
 
 #endif

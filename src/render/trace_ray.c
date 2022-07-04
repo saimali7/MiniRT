@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   trace_ray.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anifanto <anifanto@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: Sali <sali@student.42abudhabi.ae>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/04 16:44:22 by anifanto          #+#    #+#             */
-/*   Updated: 2022/07/04 18:20:26 by anifanto         ###   ########.fr       */
+/*   Updated: 2022/07/04 20:32:47 by Sali             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,10 @@ void	render_sphere(t_ray_var *v, t_ray ray, int recurse, t_rt *rt)
 		v->even_color = v->its.c_sphere->color;
 		v->odd_color = inverse_color(v->even_color);
 		v->color = chessboard(ray, v, v->its.c_sphere->is_chess);
-		v->color = multiply_vect(lighting(v->point, v->normal, rt, \
-			v->its.c_sphere->specular, v->view), v->color);
+		v->color = multiply_vect(lighting(light_var(v->point, v->normal, v->its.c_sphere->specular, v->view), rt), v->color);
 	}
 	else
-		v->color = multiply_vect(lighting(v->point, v->normal, rt, \
-			v->its.c_sphere->specular, v->view), v->its.c_sphere->color);
+		v->color = multiply_vect(lighting(light_var(v->point, v->normal, v->its.c_sphere->specular, v->view), rt), v->its.c_sphere->color);
 	sphere_reflection(v, ray, recurse, rt);
 }
 
@@ -44,12 +42,11 @@ void	render_plane(t_ray_var *v, t_ray ray, int recurse, t_rt *rt)
 		v->even_color = v->its.c_plane->color;
 		v->odd_color = inverse_color(v->even_color);
 		v->color = chessboard(ray, v, v->its.c_plane->is_chess);
-		v->color = multiply_vect(lighting(v->point, v->normal, rt, \
-			v->its.c_plane->specular, v->view), v->color);
+		v->color = multiply_vect(lighting(light_var(v->point, v->normal, v->its.c_plane->specular, v->view), rt), v->color);
 	}
 	else
-		v->color = multiply_vect(lighting(v->point, v->normal, rt, \
-			v->its.c_plane->specular, v->view), v->its.c_plane->color);
+		v->color = multiply_vect(lighting(light_var(v->point, v->normal, \
+		v->its.c_plane->specular, v->view), rt), v->its.c_plane->color);
 	plane_reflection(v, ray, recurse, rt);
 }
 

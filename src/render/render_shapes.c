@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render_shapes.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anifanto <anifanto@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: Sali <sali@student.42abudhabi.ae>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/04 16:40:09 by anifanto          #+#    #+#             */
-/*   Updated: 2022/07/04 18:19:03 by anifanto         ###   ########.fr       */
+/*   Updated: 2022/07/04 21:30:54 by Sali             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,12 +53,12 @@ void	render_cylinder(t_ray_var *v, t_ray ray, int recurse, t_rt *rt)
 		v->even_color = v->its.c_cylndr->color;
 		v->odd_color = inverse_color(v->even_color);
 		v->color = chessboard(ray, v, v->its.c_cylndr->is_chess);
-		v->color = multiply_vect(lighting(v->point, v->normal, \
-			rt, v->its.c_cylndr->specular, v->view), v->color);
+		v->color = multiply_vect(lighting(light_var(v->point, v->normal, \
+			v->its.c_cylndr->specular, v->view), rt), v->color);
 	}
 	else
-		v->color = multiply_vect(lighting(v->point, v->normal, rt, \
-			v->its.c_cylndr->specular, v->view), v->its.c_cylndr->color);
+		v->color = multiply_vect(lighting(light_var(v->point, v->normal, \
+			v->its.c_cylndr->specular, v->view), rt), v->its.c_cylndr->color);
 	cylinder_reflection(v, ray, recurse, rt);
 	(void)rt;
 	(void)ray;
@@ -89,11 +89,11 @@ void	render_parab(t_ray_var *v, t_ray ray, int recurse, t_rt *rt)
 		v->even_color = v->its.c_parab->color;
 		v->odd_color = inverse_color(v->even_color);
 		v->color = chessboard(ray, v, v->its.c_parab->is_chess);
-		v->color = multiply_vect(lighting(v->point, v->normal, rt, \
-		v->its.c_parab->specular, v->view), v->color);
+		v->color = multiply_vect(lighting(light_var(v->point, v->normal, \
+		v->its.c_parab->specular, v->view), rt), v->color);
 	}
 	else
-		v->color = multiply_vect(lighting(v->point, v->normal, rt, \
-		v->its.c_parab->specular, v->view), v->its.c_parab->color);
+		v->color = multiply_vect(lighting(light_var(v->point, v->normal, \
+		v->its.c_parab->specular, v->view), rt), v->its.c_parab->color);
 	parab_reflection(v, ray, recurse, rt);
 }

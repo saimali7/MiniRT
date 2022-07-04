@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   atod.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anifanto <anifanto@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: Sali <sali@student.42abudhabi.ae>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/04 16:46:24 by anifanto          #+#    #+#             */
-/*   Updated: 2022/07/04 18:59:12 by anifanto         ###   ########.fr       */
+/*   Updated: 2022/07/04 22:04:52 by Sali             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	rt_atoi(const char *str, t_rt *rt)
 	if ((str[i] != '\0') || (res > 2147483647 && sign == 1) || \
 	(res > 2147483648 && sign == -1))
 	{
-		free_rt(&rt);
+		free_all(rt);
 		error_exit(-1, "Error: Invalid argument file\n", rt);
 	}
 	return (res * sign);
@@ -83,7 +83,7 @@ double	rt_atod(const char *str, t_rt *rt)
 	if (!dot || dot == (ft_strlen(str) - 1) || (dot == 1 && str[0] \
 		&& (str[0] == '-' || str[0] == '+')))
 	{
-		free_rt(&rt);
+		free_all(rt);
 		error_exit(-1, "Error: Invalid argument file\n", rt);
 	}
 	return (nb / rt_devide(ft_strlen(str) - 1 - dot));

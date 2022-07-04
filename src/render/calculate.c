@@ -3,14 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   calculate.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anifanto <anifanto@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: Sali <sali@student.42abudhabi.ae>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/04 16:33:59 by anifanto          #+#    #+#             */
-/*   Updated: 2022/07/04 19:16:41 by anifanto         ###   ########.fr       */
+/*   Updated: 2022/07/04 20:30:05 by Sali             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/MiniRt.h"
+
+t_lightvar light_var(t_vect point, t_vect normal, float specular, t_vect view)
+{
+	t_lightvar var;
+
+	var.point = point;
+	var.normal = normal;
+	var.specular = specular;
+	var.view = view;
+	return (var);
+}
 
 void	init_light_var(t_lightvar *var, t_rt *rt, t_vect point)
 {
@@ -22,30 +33,28 @@ void	init_light_var(t_lightvar *var, t_rt *rt, t_vect point)
 	var->its.max = 1.0;
 }
 
-float	lighting(t_vect point, t_vect normal, t_rt *rt, float specular, t_vect view)
+float	lighting(t_lightvar v, t_rt *rt)
 {
-	t_lightvar	var;
-
-	var.length_n = length_vect(normal);
-	var.length_v = length_vect(view);
-	init_light_var(&var, rt, point);
-	closest_intersection(point, rt, var.vec_light, &var.its);
-	if (var.its.hit_flag != -1)
-		return (var.intensity);
-	var.normal_dot = dot_product(normal, var.vec_light);
-	if (var.normal_dot > 0)
-		var.intensity += rt->light.ratio * var.normal_dot
-		/ (var.length_n * length_vect(var.vec_light));
-	if (specular != -1)
+	v.length_n = length_vect(v.normal);
+	v.length_v = length_vect(v.view);
+	init_light_var(&v, rt, v.point);
+	closest_intersection(v.point, rt, v.vec_light, &v.its);
+	if (v.its.hit_flag != -1)
+		return (v.intensity);
+	v.normal_dot = dot_product(v.normal, v.vec_light);
+	if (v.normal_dot > 0)
+		v.intensity += rt->light.ratio * v.normal_dot
+		/ (v.length_n * length_vect(v.vec_light));
+	if (v.specular != -1)
 	{
-		var.r = subtr_vec(multiply_vect(2.0 * dot_product(normal,
-		var.vec_light), normal), var.vec_light);
-		var.r_dot_v = dot_product(var.r, view);
-		if (var.r_dot_v > 0)
-			var.intensity += rt->light.ratio * pow(var.r_dot_v
-			/ (length_vect(var.r) * var.length_v), specular);
+		v.r = subtr_vec(multiply_vect(2.0 * dot_product(v.normal,
+		v.vec_light), v.normal), v.vec_light);
+		v.r_dot_v = dot_product(v.r, v.view);
+		if (v.r_dot_v > 0)
+			v.intensity += rt->light.ratio * pow(v.r_dot_v
+			/ (length_vect(v.r) * v.length_v), v.specular);
 	}
-	return (var.intensity);
+	return (v.intensity);
 }
 
 void	calculate(t_disp *display, t_rt *rt)

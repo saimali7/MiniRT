@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   plane.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anifanto <anifanto@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: Sali <sali@student.42abudhabi.ae>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/04 16:27:49 by anifanto          #+#    #+#             */
-/*   Updated: 2022/07/04 18:28:31 by anifanto         ###   ########.fr       */
+/*   Updated: 2022/07/04 21:35:19 by Sali             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ void	check_plane(t_vect origin, t_rt *rt, t_vect dir, t_inter *its)
 	closest_t = INF;
 	closest_plane = NULL;
 	plane = rt->plane;
+	ip = 0;
 	while (plane != NULL)
 	{
 		intersect_plane(origin, dir, plane, &ip);

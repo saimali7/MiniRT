@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anifanto <anifanto@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: Sali <sali@student.42abudhabi.ae>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/04 16:24:51 by anifanto          #+#    #+#             */
-/*   Updated: 2022/07/04 18:50:33 by anifanto         ###   ########.fr       */
+/*   Updated: 2022/07/04 22:05:42 by Sali             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	main(int argc, char **argv)
 	{
 		if (parse(rt, argv[1]) == -1)
 		{
-			free_rt(&rt);
+			free_all(rt);
 			error_exit(-1, "Error: Invalid argument file\n", NULL);
 		}
 		init_window(rt->display, rt);

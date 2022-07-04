@@ -3,61 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   utils_free.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anifanto <anifanto@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: Sali <sali@student.42abudhabi.ae>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/04 16:46:52 by anifanto          #+#    #+#             */
-/*   Updated: 2022/07/04 19:19:35 by anifanto         ###   ########.fr       */
+/*   Updated: 2022/07/04 22:07:31 by Sali             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/MiniRt.h"
-
-void	free_rt(t_rt **ptr_rt)
-{
-	t_rt		*rt;
-	t_plane		*plane;
-	t_sphere	*sphere;
-	t_cylndr	*cylndr;
-	t_parab		*parab;
-
-	rt = *ptr_rt;
-	plane = NULL;
-	sphere = NULL;
-	cylndr = NULL;
-	parab = NULL;
-	while (rt->plane != NULL)
-	{
-		plane = rt->plane;
-		rt->plane = rt->plane->next;
-		free (plane);
-	}
-	while (rt->sphere != NULL)
-	{
-		sphere = rt->sphere;
-		rt->sphere = rt->sphere->next;
-		free (sphere);
-	}
-	while (rt->cylndr != NULL)
-	{
-		cylndr = rt->cylndr;
-		rt->cylndr = rt->cylndr->next;
-		free (cylndr);
-	}
-	while (rt->parab != NULL)
-	{
-		parab = rt->parab;
-		rt->parab = rt->parab->next;
-		free (parab);
-	}
-	free (rt);
-}
 
 void	free_all(t_rt *ptr_rt)
 {
 	if (ptr_rt && ptr_rt->display)
 		ft_free_display(ptr_rt->display);
 	if (ptr_rt)
-		free_rt(&ptr_rt);
+	{
+		free_plane_sphere(&ptr_rt);
+		free_cyl_parab(&ptr_rt);
+		free (ptr_rt);
+	}
 }
 
 int	exit_hook(t_rt *rt)
