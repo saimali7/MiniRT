@@ -6,7 +6,7 @@
 /*   By: anifanto <anifanto@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/04 09:35:47 by anifanto          #+#    #+#             */
-/*   Updated: 2022/04/20 13:12:33 by anifanto         ###   ########.fr       */
+/*   Updated: 2022/07/04 17:24:58 by anifanto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,4 +89,3 @@ char	*get_next_line(int fd)
 	line = check_ost(&ost);
 	return (line);
 }
-

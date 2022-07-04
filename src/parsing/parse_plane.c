@@ -1,19 +1,31 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_plane.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: anifanto <anifanto@student.42abudhabi.a    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/04 16:31:53 by anifanto          #+#    #+#             */
+/*   Updated: 2022/07/04 18:53:12 by anifanto         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/MiniRt.h"
 
-t_plane	*new_plane(void)
+t_plane	*new_plane(t_rt *rt)
 {
 	t_plane	*ptr;
 
 	ptr = (t_plane *) ft_calloc(sizeof(t_plane), 1);
 	if (!ptr)
-		error_exit(-1, ERR_MEM_AL);
+		error_exit(-1, ERR_MEM_AL, rt);
 	ptr->next = NULL;
 	return (ptr);
 }
 
-int plane_errorcheck(t_rt *rt)
+int	plane_errorcheck(t_rt *rt)
 {
-    if (rt->plane->coord.x < -MAX_SIZE|| rt->plane->coord.x > MAX_SIZE || \
+	if (rt->plane->coord.x < -MAX_SIZE || rt->plane->coord.x > MAX_SIZE || \
 	rt->plane->coord.y < -MAX_SIZE || rt->plane->coord.y > MAX_SIZE || \
 	rt->plane->coord.z < -MAX_SIZE || rt->plane->coord.z > MAX_SIZE)
 		return (-1);
@@ -28,7 +40,7 @@ int plane_errorcheck(t_rt *rt)
 	if (rt->plane->reflect < 0 || rt->plane->reflect > 1 || \
 	rt->plane->specular < 0 || rt->plane->specular > 5000 || \
 	rt->plane->is_chess < -10 || rt->plane->is_chess > 10)
-		return(-1);
+		return (-1);
 	return (0);
 }
 
@@ -55,7 +67,7 @@ int	set_plane(char **line, t_rt *rt)
 		rt->plane->specular = 10;
 	if (array_size(line) == 7)
 		rt->plane->is_chess = ft_value(line[6], ',', 0, rt);
-    if (plane_errorcheck(rt) == -1)
+	if (plane_errorcheck(rt) == -1)
 		return (-1);
 	return (0);
 }
@@ -69,10 +81,10 @@ int	parse_plane(char **line, t_rt *rt)
 	while (rt->plane != NULL && rt->plane->next != NULL)
 		rt->plane = rt->plane->next;
 	if (rt->plane == NULL)
-		rt->plane = new_plane();
+		rt->plane = new_plane(rt);
 	else
 	{
-		rt->plane->next = new_plane();
+		rt->plane->next = new_plane(rt);
 		rt->plane = rt->plane->next;
 	}
 	size = array_size(line);

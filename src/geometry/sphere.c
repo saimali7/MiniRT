@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   sphere.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: anifanto <anifanto@student.42abudhabi.a    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/04 16:28:00 by anifanto          #+#    #+#             */
+/*   Updated: 2022/07/04 18:50:58 by anifanto         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/MiniRt.h"
 
 void	intsect_sphere(t_vect origin, t_vect dir, t_sphere *sphere, float *ip)
@@ -24,6 +36,24 @@ void	intsect_sphere(t_vect origin, t_vect dir, t_sphere *sphere, float *ip)
 	return ;
 }
 
+int	check_its_sphere(t_inter *its, float *ip, float *closest_t)
+{
+	int	ret;
+
+	ret = 0;
+	if (ip[0] < *closest_t && its->min < ip[0] && ip[0] < its->max)
+	{
+		*closest_t = ip[0];
+		ret++;
+	}
+	if (ip[1] < *closest_t && its->min < ip[0] && ip[0] < its->max)
+	{
+		*closest_t = ip[1];
+		ret++;
+	}
+	return (ret);
+}
+
 void	check_sphere(t_vect origin, t_rt *rt, t_vect dir, t_inter *its)
 {
 	t_sphere	*sphere;
@@ -36,20 +66,12 @@ void	check_sphere(t_vect origin, t_rt *rt, t_vect dir, t_inter *its)
 	sphere = rt->sphere;
 	ip = ft_calloc(sizeof(float), 2);
 	if (!ip)
-		error_exit(-1, ERR_MEM_AL);
+		error_exit(-1, ERR_MEM_AL, rt);
 	while (sphere != NULL)
 	{
 		intsect_sphere(origin, dir, sphere, ip);
-		if (ip[0] < closest_t && its->min < ip[0] && ip[0] < its->max)
-		{
-			closest_t = ip[0];
+		if (check_its_sphere(its, ip, &closest_t))
 			closest_sphere = sphere;
-		}
-		if (ip[1] < closest_t && its->min < ip[1] && ip[1] < its->max)
-		{
-			closest_t = ip[1];
-			closest_sphere = sphere;
-		}
 		sphere = sphere->next;
 	}
 	if (closest_sphere != NULL && closest_t < its->closest_t)

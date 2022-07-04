@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_rt_line.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: anifanto <anifanto@student.42abudhabi.a    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/04 16:32:29 by anifanto          #+#    #+#             */
+/*   Updated: 2022/07/04 17:28:26 by anifanto         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/MiniRt.h"
 
 void	free_split(char **line)
@@ -54,15 +66,15 @@ int	parse_line(char *str, t_rt *rt, t_parsecheck *min_check)
 	else if (line != NULL && ft_strncmp(line[0], "pa", 3) == 0)
 		ret = parse_paraboloid(line, rt);
 	else if (line != NULL && ft_strncmp(line[0], "\n", 2) != 0)
-		ret =  -1;
+		ret = -1;
 	free_split(line);
 	return (ret);
 }
 
 int	parse_set_rt(t_rt *rt, int fd)
 {
-	char	*str;
-	t_parsecheck min_check;
+	char			*str;
+	t_parsecheck	min_check;
 
 	min_check.ambient = 0;
 	min_check.camera = 0;

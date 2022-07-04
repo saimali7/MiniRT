@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   atod.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: anifanto <anifanto@student.42abudhabi.a    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/04 16:46:24 by anifanto          #+#    #+#             */
+/*   Updated: 2022/07/04 18:59:12 by anifanto         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/MiniRt.h"
 
 int	rt_atoi(const char *str, t_rt *rt)
@@ -23,7 +35,7 @@ int	rt_atoi(const char *str, t_rt *rt)
 	(res > 2147483648 && sign == -1))
 	{
 		free_rt(&rt);
-		error_exit(-1, "Error: Invalid argument file\n");
+		error_exit(-1, "Error: Invalid argument file\n", rt);
 	}
 	return (res * sign);
 }
@@ -72,7 +84,7 @@ double	rt_atod(const char *str, t_rt *rt)
 		&& (str[0] == '-' || str[0] == '+')))
 	{
 		free_rt(&rt);
-		error_exit(-1, "Error: Invalid argument file\n");
+		error_exit(-1, "Error: Invalid argument file\n", rt);
 	}
 	return (nb / rt_devide(ft_strlen(str) - 1 - dot));
 }

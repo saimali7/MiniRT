@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   display.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: anifanto <anifanto@student.42abudhabi.a    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/04 16:38:18 by anifanto          #+#    #+#             */
+/*   Updated: 2022/07/04 19:15:14 by anifanto         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/MiniRt.h"
 
 void	my_mlx_pixel_put(t_img *data, int x, int y, int color)
@@ -20,30 +32,26 @@ static int	init_screen(t_disp	*display)
 		return (1);
 	}
 	else
-	{
-		//ft_putendl_fd("Error init screen", 2);
-		//ft_free_display(display, 0);
 		return (0);
-	}
 }
 
 void	init_window(t_disp *display, t_rt *rt)
 {
 	display = (t_disp *)ft_calloc(1, sizeof(t_disp));
 	if (!display)
-		error_exit(-1, ERR_MEM_AL);
+		error_exit(-1, ERR_MEM_AL, rt);
 	display->mlx = mlx_init();
 	if (!display->height)
 		display->height = HEIGHT;
 	if (!display->width)
 		display->width = WIDHT;
 	if (!display->mlx)
-		error_exit(-1, "Error: Init mlx failed");
+		error_exit(-1, "Error: Init mlx failed", rt);
 	display->mlx_win = mlx_new_window(display->mlx, WIDHT, HEIGHT, "MiniRt");
 	if (!display->mlx_win)
-		error_exit(-1, "Error: Init window failed");
+		error_exit(-1, "Error: Init window failed", rt);
 	if (!init_screen(display))
-		error_exit(-1, "Error: Init screen failed");
+		error_exit(-1, "Error: Init screen failed", rt);
 	(void)rt;
 	calculate(display, rt);
 }

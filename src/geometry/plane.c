@@ -1,4 +1,32 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   plane.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: anifanto <anifanto@student.42abudhabi.a    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/04 16:27:49 by anifanto          #+#    #+#             */
+/*   Updated: 2022/07/04 18:28:31 by anifanto         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/MiniRt.h"
+
+void	put_intersect_cont(t_inter *its, char f)
+{
+	if (f == 'c')
+	{
+		its->c_sphere = NULL;
+		its->c_plane = NULL;
+		its->c_parab = NULL;
+	}
+	else if (f == 'b')
+	{
+		its->c_sphere = NULL;
+		its->c_plane = NULL;
+		its->c_cylndr = NULL;
+	}
+}
 
 void	put_intersect(t_inter *its, float closest_t, char f)
 {
@@ -14,18 +42,8 @@ void	put_intersect(t_inter *its, float closest_t, char f)
 		its->c_plane = NULL;
 		its->c_parab = NULL;
 	}
-	else if (f == 'c')
-	{
-		its->c_sphere = NULL;
-		its->c_plane = NULL;
-		its->c_parab = NULL;
-	}
-	else if (f == 'b')
-	{
-		its->c_sphere = NULL;
-		its->c_plane = NULL;
-		its->c_cylndr = NULL;
-	}
+	else
+		put_intersect_cont(its, f);
 	its->closest_t = closest_t;
 	its->hit_flag = 1;
 }

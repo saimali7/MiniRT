@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   vectors_p2.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: anifanto <anifanto@student.42abudhabi.a    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/04 16:28:19 by anifanto          #+#    #+#             */
+/*   Updated: 2022/07/04 16:28:27 by anifanto         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/Vector.h"
 
 float	dot_product(t_vect vect1, t_vect vect2)
@@ -28,7 +40,7 @@ t_vect	add_vect(t_vect v1, t_vect v2)
 	return (result);
 }
 
-t_vect	multiply_vect(float scalar,t_vect vect)
+t_vect	multiply_vect(float scalar, t_vect vect)
 {
 	t_vect	res;
 

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   MiniRt.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: anifanto <anifanto@student.42abudhabi.a    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/04 16:22:49 by anifanto          #+#    #+#             */
+/*   Updated: 2022/07/04 19:17:39 by anifanto         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINIRT_H
 # define MINIRT_H
 
@@ -109,11 +121,11 @@ typedef struct s_rt
 
 typedef struct s_traceray
 {
-	t_vect origin;
-	t_vect dir;
-	float  min;
-	float  max;
-}	t_ray;
+	t_vect	origin;
+	t_vect	dir;
+	float	min;
+	float	max;
+}			t_ray;
 
 typedef struct s_rayvars
 {
@@ -124,16 +136,16 @@ typedef struct s_rayvars
 	t_inter	its;
 	t_vect	r_ray;
 	t_vect	reflect_color;
-	t_vect even_color;
-	t_vect odd_color;
-}	t_ray_var;
+	t_vect	even_color;
+	t_vect	odd_color;
+}			t_ray_var;
 
 typedef struct s_parsecheck
 {
-	int ambient;
-	int light;
-	int camera;
-}	t_parsecheck;
+	int	ambient;
+	int	light;
+	int	camera;
+}		t_parsecheck;
 
 typedef struct s_lightvar
 {
@@ -146,7 +158,7 @@ typedef struct s_lightvar
 	float	r_dot_v;
 	float	t_max;
 	t_inter	its;
-}	t_lightvar;
+}			t_lightvar;
 
 int		parse(t_rt *rt, char *arg);
 double	rt_atod(const char *str, t_rt *rt);
@@ -167,38 +179,37 @@ void	ft_calculate(t_disp *display, t_rt *rt);
 t_vect	trace_ray(t_rt *rt, t_ray ray, int recurse);
 t_ray	set_ray(t_vect origin, t_vect dir, float min, float max);
 void	free_rt(t_rt **ptr_rt);
-void	error_exit(int code, char *str);
+void	error_exit(int code, char *str, t_rt *rt);
 void	ray_tracing(t_rt *rt);
 float	is_ray_sphere(t_camera camera, float *ray, t_sphere *sphere);
 void	calculate(t_disp *display, t_rt *rt);
 void	free_all(t_rt *ptr_rt);
-int		exit_hook(int x);
 int		ft_key(int key, t_rt *rt);
 
 t_vect	convert_viewport(int x, int y, t_rt *rt);
 void	put_intersect(t_inter *its, float closest_t, char f);
 
 int		trace_ray_plane(t_rt *rt, float *dir);
-void 	render_plane(t_ray_var *v, t_ray ray, int recurse, t_rt *rt);
-void  	render_sphere(t_ray_var *v, t_ray ray, int recurse, t_rt *rt);
-void 	render_parab(t_ray_var *v, t_ray ray, int recurse, t_rt *rt);
-void  	render_cylinder(t_ray_var *v, t_ray ray, int recurse, t_rt *rt);
+void	render_plane(t_ray_var *v, t_ray ray, int recurse, t_rt *rt);
+void	render_sphere(t_ray_var *v, t_ray ray, int recurse, t_rt *rt);
+void	render_parab(t_ray_var *v, t_ray ray, int recurse, t_rt *rt);
+void	render_cylinder(t_ray_var *v, t_ray ray, int recurse, t_rt *rt);
 void	parab_reflection(t_ray_var *v, t_ray ray, int recurse, t_rt *rt);
-void sphere_reflection(t_ray_var *v, t_ray ray, int recurse, t_rt *rt);
+void	sphere_reflection(t_ray_var *v, t_ray ray, int recurse, t_rt *rt);
 void	cylinder_reflection(t_ray_var *v, t_ray ray, int recurse, t_rt *rt);
 void	plane_reflection(t_ray_var *v, t_ray ray, int recurse, t_rt *rt);
-t_vect		get_normal_for_parab(t_vect point, t_parab *parab);
-t_vect		get_normal_for_cyl(t_vect point, t_cylndr *cylndr);
+t_vect	get_normal_for_parab(t_vect point, t_parab *parab);
+t_vect	get_normal_for_cyl(t_vect point, t_cylndr *cylndr);
 
 void	closest_intersection(t_vect origin, t_rt *rt, t_vect dir, t_inter *its);
 void	check_sphere(t_vect origin, t_rt *rt, t_vect dir, t_inter *its);
 void	check_cylinder(t_vect origin, t_rt *rt, t_vect dir, t_inter *its);
 void	check_plane(t_vect origin, t_rt *rt, t_vect dir, t_inter *its);
-void 	check_paraboloid(t_vect origin, t_rt *rt, t_vect dir, t_inter *its);
+void	check_paraboloid(t_vect origin, t_rt *rt, t_vect dir, t_inter *its);
 t_vect	clamp(float min, float max, t_vect value);
 void	ft_putpixel(int x, int y, t_vect color, t_disp *display);
-t_vect inverse_color(t_vect color);
-t_vect chessboard(t_ray ray, t_vect even, t_vect odd, float closest_t, float koef);
+t_vect	inverse_color(t_vect color);
+t_vect	chessboard(t_ray ray, t_ray_var *v, float koef);
 
 float	lighting(t_vect point, t_vect normal, t_rt *rt, float specular, t_vect view);
 

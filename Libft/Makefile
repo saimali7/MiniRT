@@ -6,11 +6,13 @@
 #    By: anifanto <anifanto@student.42abudhabi.a    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/03 11:38:11 by anifanto          #+#    #+#              #
-#    Updated: 2022/04/27 12:24:42 by anifanto         ###   ########.fr        #
+#    Updated: 2022/07/04 17:59:56 by anifanto         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = libft.a
+
+.SILENT:
 
 LIST =	ft_atoi.c			ft_bzero.c			ft_calloc.c\
 		ft_isalnum.c		ft_isalpha.c		ft_isascii.c\
@@ -42,11 +44,11 @@ GREEN = "\033[32m"
 RESET = "\033[0m"
 UP = "\033[A"
 
-all : $(NAME)
-
 $(NAME) :	$(OBJ)
-			@gcc -c $(FLAGS) $(LIST)
-			@ar rc $(NAME) $(OBJ)
+	gcc -c $(FLAGS) $(LIST)
+	ar rc $(NAME) $(OBJ)
+
+all : $(NAME)
 
 %.o : %.c
 	@$(CC) $(FLAGS) -c $< -o $(<:%.c=%.o)

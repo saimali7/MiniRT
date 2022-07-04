@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: anifanto <anifanto@student.42abudhabi.a    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/04 16:33:21 by anifanto          #+#    #+#             */
+/*   Updated: 2022/07/04 18:54:01 by anifanto         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/MiniRt.h"
 
 int	extension_check(char *arg)
@@ -17,7 +29,7 @@ int	extension_check(char *arg)
 	return (0);
 }
 
-int	open_and_check(char *arg)
+int	open_and_check(t_rt *rt, char *arg)
 {
 	int		fd;
 	int		rd;
@@ -27,7 +39,7 @@ int	open_and_check(char *arg)
 	rd = 0;
 	buf = (char *) malloc(sizeof(char));
 	if (!buf)
-		error_exit(-1, ERR_MEM_AL);
+		error_exit(-1, ERR_MEM_AL, rt);
 	fd = open(arg, O_RDONLY);
 	if (fd == -1)
 		return (-1);
@@ -51,7 +63,7 @@ int	parse(t_rt *rt, char *arg)
 	fd = 0;
 	if (extension_check(arg) == -1)
 		return (-1);
-	fd = open_and_check(arg);
+	fd = open_and_check(rt, arg);
 	if (fd == -1)
 		return (-1);
 	if (parse_set_rt(rt, fd) == -1)

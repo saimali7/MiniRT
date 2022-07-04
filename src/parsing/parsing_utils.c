@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing_utils.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: anifanto <anifanto@student.42abudhabi.a    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/04 16:33:07 by anifanto          #+#    #+#             */
+/*   Updated: 2022/07/04 16:33:19 by anifanto         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/MiniRt.h"
 
 int	array_size(char **line)
@@ -30,7 +42,7 @@ double	ft_value(char *str, char delimeter, int reset, t_rt *rt)
 	return (value);
 }
 
-int		comma_helper(char *str, int *i)
+int	comma_helper(char *str, int *i)
 {
 	while (str != NULL && str[*i] != ',' && str[*i] != '\0' && str[*i] != '\n')
 	{

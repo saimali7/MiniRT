@@ -1,12 +1,24 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_sphere.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: anifanto <anifanto@student.42abudhabi.a    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/04 16:32:47 by anifanto          #+#    #+#             */
+/*   Updated: 2022/07/04 18:54:25 by anifanto         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/MiniRt.h"
 
-t_sphere	*new_sphere(void)
+t_sphere	*new_sphere(t_rt *rt)
 {
 	t_sphere	*ptr;
 
 	ptr = (t_sphere *) ft_calloc(sizeof(t_sphere), 1);
 	if (!ptr)
-		error_exit(-1, ERR_MEM_AL);
+		error_exit(-1, ERR_MEM_AL, rt);
 	ptr->next = NULL;
 	return (ptr);
 }
@@ -22,15 +34,15 @@ int	sphere_errorcheck(t_rt *rt)
 	rt->sphere->coord.z < -MAX_SIZE || rt->sphere->coord.z > MAX_SIZE)
 		return (-1);
 	if (rt->sphere->radius < 0 || rt->sphere->radius > MAX_SIZE / 2)
-		return(-1);
-	if (rt->sphere->reflect < 0 || rt->sphere->reflect > 1 || 
+		return (-1);
+	if (rt->sphere->reflect < 0 || rt->sphere->reflect > 1 || \
 	rt->sphere->specular < 0 || rt->sphere->specular > 5000 \
 	|| rt->sphere->is_chess < -10 || rt->sphere->is_chess > 10)
-		return(-1);
+		return (-1);
 	return (0);
 }
 
-int	set_sphere(char **line,t_rt *rt)
+int	set_sphere(char **line, t_rt *rt)
 {
 	if (comma_check(line[1]) == -1 || comma_check(line[3]) == -1)
 		return (-1);
@@ -49,7 +61,7 @@ int	set_sphere(char **line,t_rt *rt)
 		rt->sphere->specular = 2000;
 	if (array_size(line) == 7)
 		rt->sphere->is_chess = ft_value(line[6], ',', 0, rt);
-    if (sphere_errorcheck(rt) == -1)
+	if (sphere_errorcheck(rt) == -1)
 		return (-1);
 	return (0);
 }
@@ -63,10 +75,10 @@ int	parse_sphere(char **line, t_rt *rt)
 	while (rt->sphere != NULL && rt->sphere->next != NULL)
 		rt->sphere = rt->sphere->next;
 	if (rt->sphere == NULL)
-		rt->sphere = new_sphere();
+		rt->sphere = new_sphere(rt);
 	else
 	{
-		rt->sphere->next = new_sphere();
+		rt->sphere->next = new_sphere(rt);
 		rt->sphere = rt->sphere->next;
 	}
 	size = array_size(line);

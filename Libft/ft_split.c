@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anifanto <anifanto@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anifanto <anifanto@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/29 20:26:43 by anifanto          #+#    #+#             */
-/*   Updated: 2021/10/07 10:04:57 by anifanto         ###   ########.fr       */
+/*   Updated: 2022/07/04 17:24:35 by anifanto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ static char	*ft_word(const char *str, char set)
 static int	ft_fill(char const *s, char c, char	**array, int i)
 {
 	while (*s)
-	{		
+	{
 		while (*s && (*s == c))
 			s++;
 		if (*s && (*s != c))
@@ -86,7 +86,7 @@ char	**ft_split(char const *s, char c)
 	{
 		array = (char **)ft_calloc(1, sizeof(char));
 		if (!array)
-			 return (0);
+			return (0);
 		return (&array[0]);
 	}
 	array = (char **)ft_calloc((ft_size(s, c) + 1), sizeof(char *));

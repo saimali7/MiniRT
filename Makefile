@@ -1,5 +1,7 @@
 NAME = miniRT
 
+.SILENT:
+
 CC = gcc
 
 LIST =	src/main.c	src/geometry/plane.c	src/geometry/sphere.c	src/geometry/paraboloid.c	\
@@ -12,7 +14,7 @@ LIST =	src/main.c	src/geometry/plane.c	src/geometry/sphere.c	src/geometry/parabo
 		src/render/render_shapes.c			src/render/render_shape_utils.c
 
 
-OBJ = $(LIST:.c=.o)
+OBJS = $(LIST:.c=.o)
 
 HEADERS = inc/MiniRt.h inc/Minilibx.h inc/Vector.h
 
@@ -25,26 +27,19 @@ DOWN = "\033[B"
 UP = "\033[A"
 SAVE = "\033[s"
 
+$(NAME) :	$(OBJS)
+	$(MAKE) -C ./libft
+	$(MAKE) -C ./mlx
+	$(CC) $(CFLAGS) $(OBJS) -L ./mlx -l mlx -framework OpenGL -Ofast -framework AppKit -L ./libft -l ft -lm -o $(NAME)
+	@printf $(CUT) $(DOWN)
+	@echo $(GREEN)miniRT compiled 🌏 $(RESET)
+
 all : $(NAME)
-
-$(NAME) :	$(OBJ)
-			@ar rc $@ $(OBJ)
-			@$(MAKE) -C ./libft
-			@$(MAKE) -C ./mlx
-			@$(CC) $(LIST) $(CFLAGS) $(OBJS) -L ./mlx -l mlx -framework OpenGL -Ofast -framework AppKit -L ./libft -l ft -lm -o $(NAME)
-			@printf $(CUT) $(DOWN)
-			@echo $(GREEN)miniRT compiled 🌏 $(RESET)
-
-%.o : %.c
-	@$(CC) -Wall -Wextra -Werror -Imlx -c $< -o $@
-	@echo $(SAVE)$(CUT)$(GREEN) Compiling with $(CFLAGS)...$(RESET)
-	@echo $(CUT) $(GREEN)[$^] to [$@] $(RESET)
-	@printf $(UP)$(UP)
 
 bonus : $(NAME)
 
 clean:
-	@rm -rf $(OBJ)
+	@rm -rf $(OBJS)
 	@rm -f ./mlx/*.a
 	@rm -f ./libft/*.o
 	@rm -f ./libft/*.a

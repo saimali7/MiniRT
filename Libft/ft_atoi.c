@@ -6,7 +6,7 @@
 /*   By: anifanto <anifanto@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/28 20:21:17 by anifanto          #+#    #+#             */
-/*   Updated: 2022/06/28 13:13:53 by anifanto         ###   ########.fr       */
+/*   Updated: 2022/07/04 17:23:29 by anifanto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,11 @@ int	ft_atoi(const char *str)
 		i++;
 	while (ft_isdigit(str[i]))
 	{
-		res = res * 10 + (str[i] - '0');
+		res = res * 10 + (str[i++] - '0');
 		i++;
 	}
 	if ((str[i] != '\0') || (res > 2147483647 && sign == 1) || \
 	(res > 2147483648 && sign == -1))
-	{
 		exit(1);
-	}
 	return (res * sign);
 }

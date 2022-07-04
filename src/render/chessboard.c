@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   chessboard.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: anifanto <anifanto@student.42abudhabi.a    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/04 16:37:58 by anifanto          #+#    #+#             */
+/*   Updated: 2022/07/04 18:23:04 by anifanto         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/MiniRt.h"
 
-t_vect inverse_color(t_vect color)
+t_vect	inverse_color(t_vect color)
 {
 	t_vect	tmp;
 	float	med_val;
@@ -14,7 +26,7 @@ t_vect inverse_color(t_vect color)
 
 t_vect	lin_interpol(t_vect even, t_vect odd, float k)
 {
-	t_vect res;
+	t_vect	res;
 
 	res.x = even.x * (1 - k) + odd.x * k;
 	res.y = even.y * (1 - k) + odd.y * k;
@@ -22,20 +34,19 @@ t_vect	lin_interpol(t_vect even, t_vect odd, float k)
 	return (res);
 }
 
-t_vect chessboard(t_ray ray, t_vect even, t_vect odd, float closest_t, float koef)
+t_vect	chessboard(t_ray ray, t_ray_var *v, float koef)
 {
 	float	chessboard;
 	float	cc1;
 	t_vect	tmp_p;
 	t_vect	res;
 
-	tmp_p = multiply_vect(closest_t, ray.dir);
+	tmp_p = multiply_vect(v->its.closest_t, ray.dir);
 	tmp_p = add_vect(ray.origin, tmp_p);
 	tmp_p = multiply_vect(1.0 / koef, tmp_p);
-	chessboard = floorf(tmp_p.x) + floorf(tmp_p.y) + floorf(tmp_p.z); // check working in shcool
-	//chessboard = round(tmp_p.x) + round(tmp_p.y) + round(tmp_p.z);
+	chessboard = floorf(tmp_p.x) + floorf(tmp_p.y) + floorf(tmp_p.z);
 	chessboard = modff(chessboard * 0.5, &cc1) * 2;
 	chessboard = fabsf(chessboard);
-	res = lin_interpol(even, odd, chessboard);
+	res = lin_interpol(v->even_color, v->odd_color, chessboard);
 	return (res);
 }

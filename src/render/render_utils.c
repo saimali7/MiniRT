@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   render_utils.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: anifanto <anifanto@student.42abudhabi.a    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/04 16:43:57 by anifanto          #+#    #+#             */
+/*   Updated: 2022/07/04 17:29:02 by anifanto         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/MiniRt.h"
 
 void	closest_intersection(t_vect origin, t_rt *rt, t_vect dir, t_inter *its)
@@ -15,9 +27,9 @@ void	closest_intersection(t_vect origin, t_rt *rt, t_vect dir, t_inter *its)
 	(void)rt;
 }
 
-t_ray set_ray(t_vect origin, t_vect dir, float min, float max)
+t_ray	set_ray(t_vect origin, t_vect dir, float min, float max)
 {
-	t_ray temp;
+	t_ray	temp;
 
 	temp.origin = origin;
 	temp.dir = dir;
@@ -49,7 +61,7 @@ void	ft_putpixel(int x, int y, t_vect color, t_disp *display)
 	int		position;
 
 	x = WIDHT / 2 + x;
-	y = HEIGHT /2 - y - 1;
+	y = HEIGHT / 2 - y - 1;
 	position = x * 4 + 4 * WIDHT * y;
 	temp = display->img.addr;
 	temp[position] = color.z;

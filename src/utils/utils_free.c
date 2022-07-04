@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils_free.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: anifanto <anifanto@student.42abudhabi.a    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/04 16:46:52 by anifanto          #+#    #+#             */
+/*   Updated: 2022/07/04 19:19:35 by anifanto         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/MiniRt.h"
 
 void	free_rt(t_rt **ptr_rt)
@@ -9,10 +21,10 @@ void	free_rt(t_rt **ptr_rt)
 	t_parab		*parab;
 
 	rt = *ptr_rt;
-	// plane = NULL;
-	// sphere = NULL;
-	// cylndr = NULL;
-	// parab = NULL;
+	plane = NULL;
+	sphere = NULL;
+	cylndr = NULL;
+	parab = NULL;
 	while (rt->plane != NULL)
 	{
 		plane = rt->plane;
@@ -42,14 +54,15 @@ void	free_rt(t_rt **ptr_rt)
 
 void	free_all(t_rt *ptr_rt)
 {
-	free_rt(&ptr_rt);
+	if (ptr_rt && ptr_rt->display)
+		ft_free_display(ptr_rt->display);
+	if (ptr_rt)
+		free_rt(&ptr_rt);
 }
 
-int	exit_hook(int x)
+int	exit_hook(t_rt *rt)
 {
-	(void)x;
-	//mlx_destroy_window(rt->display->mlx, rt->display->mlx_win);
-	//free_all;
+	free_all(rt);
 	exit(1);
 }
 
@@ -63,7 +76,7 @@ int	ft_key(int key, t_rt *rt)
 	return (0);
 }
 
-void	ft_free_display(t_disp	*display) // need paste
+void	ft_free_display(t_disp	*display)
 {
 	if (display)
 	{

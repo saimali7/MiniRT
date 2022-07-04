@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_ambient_light.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: anifanto <anifanto@student.42abudhabi.a    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/04 16:29:58 by anifanto          #+#    #+#             */
+/*   Updated: 2022/07/04 17:28:06 by anifanto         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/MiniRt.h"
 
 int	set_ambient(char **line, t_rt *rt)
@@ -62,7 +74,7 @@ int	set_light(char **line, t_rt *rt)
 	return (0);
 }
 
-int	parse_light(char **line, t_rt *rt,  t_parsecheck *min_check)
+int	parse_light(char **line, t_rt *rt, t_parsecheck *min_check)
 {
 	int			size;
 	static int	l;
