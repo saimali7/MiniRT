@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   calculate.c                                        :+:      :+:    :+:   */
+/*   calculate_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: anifanto <anifanto@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/04 16:33:59 by anifanto          #+#    #+#             */
-/*   Updated: 2022/07/05 09:19:52 by anifanto         ###   ########.fr       */
+/*   Updated: 2022/07/05 11:00:02 by anifanto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/MiniRt.h"
+#include "../../inc_bonus/MiniRt_bonus.h"
 
 t_lightvar	light_var(t_vect point, t_vect normal, float specular, t_vect view)
 {

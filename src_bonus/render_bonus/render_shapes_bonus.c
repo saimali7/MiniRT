@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   render_shapes.c                                    :+:      :+:    :+:   */
+/*   render_shapes_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: anifanto <anifanto@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/04 16:40:09 by anifanto          #+#    #+#             */
-/*   Updated: 2022/07/05 09:38:21 by anifanto         ###   ########.fr       */
+/*   Updated: 2022/07/05 11:00:25 by anifanto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/MiniRt.h"
+#include "../../inc_bonus/MiniRt_bonus.h"
 
 void	cylinder_reflection(t_ray_var *v, int recurse, t_rt *rt)
 {

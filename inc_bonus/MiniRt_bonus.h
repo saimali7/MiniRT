@@ -1,25 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   MiniRt.h                                           :+:      :+:    :+:   */
+/*   MiniRt_bonus.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: anifanto <anifanto@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/04 16:22:49 by anifanto          #+#    #+#             */
-/*   Updated: 2022/07/05 09:35:27 by anifanto         ###   ########.fr       */
+/*   Updated: 2022/07/05 10:10:38 by anifanto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINIRT_H
-# define MINIRT_H
+#ifndef MINIRT_BONUS_H
+# define MINIRT_BONUS_H
 
 # include <math.h>
 # include <stdlib.h>
 # include <stdio.h>
 # include <fcntl.h>
 # include <unistd.h>
-# include "Minilibx.h"
-# include "Vector.h"
+# include "Minilibx_bonus.h"
+# include "Vector_bonus.h"
 # include "../mlx/mlx.h"
 # include "../Libft/libft.h"
 # include "../Libft/gnl/get_next_line.h"

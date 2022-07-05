@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   render_utils.c                                     :+:      :+:    :+:   */
+/*   render_utils_bonus.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: anifanto <anifanto@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/04 16:43:57 by anifanto          #+#    #+#             */
-/*   Updated: 2022/07/05 09:38:38 by anifanto         ###   ########.fr       */
+/*   Updated: 2022/07/05 11:00:28 by anifanto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/MiniRt.h"
+#include "../../inc_bonus/MiniRt_bonus.h"
 
 void	closest_its(t_vect origin, t_rt *rt, t_vect dir, t_inter *its)
 {

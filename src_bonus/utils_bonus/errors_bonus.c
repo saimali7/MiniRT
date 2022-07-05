@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   errors.c                                           :+:      :+:    :+:   */
+/*   errors_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: anifanto <anifanto@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/04 16:46:30 by anifanto          #+#    #+#             */
-/*   Updated: 2022/07/05 09:24:14 by anifanto         ###   ########.fr       */
+/*   Updated: 2022/07/05 10:57:56 by anifanto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/MiniRt.h"
+#include "../../inc_bonus/MiniRt_bonus.h"
 
 void	error_exit(int code, char *str, t_rt *rt)
 {

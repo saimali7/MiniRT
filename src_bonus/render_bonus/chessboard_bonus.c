@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   chessboard.c                                       :+:      :+:    :+:   */
+/*   chessboard_bonus.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: anifanto <anifanto@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/04 16:37:58 by anifanto          #+#    #+#             */
-/*   Updated: 2022/07/05 09:10:33 by anifanto         ###   ########.fr       */
+/*   Updated: 2022/07/05 11:00:13 by anifanto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/MiniRt.h"
+#include "../../inc_bonus/MiniRt_bonus.h"
 
 t_vect	inverse_color(t_vect color)
 {

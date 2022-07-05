@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   render_shape_utils.c                               :+:      :+:    :+:   */
+/*   render_shape_utils_bonus.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: anifanto <anifanto@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/04 16:38:28 by anifanto          #+#    #+#             */
-/*   Updated: 2022/07/05 09:35:20 by anifanto         ###   ########.fr       */
+/*   Updated: 2022/07/05 11:00:21 by anifanto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/MiniRt.h"
+#include "../../inc_bonus/MiniRt_bonus.h"
 
 t_vect	get_normal_for_cyl(t_vect point, t_cylndr *cylndr)
 {

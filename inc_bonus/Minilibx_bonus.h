@@ -1,23 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Minilibx.h                                         :+:      :+:    :+:   */
+/*   Minilibx_bonus.h                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: anifanto <anifanto@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/04 16:22:17 by anifanto          #+#    #+#             */
-/*   Updated: 2022/07/05 10:48:38 by anifanto         ###   ########.fr       */
+/*   Updated: 2022/07/05 10:10:55 by anifanto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINILIBX_H
-# define MINILIBX_H
+#ifndef MINILIBX_BONUS_H
+# define MINILIBX_BONUS_H
 
 # include "../mlx/mlx.h"
-# include "MiniRt.h"
+# include "MiniRt_bonus.h"
 
-# define WIDHT 1200.00
-# define HEIGHT 800.00
+# define WIDHT 1600.00
+# define HEIGHT 1200.00
 # define INF 100000000
 # define EPSILON 0.01
 

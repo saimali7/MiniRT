@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   trace_ray.c                                        :+:      :+:    :+:   */
+/*   trace_ray_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: anifanto <anifanto@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/04 16:44:22 by anifanto          #+#    #+#             */
-/*   Updated: 2022/07/05 09:36:11 by anifanto         ###   ########.fr       */
+/*   Updated: 2022/07/05 11:00:32 by anifanto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/MiniRt.h"
+#include "../../inc_bonus/MiniRt_bonus.h"
 
 void	render_sphere(t_ray_var *v, t_ray ray, int recurse, t_rt *rt)
 {
