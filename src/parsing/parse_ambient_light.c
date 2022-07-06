@@ -65,9 +65,9 @@ int	set_light(char **line, t_rt *rt)
 	rt->light.color.y < 0 || rt->light.color.y > 255 || \
 	rt->light.color.z < 0 || rt->light.color.z > 255)
 		return (-1);
-	if (rt->light.coord.x < -100 || rt->light.coord.x > 100 || \
-	rt->light.coord.y < -100 || rt->light.coord.y > 100 || \
-	rt->light.coord.z < -100 || rt->light.coord.z > 100)
+	if (rt->light.coord.x < -MAX_SIZE || rt->light.coord.x > MAX_SIZE || \
+	rt->light.coord.y < -MAX_SIZE || rt->light.coord.y > MAX_SIZE || \
+	rt->light.coord.z < -MAX_SIZE || rt->light.coord.z > MAX_SIZE)
 		return (-1);
 	if (rt->light.ratio < 0.0 || rt->light.ratio > 1.0)
 		return (-1);

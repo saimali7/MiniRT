@@ -55,7 +55,6 @@ int	set_plane(char **line, t_rt *rt)
 	rt->plane->orient.x = ft_value(line[2], ',', 0, rt);
 	rt->plane->orient.y = ft_value(line[2], ',', 1, rt);
 	rt->plane->orient.z = ft_value(line[2], ',', 1, rt);
-	normalize_vect(&rt->plane->orient);
 	rt->plane->color.x = ft_value(line[3], ',', 0, rt);
 	rt->plane->color.y = ft_value(line[3], ',', 1, rt);
 	rt->plane->color.z = ft_value(line[3], ',', 1, rt);
@@ -69,6 +68,7 @@ int	set_plane(char **line, t_rt *rt)
 		rt->plane->is_chess = ft_value(line[6], ',', 0, rt);
 	if (plane_errorcheck(rt) == -1)
 		return (-1);
+	normalize_vect(&rt->plane->orient);
 	return (0);
 }
 

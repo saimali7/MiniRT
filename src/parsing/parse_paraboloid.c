@@ -57,7 +57,6 @@ int	set_paraboloid(char **line, t_rt *rt)
 	rt->parab->orient.x = ft_value(line[2], ',', 0, rt);
 	rt->parab->orient.y = ft_value(line[2], ',', 1, rt);
 	rt->parab->orient.z = ft_value(line[2], ',', 1, rt);
-	normalize_vect(&rt->parab->orient);
 	rt->parab->height = ft_value(line[3], ',', 0, rt);
 	rt->parab->color.x = ft_value(line[4], ',', 0, rt);
 	rt->parab->color.y = ft_value(line[4], ',', 1, rt);
@@ -72,6 +71,7 @@ int	set_paraboloid(char **line, t_rt *rt)
 		rt->parab->is_chess = ft_value(line[7], ',', 0, rt);
 	if (parab_errorcheck(rt) == -1)
 		return (-1);
+	normalize_vect(&rt->parab->orient);
 	return (0);
 }
 

@@ -37,9 +37,9 @@ int	cylinder_errorcheck(t_rt *rt)
 	rt->cylndr->color.y < 0 || rt->cylndr->color.y > 255 || \
 	rt->cylndr->color.z < 0 || rt->cylndr->color.z > 255)
 		return (-1);
-	if (rt->cylndr->radius < 0 || rt->cylndr->radius > 100)
+	if (rt->cylndr->radius < 0 || rt->cylndr->radius > 1000)
 		return (-1);
-	if (rt->cylndr->height < 0 || rt->cylndr->height > 100)
+	if (rt->cylndr->height < 0 || rt->cylndr->height > 1000)
 		return (-1);
 	if (rt->cylndr->reflect < 0 || rt->cylndr->reflect > 1 \
 	|| rt->cylndr->specular < 0 || rt->cylndr->specular > 5000 \
@@ -74,12 +74,12 @@ int	set_cylinder(char **line, t_rt *rt)
 	rt->cylndr->orient.x = ft_value(line[2], ',', 0, rt);
 	rt->cylndr->orient.y = ft_value(line[2], ',', 1, rt);
 	rt->cylndr->orient.z = ft_value(line[2], ',', 1, rt);
-	normalize_vect(&rt->cylndr->orient);
 	rt->cylndr->radius = ft_value(line[3], ',', 0, rt) / 2;
 	rt->cylndr->height = ft_value(line[4], ',', 0, rt);
 	set_cylinder_cont(line, rt);
 	if (cylinder_errorcheck(rt) == -1)
 		return (-1);
+	normalize_vect(&rt->cylndr->orient);
 	return (0);
 }
 

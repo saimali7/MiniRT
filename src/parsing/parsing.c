@@ -16,16 +16,9 @@ int	extension_check(char *arg)
 {
 	int	i;
 
-	i = 0;
-	while (arg[i] != '\0')
-	{
-		if (arg[i] == '.')
-		{
-			if (ft_strncmp(".rt", (arg + i), 4) != 0)
-				return (-1);
-		}
-		i++;
-	}
+	i = ft_strlen(arg) - 3;
+	if (ft_strncmp(".rt", (arg + i), 4) != 0)
+		return (-1);
 	return (0);
 }
 

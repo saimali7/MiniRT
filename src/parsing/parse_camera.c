@@ -23,9 +23,9 @@ int	set_camera(char **line, t_rt *rt)
 	rt->camera.orient.y = ft_value(line[2], ',', 1, rt);
 	rt->camera.orient.z = ft_value(line[2], ',', 1, rt);
 	rt->camera.fov = ft_value(line[3], ',', 0, rt);
-	if (rt->camera.coord.x < -100 || rt->camera.coord.x > 100 || \
-	rt->camera.coord.y < -100 || rt->camera.coord.y > 100 || \
-	rt->camera.coord.z < -100 || rt->camera.coord.z > 100)
+	if (rt->camera.coord.x < -MAX_SIZE || rt->camera.coord.x > MAX_SIZE || \
+	rt->camera.coord.y < -MAX_SIZE || rt->camera.coord.y > MAX_SIZE || \
+	rt->camera.coord.z < -MAX_SIZE || rt->camera.coord.z > MAX_SIZE)
 		return (-1);
 	if (rt->camera.orient.x < -1.0 || rt->camera.orient.x > 1.0 || \
 	rt->camera.orient.y < -1.0 || rt->camera.orient.y > 1.0 \
